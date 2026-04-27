@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  COMPANY
+  DRIVER
+  CUSTOMER
+}
+
+enum ShipmentStatus {
+  PENDING
+  ASSIGNED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id                Int        @id @default(autoincrement())
+  name              String
+  email             String     @unique
+  nit               String?    @unique
+  address           String?
+  phone             String?
+  password          String
+  role              Role       @default(CUSTOMER)
+  isActive          Boolean    @default(true)
+  createdAt         DateTime   @default(now())
+  customerShipments Shipment[] @relation("CustomerShipments")
+  driverShipments   Shipment[] @relation("DriverShipments")
+}
+
+model Shipment {
+  id          Int            @id @default(autoincrement())
+  cargoType   String
+  weight      Float
+  dimensions  String?
+  origin      String
+  destination String
+  timeline    String
+  status      ShipmentStatus @default(PENDING)
+  senderId    Int
+  sender      User           @relation("CustomerShipments", fields: [senderId], references: [id])
+  driverId    Int?
+  driver      User?          @relation("DriverShipments", fields: [driverId], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}

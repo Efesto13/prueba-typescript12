@@ -1,0 +1,449 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import UserModal from '@/components/users/userModal';
+import ConfirmModal from '@/components/ui/ConfirmModal';
+import Link from 'next/link';
+import { User } from '@/types/user';
+import { Role } from '@/generated/prisma';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+
+
+
+function getInitials(name: string): string {
+    if (!name) return '?';
+    return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function formatDate(date: string): string {
+    return new Date(date).toLocaleDateString('es-CO', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+}
+
+function RoleBadge({ role }: { role: Role }) {
+    const styles: Record<Role, string> = {
+        ADMIN: 'bg-zinc-800 text-zinc-400',
+        COMPANY: 'bg-amber-900/20 text-amber-200 border border-amber-900/30',
+        DRIVER: 'bg-amber-900/20 text-amber-200 border border-amber-900/30',
+        CUSTOMER: 'bg-blue-900/20 text-blue-200 border border-blue-900/30',
+    };
+    const labels: Record<Role, string> = {
+        ADMIN: 'Internal',
+        COMPANY: 'Company',
+        DRIVER: 'Driver',
+        CUSTOMER: 'Client',
+    };
+    return (
+        <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${styles[role]}`}>
+            {labels[role]}
+        </span>
+    );
+}
+
+type TabType = 'ALL' | 'CUSTOMER' | 'COMPANY' | 'DRIVER' | 'ADMIN';
+
+export default function MasterAdmin() {
+    const router = useRouter();
+    const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [activeTab, setActiveTab] = useState<TabType>('ALL');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [confirmUser, setConfirmUser] = useState<User | null>(null);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+
+    const exportShipmentsPDF = (users: User[]) => {
+        const doc = new jsPDF();
+
+        autoTable(doc, {
+            head: [["ID", "Nombre", "Correo", "Rol"]],
+            body: users.map(u => [
+                u.id,
+                u.name,
+                u.email,
+                u.role,
+            ]),
+        });
+
+        doc.save("envios.pdf");
+    };
+
+    async function fetchUsers() {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem('accessToken');
+            const res = await fetch('/api/users', {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'No se pudieron cargar los usuarios');
+            setUsers(data);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+    async function handleToggleStatus() {
+        if (!confirmUser) return;
+        setConfirmLoading(true);
+        try {
+            const token = localStorage.getItem('accessToken');
+            const res = await fetch(`/api/users/${confirmUser.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ isActive: !confirmUser.isActive }),
+            });
+            if (!res.ok) throw new Error();
+            fetchUsers();
+        } catch {
+            console.error('Error al cambiar estado');
+        } finally {
+            setConfirmLoading(false);
+            setConfirmOpen(false);
+            setConfirmUser(null);
+        }
+    }
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const filteredUsers = users.filter((user) => {
+        if (activeTab === 'ALL') return true;
+        return user.role === activeTab;
+    });
+
+    return (
+        <div className="font-body selection:bg-primary-container selection:text-on-primary">
+
+            {/* Sidebar — solo visible en lg+ */}
+            <aside className="fixed left-0 top-0 h-screen w-64 bg-[#1b1b1b] text-sm font-medium font-inter border-r border-slate-800 flex-col p-4 gap-6 z-50 hidden lg:flex">
+                <div className="px-6 pb-2">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center overflow-hidden">
+                            <div className="w-full h-full bg-amber-400 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-black text-sm">person</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p className="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold text-amber-400">Master Admin</p>
+                            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.05em]">Terminal 01-A</p>
+                        </div>
+                    </div>
+                </div>
+                <nav className="flex-1 space-y-1">
+                    <div className="px-3">
+                        <div className="px-3">
+                            <a className="flex items-center gap-3 px-4 py-3 bg-[#353535] text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold" href="#">
+                                <span className="material-symbols-outlined">dashboard</span>
+                                Master Admin
+                            </a>
+                        </div>
+                        <div className="px-3">
+                            <a className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all" href="#">
+                                <span className="material-symbols-outlined">badge</span>
+                                <Link href="/shipments">Shipments</Link>
+                            </a>
+                        </div>
+
+                    </div>
+                </nav>
+                <div className="px-6 py-4 space-y-4">
+                    <button onClick={() => exportShipmentsPDF(users)} className="w-full bg-primary-container text-on-primary py-3 rounded-xl font-bold uppercase tracking-[0.05em] text-[10px] shadow-[0_0_12px_rgba(255,191,0,0.3)] hover:shadow-[0_0_20px_rgba(255,191,0,0.4)] transition-all">
+                        Generate Report
+                    </button>
+                </div>
+            </aside>
+
+            {/* Main — sin margin en mobile, con margin en lg+ */}
+            <main className="lg:ml-64 min-h-screen flex flex-col">
+
+                {/* Header */}
+                <header className="bg-[#131313] flex justify-between items-center w-full px-4 lg:px-8 h-16 sticky top-0 z-50 gap-4">
+                    <div className="flex items-center gap-4 lg:gap-12 min-w-0">
+                        <span className="text-2xl font-black italic tracking-tighter text-amber-400 font-['Inter'] shrink-0">TRUX</span>
+                        {/* Search oculto en mobile pequeño */}
+                        <div className="relative hidden sm:block">
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">search</span>
+                            <input
+                                className="bg-[#1b1b1b] border-none rounded-full pl-10 pr-4 py-2 text-sm w-48 lg:w-80 text-on-surface focus:ring-1 focus:ring-amber-400 placeholder:text-zinc-600 transition-all"
+                                placeholder="Global system search..."
+                                type="text"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 lg:gap-6 shrink-0">
+                        {/* Nav links ocultos en mobile */}
+                        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[12px] uppercase font-bold tracking-widest font-['Inter']">
+                            <a className="text-zinc-400 hover:text-amber-300 transition-colors" href="#">Terminal</a>
+                            <a className="text-amber-400 font-bold border-b-2 border-amber-400 py-5" href="#">Directory</a>
+                            <a className="text-zinc-400 hover:text-amber-300 transition-colors" href="#">Network</a>
+                        </nav>
+                        <div className="flex items-center gap-2 lg:gap-4 md:border-l md:border-zinc-800 md:pl-6">
+                            <button className="material-symbols-outlined text-zinc-400 hover:text-amber-400 transition-colors">notifications</button>
+                            <button className="material-symbols-outlined text-zinc-400 hover:text-amber-400 transition-colors">settings</button>
+                        </div>
+                    </div>
+                </header>
+
+                {/* Canvas */}
+                <div className="p-4 lg:p-8 space-y-6 lg:space-y-8 flex-1 min-w-0">
+
+                    {/* Title row */}
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
+                        <div>
+                            <h1 className="text-3xl lg:text-5xl font-extrabold tracking-tighter text-on-surface mb-2 font-display">ENTITY DIRECTORY</h1>
+                            <p className="text-zinc-500 uppercase tracking-[0.2em] text-xs font-bold">Central Registry • Operational Node A1</p>
+                        </div>
+                        <div className="flex gap-3 shrink-0">
+                            <button className="bg-surface-container-highest text-primary px-4 lg:px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[18px]">filter_list</span>
+                                <span className="hidden sm:inline">Filter</span>
+                            </button>
+                            <button onClick={() => {
+                                setSelectedUser(null);
+                                setIsModalOpen(true);
+                            }} className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-4 lg:px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest shadow-[0_4px_15px_rgba(255,191,0,0.2)] hover:shadow-[0_4px_25px_rgba(255,191,0,0.3)] transition-all flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[18px]">add</span>
+                                <span className="hidden sm:inline">Register Entity</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Tabs — scroll horizontal en mobile */}
+                    <div className="flex items-center gap-1 border-b border-zinc-800/30 overflow-x-auto scrollbar-none">
+                        {([
+                            { key: 'ALL', label: 'All Entities' },
+                            { key: 'CUSTOMER', label: 'Clients' },
+                            { key: 'COMPANY', label: 'COmpany' },
+                            { key: 'DRIVER', label: 'Partners' },
+                            { key: 'ADMIN', label: 'Internal' },
+                        ] as { key: TabType; label: string }[]).map((tab) => (
+                            <button
+                                key={tab.key}
+                                onClick={() => setActiveTab(tab.key)}
+                                className={`px-5 lg:px-8 py-4 text-xs font-bold uppercase tracking-widest transition-colors whitespace-nowrap ${activeTab === tab.key
+                                    ? 'text-amber-400 border-b-2 border-amber-400'
+                                    : 'text-zinc-500 hover:text-zinc-200'
+                                    }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Tabla — scroll horizontal en mobile */}
+                    <section className="bg-surface-container-low rounded-2xl overflow-hidden shadow-2xl border border-white/[0.02]">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[600px] text-left border-collapse">
+                                <thead>
+                                    <tr className="bg-surface-container-high/50 border-b border-zinc-800">
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Entity Name</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Type</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Email</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">NIT</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Phone</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Address</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Registered</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-zinc-800/50">
+                                    {loading && (
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
+                                                <span className="material-symbols-outlined animate-spin block mx-auto mb-2">progress_activity</span>
+                                                Loading entities...
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {!loading && error && (
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-12 text-center text-red-400">
+                                                <span className="material-symbols-outlined block mx-auto mb-2">error</span>
+                                                {error}
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {!loading && !error && filteredUsers.length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
+                                                <span className="material-symbols-outlined block mx-auto mb-2">group_off</span>
+                                                No entities found
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {!loading && !error && filteredUsers.map((user) => (
+                                        <tr key={user.id} className="hover:bg-surface-container-highest/30 transition-colors group">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-amber-400 font-bold text-xs group-hover:scale-110 transition-transform shrink-0">
+                                                        {getInitials(user.name)}
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <div className="font-bold text-on-surface text-sm truncate">{user.name}</div>
+                                                        <div className="text-[10px] text-zinc-500 uppercase tracking-wider">ID: #{String(user.id).padStart(4, '0')}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <RoleBadge role={user.role} />
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-sm text-zinc-300 truncate max-w-[180px]">{user.email}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-sm text-zinc-300 truncate max-w-[180px]">{user.nit}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-[11px] text-zinc-500 whitespace-nowrap">{user.phone}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-[11px] text-zinc-500 whitespace-nowrap">{user.address}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-[11px] text-zinc-500 whitespace-nowrap">{formatDate(user.createdAt)}</div>
+                                            </td>
+                                            <td className="px-6 py-4 text-right space-x-2">
+                                                <button onClick={() => {
+                                                    setConfirmUser(user);
+                                                    setConfirmOpen(true);
+                                                }} className="p-2 text-zinc-500 hover:text-amber-400 hover:bg-amber-400/10 rounded-lg transition-all">
+                                                    <span className="material-symbols-outlined text-[20px]">{user.isActive ? 'block' : 'check_circle'}</span>
+                                                </button>
+                                                <button onClick={() => {
+                                                    setSelectedUser(user);
+                                                    setIsModalOpen(true);
+                                                }} className="p-2 text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 rounded-lg transition-all">
+                                                    <span className="material-symbols-outlined text-[20px]">edit_note</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="bg-surface-container-high px-6 py-4 flex items-center justify-between border-t border-zinc-800">
+                            <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
+                                {loading ? '...' : `Showing ${filteredUsers.length} of ${users.length} Entries`}
+                            </p>
+                        </div>
+                    </section>
+
+                    {/* Bento Grid */}
+                    <div className="grid grid-cols-12 gap-4 lg:gap-6">
+                        <div className="col-span-12 lg:col-span-8 bg-surface-container-low p-6 lg:p-8 rounded-2xl flex flex-col justify-between border border-white/[0.02] min-h-[260px] lg:min-h-[300px] relative overflow-hidden">
+                            <div className="relative z-10">
+                                <h3 className="text-amber-400 font-display text-2xl lg:text-3xl font-black italic tracking-tighter mb-4">PLATFORM GROWTH TELEMETRY</h3>
+                                <p className="text-zinc-500 text-sm max-w-md">
+                                    Entity registration has increased by <span className="text-on-surface font-bold">14.2%</span> over the last quarter.
+                                </p>
+                            </div>
+                            <div className="flex flex-wrap gap-8 lg:gap-12 relative z-10 mt-4">
+                                <div>
+                                    <div className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest mb-1">Total Entities</div>
+                                    <div className="text-3xl lg:text-4xl font-display font-black text-on-surface">{loading ? '...' : users.length}</div>
+                                </div>
+                                <div>
+                                    <div className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest mb-1">Clients</div>
+                                    <div className="text-3xl lg:text-4xl font-display font-black text-on-surface">
+                                        {loading ? '...' : users.filter(u => u.role === 'CUSTOMER').length}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest mb-1">Drivers</div>
+                                    <div className="text-3xl lg:text-4xl font-display font-black text-on-surface">
+                                        {loading ? '...' : users.filter(u => u.role === 'DRIVER').length}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-span-12 lg:col-span-4 bg-gradient-to-br from-[#1b1b1b] to-surface p-6 lg:p-8 rounded-2xl border border-amber-400/20 shadow-[0_10px_40px_rgba(255,191,0,0.05)]">
+                            <div className="w-12 h-12 bg-amber-400 rounded-xl flex items-center justify-center mb-6">
+                                <span className="material-symbols-outlined text-on-primary">bolt</span>
+                            </div>
+                            <h4 className="text-xl font-bold text-on-surface mb-2">QUICK REGISTRY</h4>
+                            <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold mb-6">Direct Terminal Access</p>
+                            <div className="space-y-4">
+                                <div className="bg-surface-container-highest p-4 rounded-xl border-l-2 border-amber-400">
+                                    <div className="text-amber-400 text-[10px] font-bold uppercase tracking-widest">New Entity Alert</div>
+                                    <div className="text-sm text-zinc-300 font-medium">
+                                        {loading ? '...' : `${users.filter(u => u.role === 'CUSTOMER').length} clients registered`}
+                                    </div>
+                                </div>
+                                <div className="bg-surface-container-highest/50 p-4 rounded-xl border-l-2 border-zinc-700">
+                                    <div className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Drivers Online</div>
+                                    <div className="text-sm text-zinc-400 font-medium">
+                                        {loading ? '...' : `${users.filter(u => u.role === 'DRIVER').length} active drivers`}
+                                    </div>
+                                </div>
+                            </div>
+                            <button className="w-full mt-8 border border-zinc-800 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-amber-400 hover:border-amber-400 transition-all">
+                                View Audit Log
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <footer className="p-4 lg:p-8 mt-auto border-t border-zinc-800/30 flex flex-col sm:flex-row justify-between items-center gap-3 bg-[#131313]">
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Core Systems: Online</span>
+                        </div>
+                    </div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 text-center sm:text-right">
+                        © 2024 TRUX OPERATIONAL SYSTEMS • V 4.2.0-STABLE
+                    </div>
+                </footer>
+            </main>
+
+            <button className="fixed bottom-8 right-8 w-14 h-14 bg-amber-400 text-on-primary rounded-full shadow-[0_8px_30px_rgba(255,191,0,0.3)] hover:scale-110 active:scale-95 transition-all flex items-center justify-center z-[100]">
+                <span className="material-symbols-outlined text-3xl">terminal</span>
+            </button>
+            <UserModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setSelectedUser(null);
+                }}
+                onSuccess={() => {
+                    setIsModalOpen(false);
+                    setSelectedUser(null);
+                    fetchUsers();
+                }}
+                user={selectedUser}
+            />
+            <ConfirmModal
+                isOpen={confirmOpen}
+                onClose={() => {
+                    setConfirmOpen(false);
+                    setConfirmUser(null);
+                }}
+                onConfirm={handleToggleStatus}
+                loading={confirmLoading}
+                variant={confirmUser?.isActive ? 'danger' : 'success'}
+                title={confirmUser?.isActive ? 'Deactivate Entity' : 'Activate Entity'}
+                description={
+                    confirmUser?.isActive
+                        ? `Are you sure you want to deactivate ${confirmUser?.name}?`
+                        : `Are you sure you want to activate ${confirmUser?.name}?`
+                }
+                confirmLabel={confirmUser?.isActive ? 'Deactivate' : 'Activate'}
+            />
+        </div>
+    );
+}
