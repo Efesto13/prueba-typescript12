@@ -59,6 +59,17 @@ export default function MasterAdmin() {
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
+    async function handleLogout() {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (e) {
+            console.error('Error cerrando sesión', e);
+        } finally {
+            router.push('/login');
+        }
+    }
+
+
     const exportShipmentsPDF = (users: User[]) => {
         const doc = new jsPDF();
 
@@ -78,10 +89,7 @@ export default function MasterAdmin() {
     async function fetchUsers() {
         try {
             setLoading(true);
-            const token = localStorage.getItem('accessToken');
-            const res = await fetch('/api/users', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const res = await fetch('/api/users');
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'No se pudieron cargar los usuarios');
             setUsers(data);
@@ -162,6 +170,11 @@ export default function MasterAdmin() {
                 <div className="px-6 py-4 space-y-4">
                     <button onClick={() => exportShipmentsPDF(users)} className="w-full bg-primary-container text-on-primary py-3 rounded-xl font-bold uppercase tracking-[0.05em] text-[10px] shadow-[0_0_12px_rgba(255,191,0,0.3)] hover:shadow-[0_0_20px_rgba(255,191,0,0.4)] transition-all">
                         Generate Report
+                    </button>
+                </div>
+                <div className='px-8 py-2 space-y-2'>
+                    <button onClick={handleLogout} className="w-full bg-red-500 text-white py-3 rounded-xl font-bold uppercase tracking-[0.05em] text-[10px] hover:bg-red-600 transition-all">
+                        Cerrar Sesión
                     </button>
                 </div>
             </aside>

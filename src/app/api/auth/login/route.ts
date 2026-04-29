@@ -16,7 +16,6 @@ export async function POST(req: Request) {
 
         const res = NextResponse.json({
             message: "Login correcto",
-            accessToken: user.accessToken,
             user: user.user
         });
 
@@ -24,6 +23,13 @@ export async function POST(req: Request) {
             httpOnly: true,
             path: "/",
             maxAge: 60 * 60 * 24 * 7
+        });
+        res.cookies.set("accessToken", user.accessToken, {
+            httpOnly: true,
+            path: "/",
+            maxAge: 60 * 60 * 60,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
         });
 
         return res;
