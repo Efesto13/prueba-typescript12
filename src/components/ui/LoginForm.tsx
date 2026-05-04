@@ -58,10 +58,9 @@ export default function RegisterForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
-            <h2 className="text-xl font-semibold text-white/90 text-center mb-2">Ingresa a tu cuenta</h2>
-
-            <div className="space-y-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full text-start">
+            <h2 className="text-2xl font-black tracking-tighter text-[#fbbc00]">TRUX LOGISTICA</h2>
+            <p className="text-on-surface-variant font-medium tracking-wide text-sm uppercase opacity-70">Enter credentials to initialize your session</p>            <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400 ml-1">Correo Electrónico</label>
                 <input
                     type="email"
@@ -82,18 +81,15 @@ export default function RegisterForm() {
                     onChange={e => setPassword(e.target.value)}
                 />
             </div>
-
-            <button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98] mt-2"
-            >
+            <button className="w-full py-5 rounded-xl text-[#402d00] mt-5 font-bold uppercase tracking-widest text-sm bg-[linear-gradient(135deg,_#ffe2ab_0%,_#ffbf00_100%)] shadow-[0_0_20px_rgba(255,191,0,0.3)] transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2" type="submit">
                 Iniciar Sesión
+                <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'wght' 700" }}>arrow_forward</span>
             </button>
 
             <div className="text-center mt-2">
                 <p className="text-sm text-gray-500">
                     ¿No tienes cuenta?{" "}
-                    <Link href="/register" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+                    <Link href="/register" className="text-[#fbbc00] hover:text-[#e3ab14] font-medium transition-colors">
                         Regístrate aquí
                     </Link>
                 </p>

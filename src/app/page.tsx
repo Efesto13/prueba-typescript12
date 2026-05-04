@@ -1,19 +1,66 @@
+import LoginForm from "@/components/ui/LoginForm";
 export default function Home() {
   return (
     <>
-      <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-slate-950 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-black text-white">
-        <div className="text-center max-w-3xl animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter"> Bienvenido a <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">RIWI .IA</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-400 mb-10 font-light leading-relaxed"> La plataforma definitiva para gestionar tus clases y proyectos con el poder de la inteligencia artificial.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <a href="/register" className="px-8 py-4 bg-white text-black rounded-full font-bold hover:bg-gray-200 transition-all transform hover:scale-105"> Empezar ahora
-            </a>
-            <a href="/login" className="px-8 py-4 bg-white/5 border border-white/10 rounded-full font-bold hover:bg-white/10 transition-all"> Iniciar sesión
-            </a>
+      <main className="flex min-h-screen w-full">
+        <section className="w-full lg:w-[40%] flex flex-col justify-center px-8 sm:px-16 lg:px-24 z-10 bg-surface">
+          <div>
+            <LoginForm />
           </div>
-        </div>
+        </section>
+        <section className="hidden lg:block lg:w-[60%] relative overflow-hidden bg-black">
+
+          <div className="absolute inset-0 z-0">
+            <img alt="logistics center" className="w-full h-full object-cover opacity-40 mix-blend-luminosity" data-alt="dramatic wide angle shot of a futuristic dark logistics warehouse with amber motion blur light trails of moving transport trucks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYQ9_5YvdxS-Ypf_9Ebo07He6RUd0BUYz4hr7Ar4sz8WtK2Cw22ViuQ8To_Z5QZy6sRp1EWMG-ZfwGrHZm5tO6e9YbeUL0uJVFQESCR0L9tqxEV8PGqwMIExdE-F87JHsC7btHrpOfR5k-n1nVDD5bKJQ4fHCBlUVsxVi7jl0MMGrj_tuCZqx0NJVVEtFRIFGmgcuqaG9xMqBSH-SkBaLjo3B7mCkFZ5SaB1B4XzJYeFoV7KsWRgl2HOlmWD-B8YMn40upGo-xpv_q" />
+            <div className="absolute inset-0 bg-gradient-to-r from-surface via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+          </div>
+          {/* <!-- Floating Telemetry Modules (Asymmetric Bento Style) --> */}
+          <div className="absolute inset-0 flex items-center justify-center p-12 z-10">
+            <div className="grid grid-cols-6 grid-rows-6 gap-4 w-full h-full">
+              {/* <!-- Main Telemetry Hero --> */}
+              <div className="col-start-2 col-end-5 row-start-2 row-end-4 glass-panel bg-[#303030] rounded-xl p-8 border border-white/5 flex flex-col justify-between">
+                <div className="flex justify-between items-start">
+                  <span className="material-symbols-outlined text-primary-container text-4xl">dynamic_feed</span>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary-container bg-primary-container/10 px-3 py-1 rounded-full">Real-time Feed</span>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.1em] mb-1">Global Fleet Momentum</div>
+                  <div className="text-6xl font-black tracking-tighter text-white italic">84.2<span className="text-2xl not-italic ml-2 text-primary-container">Mph</span></div>
+                </div>
+              </div>
+              {/* <!-- Secondary Metric --> */}
+              <div className="col-start-5 col-end-7 row-start-3 row-end-5 glass-panel bg-[#303030] rounded-xl p-6 border border-white/5 self-end">
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.1em] mb-4">Route Efficiency</div>
+                <div className="flex items-end gap-2">
+                  <div className="h-16 w-2 bg-primary-container rounded-t-full"></div>
+                  <div className="h-24 w-2 bg-primary-container rounded-t-full"></div>
+                  <div className="h-12 w-2 bg-primary-container/20 rounded-t-full"></div>
+                  <div className="h-20 w-2 bg-primary-container rounded-t-full"></div>
+                  <div className="ml-4 text-4xl font-black text-on-surface">98%</div>
+                </div>
+              </div>
+              {/* <!-- Small Decorative Node --> */}
+              <div className="col-start-2 col-end-3 row-start-4 row-end-5 glass-panel bg-[#303030] rounded-xl flex items-center justify-center border border-white/5">
+                <span className="material-symbols-outlined text-neutral-500" data-weight="fill">hub</span>
+              </div>
+              {/* <!-- Visual Accent Line --> */}
+              <div className="col-start-1 col-end-7 row-start-6 row-end-7 flex items-center px-12">
+                <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-primary-container/30 to-transparent"></div>
+              </div>
+            </div>
+          </div>
+          {/* <!-- Bottom Left Brand Tag --> */}
+          <div className="absolute bottom-12 left-12 z-20 flex items-center gap-4">
+            <div className="w-12 h-12 bg-primary-container flex items-center justify-center rounded-xl rotate-45">
+              <span className="material-symbols-outlined -rotate-45 text-on-primary font-bold">rocket_launch</span>
+            </div>
+            <div>
+              <div className="text-xs font-black tracking-widest text-on-surface uppercase">Kinetic Precision</div>
+              <div className="text-[10px] font-medium text-neutral-500 uppercase tracking-[0.2em]">Next-Gen Logistic OS</div>
+            </div>
+          </div>
+        </section>
       </main>
     </>
   );

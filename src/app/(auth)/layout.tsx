@@ -1,33 +1,36 @@
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-    title: "Register y login de mi app",
-    description: "quiero que encuentren esto",
-};
-
 export default function authLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <div className="min-h-screen w-full flex items-center justify-center p-4 bg-slate-950 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-black overflow-hidden relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl shadow-black/50">
-                <div className="text-center mb-8">
-                    <div className="inline-block px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4">
-                        <span className="text-xs font-bold text-blue-400 tracking-widest uppercase">Seguridad AI</span>
+        <div className="flex min-h-screen w-full">
+            {/* Panel izquierdo - Formulario */}
+            <section className="w-full lg:w-[40%] flex flex-col justify-center px-8 sm:px-16 lg:px-24 bg-[#121212] relative z-10">
+                {/* Branding */}
+                <div className="mb-10">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 bg-[linear-gradient(135deg,_#ffe2ab_0%,_#ffbf00_100%)] rounded-lg rotate-45 flex items-center justify-center">
+                            <span className="material-symbols-outlined -rotate-45 text-[#402d00] text-lg font-bold">rocket_launch</span>
+                        </div>
+                        <span className="text-white font-black text-xl tracking-tight">TRUX</span>
                     </div>
-                    <h1 className="text-3xl font-black text-white tracking-tighter">
-                        RIWI <span className="text-blue-500">.IA</span>
-                    </h1>
-                    <h1>Hola</h1>
+                    <p className="text-xs text-neutral-500 uppercase tracking-[0.2em]">Logística Inteligente</p>
                 </div>
+
                 {children}
-                <p className="text-center mt-8 text-sm text-gray-500 font-light">
-                    &copy; 2026 RIWI .IA - Potenciado por Agentes
+
+                <p className="mt-12 text-xs text-neutral-600">
+                    &copy; 2026 TRUX Logística
                 </p>
-            </div>
+            </section>
+
+            {/* Panel derecho - Visual decorativo */}
+            <section className="hidden lg:block lg:w-[60%] relative overflow-hidden bg-black">
+                <img alt="logistics center" className="w-full h-full object-cover" data-alt="dramatic wide angle shot of a futuristic dark logistics warehouse with amber motion blur light trails of moving transport trucks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYQ9_5YvdxS-Ypf_9Ebo07He6RUd0BUYz4hr7Ar4sz8WtK2Cw22ViuQ8To_Z5QZy6sRp1EWMG-ZfwGrHZm5tO6e9YbeUL0uJVFQESCR0L9tqxEV8PGqwMIExdE-F87JHsC7btHrpOfR5k-n1nVDD5bKJQ4fHCBlUVsxVi7jl0MMGrj_tuCZqx0NJVVEtFRIFGmgcuqaG9xMqBSH-SkBaLjo3B7mCkFZ5SaB1B4XzJYeFoV7KsWRgl2HOlmWD-B8YMn40upGo-xpv_q" />
+                {/* Capa oscura sobre la imagen */}
+                <div className="absolute inset-0 bg-black/50"></div>
+            </section>
         </div>
     );
 }
