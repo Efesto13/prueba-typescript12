@@ -8,6 +8,7 @@ import { User } from '@/types/user';
 import { Role } from '@/generated/prisma';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import prisma from '@/lib/db';
 
 
 
@@ -32,6 +33,7 @@ function RoleBadge({ role }: { role: Role }) {
         DRIVER: 'bg-amber-900/20 text-amber-200 border border-amber-900/30',
         CUSTOMER: 'bg-blue-900/20 text-blue-200 border border-blue-900/30',
     };
+
     const labels: Record<Role, string> = {
         ADMIN: 'Internal',
         COMPANY: 'Company',
@@ -45,7 +47,7 @@ function RoleBadge({ role }: { role: Role }) {
     );
 }
 
-type TabType = 'ALL' | 'CUSTOMER' | 'COMPANY' | 'DRIVER' | 'ADMIN';
+type TabType = 'ALL' | 'CUSTOMER' | 'COMPANY' | 'DRIVER';
 
 export default function MasterAdmin() {
     const router = useRouter();
@@ -58,6 +60,7 @@ export default function MasterAdmin() {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
     const [confirmLoading, setConfirmLoading] = useState(false);
+    const [userName, setUserName] = useState<string>('ADMIN');
 
     async function handleLogout() {
         try {
@@ -65,6 +68,7 @@ export default function MasterAdmin() {
         } catch (e) {
             console.error('Error cerrando sesión', e);
         } finally {
+            localStorage.clear();
             router.push('/login');
         }
     }
@@ -125,12 +129,20 @@ export default function MasterAdmin() {
 
     useEffect(() => {
         fetchUsers();
+        const storedUser = localStorage.getItem('usuario-logueado');
+        if (storedUser) {
+            const { name } = JSON.parse(storedUser);
+            if (name) setUserName(name);
+        }
     }, []);
 
     const filteredUsers = users.filter((user) => {
+        if (user.role === 'ADMIN') return false;
         if (activeTab === 'ALL') return true;
         return user.role === activeTab;
     });
+
+
 
     return (
         <div className="font-body selection:bg-primary-container selection:text-on-primary">
@@ -145,7 +157,7 @@ export default function MasterAdmin() {
                             </div>
                         </div>
                         <div>
-                            <p className="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold text-amber-400">Master Admin</p>
+                            <p className="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold text-amber-400">{userName}</p>
                             <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.05em]">Terminal 01-A</p>
                         </div>
                     </div>
@@ -241,7 +253,7 @@ export default function MasterAdmin() {
                             { key: 'CUSTOMER', label: 'Clients' },
                             { key: 'COMPANY', label: 'COmpany' },
                             { key: 'DRIVER', label: 'Partners' },
-                            { key: 'ADMIN', label: 'Internal' },
+                            // { key: 'ADMIN', label: 'Internal' },
                         ] as { key: TabType; label: string }[]).map((tab) => (
                             <button
                                 key={tab.key}

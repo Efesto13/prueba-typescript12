@@ -32,7 +32,10 @@ export default function RegisterForm() {
                 showConfirmButton: false,
             });
             localStorage.setItem("accessToken", data.accessToken)
-            localStorage.setItem("usuario-logueado", JSON.stringify({ email }));
+            localStorage.setItem("usuario-logueado", JSON.stringify({ 
+                email: data.user.email, 
+                name: data.user.name 
+            }));
             //redirigir segun el rol
             const role = data.user.role;
             if (role === "ADMIN") {
@@ -65,7 +68,7 @@ export default function RegisterForm() {
                 <input
                     type="email"
                     placeholder="ejemplo@correo.com"
-                    className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gra p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                 />
@@ -76,7 +79,7 @@ export default function RegisterForm() {
                 <input
                     type="password"
                     placeholder="••••••••"
-                    className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 />

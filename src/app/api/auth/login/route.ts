@@ -16,7 +16,8 @@ export async function POST(req: Request) {
 
         const res = NextResponse.json({
             message: "Login correcto",
-            user: user.user
+            user: user.user,
+            accessToken: user.accessToken
         });
 
         res.cookies.set("refreshToken", user.refreshToken, {

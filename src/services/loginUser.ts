@@ -30,6 +30,7 @@ export async function LoginUser(user: Pick<User, 'email' | 'password'>) {
         refreshToken: await generateRefreshToken(payload),
         user: {
             id: validateUser.id,
+            name: validateUser.name,
             email: validateUser.email,
             role: validateUser.role
         }

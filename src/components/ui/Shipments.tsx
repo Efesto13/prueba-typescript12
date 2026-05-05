@@ -53,6 +53,7 @@ export default function DriverCommandCenter() {
             const shipmentsData = await shipmentsRes.json();
             const usersData = await usersRes.json();
 
+
             setShipments(shipmentsData.filter((s: Shipment) => s.status === 'PENDING'));
             setDrivers(usersData.filter((u: Driver) => u.role === 'DRIVER' && u.isActive));
         } catch {
