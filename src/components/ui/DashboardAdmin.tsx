@@ -8,7 +8,8 @@ import { User } from '@/types/user';
 import { Role } from '@/generated/prisma';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import prisma from '@/lib/db';
+import { Aside } from './Aside';
+import { Header } from './Header';
 
 
 
@@ -147,80 +148,12 @@ export default function MasterAdmin() {
     return (
         <div className="font-body selection:bg-primary-container selection:text-on-primary">
 
-            {/* Sidebar — solo visible en lg+ */}
-            <aside className="fixed left-0 top-0 h-screen w-64 bg-[#1b1b1b] text-sm font-medium font-inter border-r border-slate-800 flex-col p-4 gap-6 z-50 hidden lg:flex">
-                <div className="px-6 pb-2">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center overflow-hidden">
-                            <div className="w-full h-full bg-amber-400 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-black text-sm">person</span>
-                            </div>
-                        </div>
-                        <div>
-                            <p className="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold text-amber-400">{userName}</p>
-                            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.05em]">Terminal 01-A</p>
-                        </div>
-                    </div>
-                </div>
-                <nav className="flex-1 space-y-1">
-                    <div className="px-3">
-                        <div className="px-3">
-                            <a className="flex items-center gap-3 px-4 py-3 bg-[#353535] text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold" href="#">
-                                <span className="material-symbols-outlined">dashboard</span>
-                                Master Admin
-                            </a>
-                        </div>
-                        <div className="px-3">
-                            <a className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all" href="#">
-                                <span className="material-symbols-outlined">badge</span>
-                                <Link href="/shipments">Shipments</Link>
-                            </a>
-                        </div>
-
-                    </div>
-                </nav>
-                <div className="px-6 py-4 space-y-4">
-                    <button onClick={() => exportShipmentsPDF(users)} className="w-full bg-primary-container text-on-primary py-3 rounded-xl font-bold uppercase tracking-[0.05em] text-[10px] shadow-[0_0_12px_rgba(255,191,0,0.3)] hover:shadow-[0_0_20px_rgba(255,191,0,0.4)] transition-all">
-                        Generate Report
-                    </button>
-                </div>
-                <div className='px-8 py-2 space-y-2'>
-                    <button onClick={handleLogout} className="w-full bg-red-500 text-white py-3 rounded-xl font-bold uppercase tracking-[0.05em] text-[10px] hover:bg-red-600 transition-all">
-                        Cerrar Sesión
-                    </button>
-                </div>
-            </aside>
+            <Aside userName={userName} users={users} handleLogout={handleLogout} />
 
             {/* Main — sin margin en mobile, con margin en lg+ */}
             <main className="lg:ml-64 min-h-screen flex flex-col">
 
-                {/* Header */}
-                <header className="bg-[#131313] flex justify-between items-center w-full px-4 lg:px-8 h-16 sticky top-0 z-50 gap-4">
-                    <div className="flex items-center gap-4 lg:gap-12 min-w-0">
-                        <span className="text-2xl font-black italic tracking-tighter text-amber-400 font-['Inter'] shrink-0">TRUX</span>
-                        {/* Search oculto en mobile pequeño */}
-                        <div className="relative hidden sm:block">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">search</span>
-                            <input
-                                className="bg-[#1b1b1b] border-none rounded-full pl-10 pr-4 py-2 text-sm w-48 lg:w-80 text-on-surface focus:ring-1 focus:ring-amber-400 placeholder:text-zinc-600 transition-all"
-                                placeholder="Global system search..."
-                                type="text"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-3 lg:gap-6 shrink-0">
-                        {/* Nav links ocultos en mobile */}
-                        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-[12px] uppercase font-bold tracking-widest font-['Inter']">
-                            <a className="text-zinc-400 hover:text-amber-300 transition-colors" href="#">Terminal</a>
-                            <a className="text-amber-400 font-bold border-b-2 border-amber-400 py-5" href="#">Directory</a>
-                            <a className="text-zinc-400 hover:text-amber-300 transition-colors" href="#">Network</a>
-                        </nav>
-                        <div className="flex items-center gap-2 lg:gap-4 md:border-l md:border-zinc-800 md:pl-6">
-                            <button className="material-symbols-outlined text-zinc-400 hover:text-amber-400 transition-colors">notifications</button>
-                            <button className="material-symbols-outlined text-zinc-400 hover:text-amber-400 transition-colors">settings</button>
-                        </div>
-                    </div>
-                </header>
+                <Header />
 
                 {/* Canvas */}
                 <div className="p-4 lg:p-8 space-y-6 lg:space-y-8 flex-1 min-w-0">

@@ -32,9 +32,9 @@ export default function RegisterForm() {
                 showConfirmButton: false,
             });
             localStorage.setItem("accessToken", data.accessToken)
-            localStorage.setItem("usuario-logueado", JSON.stringify({ 
-                email: data.user.email, 
-                name: data.user.name 
+            localStorage.setItem("usuario-logueado", JSON.stringify({
+                email: data.user.email,
+                name: data.user.name
             }));
             //redirigir segun el rol
             const role = data.user.role;
@@ -63,12 +63,13 @@ export default function RegisterForm() {
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full text-start">
             <h2 className="text-2xl font-black tracking-tighter text-[#fbbc00]">TRUX LOGISTICA</h2>
-            <p className="text-on-surface-variant font-medium tracking-wide text-sm uppercase opacity-70">Enter credentials to initialize your session</p>            <div className="space-y-2">
+            <p className="text-on-surface-variant font-medium tracking-wide text-sm uppercase opacity-70">Enter credentials to initialize your session</p>
+            <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400 ml-1">Correo Electrónico</label>
                 <input
                     type="email"
                     placeholder="ejemplo@correo.com"
-                    className="w-full bg-transparent border-b border-gra p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                 />

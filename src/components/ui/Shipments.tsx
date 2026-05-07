@@ -1,6 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Aside } from '@/components/ui/Aside';
+import { User } from '@/types/user';
+import { useRouter } from 'next/navigation';
+import { Header } from '@/components/ui/Header';
 
 type ShipmentStatus = 'PENDING' | 'ASSIGNED' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED';
 
@@ -32,12 +36,27 @@ function getInitials(name: string): string {
 }
 
 export default function DriverCommandCenter() {
+    const router = useRouter();
     const [shipments, setShipments] = useState<Shipment[]>([]);
     const [drivers, setDrivers] = useState<Driver[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null);
     const [assigning, setAssigning] = useState(false);
     const [warning, setWarning] = useState<string | null>(null);
+    const [userName, setUserName] = useState<string>('ADMIN');
+    const [users, setUsers] = useState<User[]>([]);
+
+    async function handleLogout() {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (e) {
+            console.error('Error cerrando sesión', e);
+        } finally {
+            localStorage.clear();
+            router.push('/login');
+        }
+    }
+
 
     async function fetchData() {
         try {
@@ -56,6 +75,7 @@ export default function DriverCommandCenter() {
 
             setShipments(shipmentsData.filter((s: Shipment) => s.status === 'PENDING'));
             setDrivers(usersData.filter((u: Driver) => u.role === 'DRIVER' && u.isActive));
+            setUsers(usersData);
         } catch {
             console.error('Error al cargar datos');
         } finally {
@@ -65,7 +85,17 @@ export default function DriverCommandCenter() {
 
     useEffect(() => {
         fetchData();
+        const storedUser = localStorage.getItem('usuario-logueado');
+        if (storedUser) {
+            try {
+                const { name } = JSON.parse(storedUser);
+                if (name) setUserName(name);
+            } catch (e) {
+                console.error("Error parsing stored user", e);
+            }
+        }
     }, []);
+
 
     async function handleAssign(driverId: number) {
         if (!selectedShipment) {
@@ -100,63 +130,16 @@ export default function DriverCommandCenter() {
     return (
         <div className="flex min-h-screen overflow-hidden" style={{ backgroundColor: '#131313', color: '#e2e2e2', fontFamily: "'Inter', sans-serif" }}>
 
-            {/* Sidebar */}
-            <aside className="hidden md:flex flex-col py-8 gap-4 bg-[#1b1b1b] h-screen w-64 fixed left-0 top-0 shadow-[4px_0px_20px_rgba(255,191,0,0.05)] z-50">
-                <div className="px-6 mb-8">
-                    <h1 className="text-[#ffbf00] font-bold font-['Inter'] uppercase tracking-[0.05em] text-xs">TRUX COMMAND</h1>
-                    <p className="text-[#e2e2e2]/40 text-[10px] uppercase tracking-widest mt-1">Logistics HQ</p>
-                </div>
-                <nav className="flex-1 space-y-1">
-                    <div className="px-3">
-                        <a className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all" href="#">
-                            <span className="material-symbols-outlined">domain</span>
-                            <Link href="/masterAdmin">Master Admin</Link>
-                        </a>
-                    </div>
-                    <div className="px-3">
-                        <a className="flex items-center gap-3 px-4 py-3 bg-[#353535] text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold" href="#">
-                            <span className="material-symbols-outlined">dashboard</span>
-                            Shipments
-                        </a>
-                    </div>
-
-                    <div className="px-3">
-                        <a className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all" href="#">
-                            <span className="material-symbols-outlined">inventory_2</span>
-                            Active Manifests
-                        </a>
-                    </div>
-
-                </nav>
-                <div className="px-6 mt-auto">
-                    <button className="w-full py-4 bg-[#ffbf00] text-black font-bold rounded-xl uppercase tracking-widest text-[10px] shadow-[0_0_20px_rgba(255,191,0,0.2)]">
-                        ASSIGN DRIVER
-                    </button>
-                </div>
-            </aside>
+            <Aside
+                userName={userName}
+                users={users}
+                handleLogout={() => { handleLogout(); }}
+            />
 
             {/* Main */}
             <main className="md:ml-64 flex-1 flex flex-col min-w-0 bg-[#131313] relative overflow-hidden">
 
-                {/* Header */}
-                <header className="flex justify-between items-center px-6 h-16 w-full z-50 bg-[#131313] font-['Inter'] tracking-tight font-bold uppercase sticky top-0">
-                    <div className="flex items-center gap-8">
-                        <div className="text-[#ffbf00] font-black tracking-tighter text-2xl">TRUX</div>
-                        <div className="hidden md:flex gap-6">
-                            <a className="text-[#ffbf00] border-b-2 border-[#ffbf00] h-16 flex items-center px-2" href="#">Dashboard</a>
-                            <a className="text-[#e2e2e2]/60 hover:bg-[#353535] transition-colors h-16 flex items-center px-2" href="#">Shipments</a>
-                            <a className="text-[#e2e2e2]/60 hover:bg-[#353535] transition-colors h-16 flex items-center px-2" href="#">Network</a>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <button className="p-2 text-[#e2e2e2]/60 hover:bg-[#353535] rounded-full transition-colors">
-                            <span className="material-symbols-outlined">notifications</span>
-                        </button>
-                        <button className="p-2 text-[#e2e2e2]/60 hover:bg-[#353535] rounded-full transition-colors">
-                            <span className="material-symbols-outlined">settings</span>
-                        </button>
-                    </div>
-                </header>
+                <Header />
 
                 {/* Warning */}
                 {warning && (

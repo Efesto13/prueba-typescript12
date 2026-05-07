@@ -1,8 +1,9 @@
 'use client';
-export default function Driver() {
+import Driver from "@/components/ui/Driver";
+export default function DriverPage() {
     return (
-        <div>
-            <h1>Driver</h1>
-        </div>
+
+        <Driver />
+
     );
 }

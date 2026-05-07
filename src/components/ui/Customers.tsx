@@ -40,11 +40,12 @@ function StatusBadge({ status }: { status: ShipmentStatus }) {
     );
 }
 
-export default function Company() {
+export default function Customers() {
     const router = useRouter();
     const [shipments, setShipments] = useState<Shipment[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [userName, setUserName] = useState('');
 
     async function handleLogout() {
         try {
@@ -131,7 +132,7 @@ export default function Company() {
                     <div className="flex items-center gap-4">
                         <span className="opacity-50">Portal</span>
                         <span className="material-symbols-outlined text-[10px] opacity-30">arrow_forward_ios</span>
-                        <span className="text-on-surface">Company Overview</span>
+                        <span className="text-on-surface">Client Overview</span>
                     </div>
                     <div className="flex items-center gap-6">
                         <span className="material-symbols-outlined text-[#e2e2e2] opacity-70 hover:text-[#ffbf00] cursor-pointer transition-colors">notifications</span>
@@ -144,7 +145,7 @@ export default function Company() {
                     {/* Welcome Section */}
                     <section className="flex flex-col md:flex-row justify-between items-end gap-8">
                         <div>
-                            <h2 className="text-4xl font-black text-on-surface tracking-tight mb-2">Welcome Company</h2>
+                            <h2 className="text-4xl font-black text-on-surface tracking-tight mb-2">Welcome {userName}</h2>
                             <p className="text-on-surface-variant font-medium tracking-wide uppercase text-xs opacity-80">Logistics Command Center • Real-time Operations</p>
                         </div>
                         <div className="flex gap-10 border-l border-outline-variant/20 pl-10">

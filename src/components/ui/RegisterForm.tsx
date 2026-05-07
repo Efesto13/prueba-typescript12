@@ -56,14 +56,14 @@ export default function RegisterForm() {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
-            <h2 className="text-xl font-semibold text-white/90 text-center mb-2">Crea tu cuenta</h2>
+            <h2 className="text-on-surface-variant font-medium tracking-wide text-sm uppercase opacity-70">CREATE YOUR ACCOUNT</h2>
 
             <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-400 ml-1">Nombre completo</label>
+                <label className="text-sm font-medium text-gray-400 ml-1">Full Name</label>
                 <input
                     type="text"
                     placeholder="Pepito Perez"
-                    className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={name}
                     onChange={e => setName(e.target.value)}
                 />
@@ -73,7 +73,7 @@ export default function RegisterForm() {
                 <input
                     type="email"
                     placeholder="ejemplo@correo.com"
-                    className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                 />
@@ -83,7 +83,7 @@ export default function RegisterForm() {
                 <input
                     type="text"
                     placeholder="3333333333"
-                    className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                 />
@@ -93,7 +93,7 @@ export default function RegisterForm() {
                 <input
                     type="text"
                     placeholder="direccion"
-                    className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={address}
                     onChange={e => setAddress(e.target.value)}
                 />
@@ -101,7 +101,7 @@ export default function RegisterForm() {
             <select
                 name="role"
                 id="role"
-                className='w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all'
+                className='w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all'
                 value={role}
                 onChange={e => setRole(e.target.value)}
             >
@@ -117,7 +117,7 @@ export default function RegisterForm() {
                     <input
                         type="text"
                         placeholder="Ingrese el código secreto"
-                        className="w-full bg-amber-400/5 border border-amber-400/20 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all"
+                        className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                         value={adminCode}
                         onChange={e => setAdminCode(e.target.value)}
                         required
@@ -130,7 +130,7 @@ export default function RegisterForm() {
                     <input
                         type="text"
                         placeholder="nit"
-                        className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                        className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                         value={nit}
                         onChange={e => setNit(e.target.value)}
                     />
@@ -143,7 +143,7 @@ export default function RegisterForm() {
                 <input
                     type="password"
                     placeholder="••••••••"
-                    className="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    className="w-full bg-transparent border-b border-gray p-3 rounded-xl text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 />
@@ -151,7 +151,7 @@ export default function RegisterForm() {
 
             <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98] mt-2"
+                className="w-full py-5 rounded-xl text-[#402d00] mt-5 font-bold uppercase tracking-widest text-sm bg-[linear-gradient(135deg,_#ffe2ab_0%,_#ffbf00_100%)] shadow-[0_0_20px_rgba(255,191,0,0.3)] transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2"
             >
                 Registrar Cuenta
             </button>
@@ -159,7 +159,7 @@ export default function RegisterForm() {
             <div className="text-center mt-2">
                 <p className="text-sm text-gray-500">
                     ¿Ya tienes cuenta?{" "}
-                    <Link href="/login" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+                    <Link href="/login" className="text-[#fbbc00] hover:text-[#fff] font-medium transition-colors">
                         Inicia sesión aquí
                     </Link>
                 </p>

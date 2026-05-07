@@ -1,4 +1,3 @@
-'use client'
 'use client';
 import { useState } from 'react';
 
@@ -12,7 +11,8 @@ type Shipment = {
     destination: string;
     timeline: string;
     status: ShipmentStatus;
-    customer: { id: number; name: string; email: string };
+    customer?: { id: number; name: string; email: string } | null;
+    company?: { id: number; name: string; email: string } | null;
 };
 
 type ActiveTripModalProps = {
@@ -128,8 +128,8 @@ export default function ActiveTripModal({ isOpen, onClose, onSuccess, shipment }
                                 <p className="text-sm font-bold text-[#e2e2e2]">{shipment.status.replace('_', ' ')}</p>
                             </div>
                             <div>
-                                <p className="text-[9px] font-bold uppercase tracking-widest text-[#e2e2e2]/40">Customer</p>
-                                <p className="text-sm font-bold text-[#e2e2e2]">{shipment.customer.name}</p>
+                                <p className="text-[9px] font-bold uppercase tracking-widest text-[#e2e2e2]/40">Client</p>
+                                <p className="text-sm font-bold text-[#e2e2e2]">{shipment.company?.name || shipment.customer?.name || "N/A"}</p>
                             </div>
                         </div>
                     </div>
