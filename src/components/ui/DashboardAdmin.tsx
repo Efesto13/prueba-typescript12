@@ -151,7 +151,7 @@ export default function MasterAdmin() {
             <Aside userName={userName} users={users} handleLogout={handleLogout} />
 
             {/* Main — sin margin en mobile, con margin en lg+ */}
-            <main className="lg:ml-64 min-h-screen flex flex-col">
+            <main className="lg:ml-64 min-h-screen flex flex-col bg-[#0a0a0a]">
 
                 <Header />
 
