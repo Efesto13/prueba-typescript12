@@ -16,42 +16,81 @@ enum Role {
 
 enum ShipmentStatus {
   PENDING
+  PENDING_SUPERADMIN_REVIEW
+  PENDING_FOR_PAY
+  AVAILABLE_FOR_ASSIGNMENT
   ASSIGNED
   IN_TRANSIT
   DELIVERED
   CANCELLED
+  REJECTED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
 }
 
 model User {
-  id                Int        @id @default(autoincrement())
-  name              String
-  email             String     @unique
-  nit               String?    @unique
-  address           String?
-  phone             String?
-  password          String
-  role              Role       @default(CUSTOMER)
-  isActive          Boolean    @default(true)
-  createdAt         DateTime   @default(now())
-  customerShipments Shipment[] @relation("CustomerShipments")
-  driverShipments   Shipment[] @relation("DriverShipments")
+  id                    Int                 @id @default(autoincrement())
+  name                  String
+  email                 String              @unique
+  nit                   String?             @unique
+  address               String?
+  phone                 String?
+  password              String
+  role                  Role                @default(CUSTOMER)
+  isActive              Boolean             @default(true)
+  createdAt             DateTime            @default(now())
+  companyId             Int?
+  company               Company?            @relation(fields: [companyId], references: [id])
+  managedCompanies      Company[]           @relation("CompanyManager")
+  createdCompanies      Company[]           @relation("CompanyCreator")
+  assignedCompanies     Company[]           @relation("CompanyAssigner")
+  customerShipments     Shipment[]          @relation("CustomerShipments")
+  driverShipments       Shipment[]          @relation("DriverShipments")
+  createdShipments      Shipment[]          @relation("CreatedShipments")
+  assignedShipments     Shipment[]          @relation("AssignedShipments")
+  priceReviewedShipments Shipment[]         @relation("PriceReviewedShipments")
+  driverApplications    DriverApplication[] @relation("DriverApplications")
+  reviewedApplications  DriverApplication[] @relation("ReviewedDriverApplications")
 }
 
 model Shipment {
-  id          Int            @id @default(autoincrement())
-  cargoType   String
-  weight      Float
-  dimensions  String?
-  origin      String
-  destination String
-  timeline    String
-  status      ShipmentStatus @default(PENDING)
-  senderId    Int
-  sender      User           @relation("CustomerShipments", fields: [senderId], references: [id])
-  driverId    Int?
-  driver      User?          @relation("DriverShipments", fields: [driverId], references: [id])
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id                Int            @id @default(autoincrement())
+  cargoType         String
+  weight            Float
+  dimensions        String?
+  origin            String
+  destination       String
+  timeline          String
+  status            ShipmentStatus @default(PENDING_SUPERADMIN_REVIEW)
+  senderId          Int
+  sender            User           @relation("CustomerShipments", fields: [senderId], references: [id])
+  driverId          Int?
+  driver            User?          @relation("DriverShipments", fields: [driverId], references: [id])
+  companyId         Int?
+  company           Company?       @relation(fields: [companyId], references: [id])
+  createdById       Int?
+  createdBy         User?          @relation("CreatedShipments", fields: [createdById], references: [id])
+  assignedById      Int?
+  assignedBy        User?          @relation("AssignedShipments", fields: [assignedById], references: [id])
+  proposedPrice     Decimal?       @db.Decimal(12, 2)
+  approvedPrice     Decimal?       @db.Decimal(12, 2)
+  priceReviewedById Int?
+  priceReviewedBy   User?          @relation("PriceReviewedShipments", fields: [priceReviewedById], references: [id])
+  priceReviewedAt   DateTime?
+  paymentStatus     PaymentStatus  @default(PENDING)
+  paidAt            DateTime?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 }
 
 model Agent {
@@ -66,4 +105,35 @@ model Agent {
 
   // Opcional: Relación con el usuario
   // user     User     @relation(fields: [userId], references: [id])
+}
+
+model Company {
+  id           Int       @id @default(autoincrement())
+  name         String
+  nit          String    @unique
+  address      String?
+  isActive     Boolean   @default(true)
+  managerId    Int?
+  manager      User?     @relation("CompanyManager", fields: [managerId], references: [id])
+  createdById  Int?
+  createdBy    User?     @relation("CompanyCreator", fields: [createdById], references: [id])
+  assignedById Int?
+  assignedBy   User?     @relation("CompanyAssigner", fields: [assignedById], references: [id])
+  createdAt    DateTime  @default(now())
+  users        User[]
+  shipments    Shipment[]
+}
+
+model DriverApplication {
+  id           Int            @id @default(autoincrement())
+  userId       Int
+  user         User           @relation("DriverApplications", fields: [userId], references: [id])
+  status       ApprovalStatus @default(PENDING)
+  reviewedById Int?
+  reviewedBy   User?          @relation("ReviewedDriverApplications", fields: [reviewedById], references: [id])
+  notes        String?
+  createdAt    DateTime       @default(now())
+  reviewedAt   DateTime?
+
+  @@unique([userId])
 }
