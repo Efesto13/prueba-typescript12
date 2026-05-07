@@ -105,10 +105,8 @@ export default function RegisterForm() {
                 value={role}
                 onChange={e => setRole(e.target.value)}
             >
-                <option value="CUSTOMER" className='bg-gray-900'>Cliente</option>
-                <option value="COMPANY" className='bg-gray-900'>Empresa</option>
-                <option value="DRIVER" className='bg-gray-900'>Conductor</option>
-                <option value="ADMIN" className='bg-gray-900'>Administrador</option>
+                    <option value="DRIVER" className='bg-gray-900'>Conductor</option>
+                
             </select>
 
             {role === 'ADMIN' && (
