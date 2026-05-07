@@ -130,7 +130,8 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   role: 'role',
   isActive: 'isActive',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  companyId: 'companyId'
 };
 
 exports.Prisma.ShipmentScalarFieldEnum = {
@@ -144,6 +145,15 @@ exports.Prisma.ShipmentScalarFieldEnum = {
   status: 'status',
   senderId: 'senderId',
   driverId: 'driverId',
+  companyId: 'companyId',
+  createdById: 'createdById',
+  assignedById: 'assignedById',
+  proposedPrice: 'proposedPrice',
+  approvedPrice: 'approvedPrice',
+  priceReviewedById: 'priceReviewedById',
+  priceReviewedAt: 'priceReviewedAt',
+  paymentStatus: 'paymentStatus',
+  paidAt: 'paidAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -157,6 +167,28 @@ exports.Prisma.AgentScalarFieldEnum = {
   isPublic: 'isPublic',
   userId: 'userId',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.CompanyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  nit: 'nit',
+  address: 'address',
+  isActive: 'isActive',
+  managerId: 'managerId',
+  createdById: 'createdById',
+  assignedById: 'assignedById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DriverApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  reviewedById: 'reviewedById',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  reviewedAt: 'reviewedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -193,16 +225,34 @@ exports.Role = exports.$Enums.Role = {
 
 exports.ShipmentStatus = exports.$Enums.ShipmentStatus = {
   PENDING: 'PENDING',
+  PENDING_SUPERADMIN_REVIEW: 'PENDING_SUPERADMIN_REVIEW',
+  PENDING_FOR_PAY: 'PENDING_FOR_PAY',
+  AVAILABLE_FOR_ASSIGNMENT: 'AVAILABLE_FOR_ASSIGNMENT',
   ASSIGNED: 'ASSIGNED',
   IN_TRANSIT: 'IN_TRANSIT',
   DELIVERED: 'DELIVERED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  REJECTED: 'REJECTED'
+};
+
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED'
+};
+
+exports.ApprovalStatus = exports.$Enums.ApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
   Shipment: 'Shipment',
-  Agent: 'Agent'
+  Agent: 'Agent',
+  Company: 'Company',
+  DriverApplication: 'DriverApplication'
 };
 
 /**

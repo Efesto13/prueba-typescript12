@@ -28,6 +28,16 @@ export type Shipment = $Result.DefaultSelection<Prisma.$ShipmentPayload>
  * 
  */
 export type Agent = $Result.DefaultSelection<Prisma.$AgentPayload>
+/**
+ * Model Company
+ * 
+ */
+export type Company = $Result.DefaultSelection<Prisma.$CompanyPayload>
+/**
+ * Model DriverApplication
+ * 
+ */
+export type DriverApplication = $Result.DefaultSelection<Prisma.$DriverApplicationPayload>
 
 /**
  * Enums
@@ -45,13 +55,35 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const ShipmentStatus: {
   PENDING: 'PENDING',
+  PENDING_SUPERADMIN_REVIEW: 'PENDING_SUPERADMIN_REVIEW',
+  PENDING_FOR_PAY: 'PENDING_FOR_PAY',
+  AVAILABLE_FOR_ASSIGNMENT: 'AVAILABLE_FOR_ASSIGNMENT',
   ASSIGNED: 'ASSIGNED',
   IN_TRANSIT: 'IN_TRANSIT',
   DELIVERED: 'DELIVERED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  REJECTED: 'REJECTED'
 };
 
 export type ShipmentStatus = (typeof ShipmentStatus)[keyof typeof ShipmentStatus]
+
+
+export const ApprovalStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type ApprovalStatus = (typeof ApprovalStatus)[keyof typeof ApprovalStatus]
+
+
+export const PaymentStatus: {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED'
+};
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 }
 
@@ -62,6 +94,14 @@ export const Role: typeof $Enums.Role
 export type ShipmentStatus = $Enums.ShipmentStatus
 
 export const ShipmentStatus: typeof $Enums.ShipmentStatus
+
+export type ApprovalStatus = $Enums.ApprovalStatus
+
+export const ApprovalStatus: typeof $Enums.ApprovalStatus
+
+export type PaymentStatus = $Enums.PaymentStatus
+
+export const PaymentStatus: typeof $Enums.PaymentStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -213,6 +253,26 @@ export class PrismaClient<
     * ```
     */
   get agent(): Prisma.AgentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.company`: Exposes CRUD operations for the **Company** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Companies
+    * const companies = await prisma.company.findMany()
+    * ```
+    */
+  get company(): Prisma.CompanyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.driverApplication`: Exposes CRUD operations for the **DriverApplication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DriverApplications
+    * const driverApplications = await prisma.driverApplication.findMany()
+    * ```
+    */
+  get driverApplication(): Prisma.DriverApplicationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -649,7 +709,9 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Shipment: 'Shipment',
-    Agent: 'Agent'
+    Agent: 'Agent',
+    Company: 'Company',
+    DriverApplication: 'DriverApplication'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -665,7 +727,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "shipment" | "agent"
+      modelProps: "user" | "shipment" | "agent" | "company" | "driverApplication"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -891,6 +953,154 @@ export namespace Prisma {
           }
         }
       }
+      Company: {
+        payload: Prisma.$CompanyPayload<ExtArgs>
+        fields: Prisma.CompanyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CompanyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CompanyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>
+          }
+          findFirst: {
+            args: Prisma.CompanyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CompanyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>
+          }
+          findMany: {
+            args: Prisma.CompanyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>[]
+          }
+          create: {
+            args: Prisma.CompanyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>
+          }
+          createMany: {
+            args: Prisma.CompanyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CompanyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>[]
+          }
+          delete: {
+            args: Prisma.CompanyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>
+          }
+          update: {
+            args: Prisma.CompanyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>
+          }
+          deleteMany: {
+            args: Prisma.CompanyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CompanyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CompanyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>[]
+          }
+          upsert: {
+            args: Prisma.CompanyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CompanyPayload>
+          }
+          aggregate: {
+            args: Prisma.CompanyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCompany>
+          }
+          groupBy: {
+            args: Prisma.CompanyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CompanyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CompanyCountArgs<ExtArgs>
+            result: $Utils.Optional<CompanyCountAggregateOutputType> | number
+          }
+        }
+      }
+      DriverApplication: {
+        payload: Prisma.$DriverApplicationPayload<ExtArgs>
+        fields: Prisma.DriverApplicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DriverApplicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DriverApplicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>
+          }
+          findFirst: {
+            args: Prisma.DriverApplicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DriverApplicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>
+          }
+          findMany: {
+            args: Prisma.DriverApplicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>[]
+          }
+          create: {
+            args: Prisma.DriverApplicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>
+          }
+          createMany: {
+            args: Prisma.DriverApplicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DriverApplicationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>[]
+          }
+          delete: {
+            args: Prisma.DriverApplicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>
+          }
+          update: {
+            args: Prisma.DriverApplicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.DriverApplicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DriverApplicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DriverApplicationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>[]
+          }
+          upsert: {
+            args: Prisma.DriverApplicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DriverApplicationPayload>
+          }
+          aggregate: {
+            args: Prisma.DriverApplicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDriverApplication>
+          }
+          groupBy: {
+            args: Prisma.DriverApplicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DriverApplicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DriverApplicationCountArgs<ExtArgs>
+            result: $Utils.Optional<DriverApplicationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1002,6 +1212,8 @@ export namespace Prisma {
     user?: UserOmit
     shipment?: ShipmentOmit
     agent?: AgentOmit
+    company?: CompanyOmit
+    driverApplication?: DriverApplicationOmit
   }
 
   /* Types for Logging */
@@ -1082,13 +1294,29 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    managedCompanies: number
+    createdCompanies: number
+    assignedCompanies: number
     customerShipments: number
     driverShipments: number
+    createdShipments: number
+    assignedShipments: number
+    priceReviewedShipments: number
+    driverApplications: number
+    reviewedApplications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    managedCompanies?: boolean | UserCountOutputTypeCountManagedCompaniesArgs
+    createdCompanies?: boolean | UserCountOutputTypeCountCreatedCompaniesArgs
+    assignedCompanies?: boolean | UserCountOutputTypeCountAssignedCompaniesArgs
     customerShipments?: boolean | UserCountOutputTypeCountCustomerShipmentsArgs
     driverShipments?: boolean | UserCountOutputTypeCountDriverShipmentsArgs
+    createdShipments?: boolean | UserCountOutputTypeCountCreatedShipmentsArgs
+    assignedShipments?: boolean | UserCountOutputTypeCountAssignedShipmentsArgs
+    priceReviewedShipments?: boolean | UserCountOutputTypeCountPriceReviewedShipmentsArgs
+    driverApplications?: boolean | UserCountOutputTypeCountDriverApplicationsArgs
+    reviewedApplications?: boolean | UserCountOutputTypeCountReviewedApplicationsArgs
   }
 
   // Custom InputTypes
@@ -1105,6 +1333,27 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountManagedCompaniesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CompanyWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedCompaniesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CompanyWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssignedCompaniesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CompanyWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountCustomerShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShipmentWhereInput
   }
@@ -1113,6 +1362,81 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountDriverShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssignedShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPriceReviewedShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShipmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDriverApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriverApplicationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReviewedApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriverApplicationWhereInput
+  }
+
+
+  /**
+   * Count Type CompanyCountOutputType
+   */
+
+  export type CompanyCountOutputType = {
+    users: number
+    shipments: number
+  }
+
+  export type CompanyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | CompanyCountOutputTypeCountUsersArgs
+    shipments?: boolean | CompanyCountOutputTypeCountShipmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CompanyCountOutputType without action
+   */
+  export type CompanyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CompanyCountOutputType
+     */
+    select?: CompanyCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CompanyCountOutputType without action
+   */
+  export type CompanyCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+  /**
+   * CompanyCountOutputType without action
+   */
+  export type CompanyCountOutputTypeCountShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShipmentWhereInput
   }
 
@@ -1135,10 +1459,12 @@ export namespace Prisma {
 
   export type UserAvgAggregateOutputType = {
     id: number | null
+    companyId: number | null
   }
 
   export type UserSumAggregateOutputType = {
     id: number | null
+    companyId: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1152,6 +1478,7 @@ export namespace Prisma {
     role: $Enums.Role | null
     isActive: boolean | null
     createdAt: Date | null
+    companyId: number | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1165,6 +1492,7 @@ export namespace Prisma {
     role: $Enums.Role | null
     isActive: boolean | null
     createdAt: Date | null
+    companyId: number | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1178,16 +1506,19 @@ export namespace Prisma {
     role: number
     isActive: number
     createdAt: number
+    companyId: number
     _all: number
   }
 
 
   export type UserAvgAggregateInputType = {
     id?: true
+    companyId?: true
   }
 
   export type UserSumAggregateInputType = {
     id?: true
+    companyId?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -1201,6 +1532,7 @@ export namespace Prisma {
     role?: true
     isActive?: true
     createdAt?: true
+    companyId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1214,6 +1546,7 @@ export namespace Prisma {
     role?: true
     isActive?: true
     createdAt?: true
+    companyId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1227,6 +1560,7 @@ export namespace Prisma {
     role?: true
     isActive?: true
     createdAt?: true
+    companyId?: true
     _all?: true
   }
 
@@ -1327,6 +1661,7 @@ export namespace Prisma {
     role: $Enums.Role
     isActive: boolean
     createdAt: Date
+    companyId: number | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1359,8 +1694,18 @@ export namespace Prisma {
     role?: boolean
     isActive?: boolean
     createdAt?: boolean
+    companyId?: boolean
+    company?: boolean | User$companyArgs<ExtArgs>
+    managedCompanies?: boolean | User$managedCompaniesArgs<ExtArgs>
+    createdCompanies?: boolean | User$createdCompaniesArgs<ExtArgs>
+    assignedCompanies?: boolean | User$assignedCompaniesArgs<ExtArgs>
     customerShipments?: boolean | User$customerShipmentsArgs<ExtArgs>
     driverShipments?: boolean | User$driverShipmentsArgs<ExtArgs>
+    createdShipments?: boolean | User$createdShipmentsArgs<ExtArgs>
+    assignedShipments?: boolean | User$assignedShipmentsArgs<ExtArgs>
+    priceReviewedShipments?: boolean | User$priceReviewedShipmentsArgs<ExtArgs>
+    driverApplications?: boolean | User$driverApplicationsArgs<ExtArgs>
+    reviewedApplications?: boolean | User$reviewedApplicationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1375,6 +1720,8 @@ export namespace Prisma {
     role?: boolean
     isActive?: boolean
     createdAt?: boolean
+    companyId?: boolean
+    company?: boolean | User$companyArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1388,6 +1735,8 @@ export namespace Prisma {
     role?: boolean
     isActive?: boolean
     createdAt?: boolean
+    companyId?: boolean
+    company?: boolean | User$companyArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1401,22 +1750,45 @@ export namespace Prisma {
     role?: boolean
     isActive?: boolean
     createdAt?: boolean
+    companyId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "nit" | "address" | "phone" | "password" | "role" | "isActive" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "nit" | "address" | "phone" | "password" | "role" | "isActive" | "createdAt" | "companyId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | User$companyArgs<ExtArgs>
+    managedCompanies?: boolean | User$managedCompaniesArgs<ExtArgs>
+    createdCompanies?: boolean | User$createdCompaniesArgs<ExtArgs>
+    assignedCompanies?: boolean | User$assignedCompaniesArgs<ExtArgs>
     customerShipments?: boolean | User$customerShipmentsArgs<ExtArgs>
     driverShipments?: boolean | User$driverShipmentsArgs<ExtArgs>
+    createdShipments?: boolean | User$createdShipmentsArgs<ExtArgs>
+    assignedShipments?: boolean | User$assignedShipmentsArgs<ExtArgs>
+    priceReviewedShipments?: boolean | User$priceReviewedShipmentsArgs<ExtArgs>
+    driverApplications?: boolean | User$driverApplicationsArgs<ExtArgs>
+    reviewedApplications?: boolean | User$reviewedApplicationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | User$companyArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | User$companyArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      company: Prisma.$CompanyPayload<ExtArgs> | null
+      managedCompanies: Prisma.$CompanyPayload<ExtArgs>[]
+      createdCompanies: Prisma.$CompanyPayload<ExtArgs>[]
+      assignedCompanies: Prisma.$CompanyPayload<ExtArgs>[]
       customerShipments: Prisma.$ShipmentPayload<ExtArgs>[]
       driverShipments: Prisma.$ShipmentPayload<ExtArgs>[]
+      createdShipments: Prisma.$ShipmentPayload<ExtArgs>[]
+      assignedShipments: Prisma.$ShipmentPayload<ExtArgs>[]
+      priceReviewedShipments: Prisma.$ShipmentPayload<ExtArgs>[]
+      driverApplications: Prisma.$DriverApplicationPayload<ExtArgs>[]
+      reviewedApplications: Prisma.$DriverApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1429,6 +1801,7 @@ export namespace Prisma {
       role: $Enums.Role
       isActive: boolean
       createdAt: Date
+      companyId: number | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1823,8 +2196,17 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    company<T extends User$companyArgs<ExtArgs> = {}>(args?: Subset<T, User$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    managedCompanies<T extends User$managedCompaniesArgs<ExtArgs> = {}>(args?: Subset<T, User$managedCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdCompanies<T extends User$createdCompaniesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedCompanies<T extends User$assignedCompaniesArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedCompaniesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     customerShipments<T extends User$customerShipmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$customerShipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     driverShipments<T extends User$driverShipmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$driverShipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdShipments<T extends User$createdShipmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdShipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedShipments<T extends User$assignedShipmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedShipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    priceReviewedShipments<T extends User$priceReviewedShipmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$priceReviewedShipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    driverApplications<T extends User$driverApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$driverApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviewedApplications<T extends User$reviewedApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1864,6 +2246,7 @@ export namespace Prisma {
     readonly role: FieldRef<"User", 'Role'>
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
+    readonly companyId: FieldRef<"User", 'Int'>
   }
     
 
@@ -2118,6 +2501,10 @@ export namespace Prisma {
      */
     data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2188,6 +2575,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2257,6 +2648,97 @@ export namespace Prisma {
   }
 
   /**
+   * User.company
+   */
+  export type User$companyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    where?: CompanyWhereInput
+  }
+
+  /**
+   * User.managedCompanies
+   */
+  export type User$managedCompaniesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    where?: CompanyWhereInput
+    orderBy?: CompanyOrderByWithRelationInput | CompanyOrderByWithRelationInput[]
+    cursor?: CompanyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CompanyScalarFieldEnum | CompanyScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdCompanies
+   */
+  export type User$createdCompaniesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    where?: CompanyWhereInput
+    orderBy?: CompanyOrderByWithRelationInput | CompanyOrderByWithRelationInput[]
+    cursor?: CompanyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CompanyScalarFieldEnum | CompanyScalarFieldEnum[]
+  }
+
+  /**
+   * User.assignedCompanies
+   */
+  export type User$assignedCompaniesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    where?: CompanyWhereInput
+    orderBy?: CompanyOrderByWithRelationInput | CompanyOrderByWithRelationInput[]
+    cursor?: CompanyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CompanyScalarFieldEnum | CompanyScalarFieldEnum[]
+  }
+
+  /**
    * User.customerShipments
    */
   export type User$customerShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2305,6 +2787,126 @@ export namespace Prisma {
   }
 
   /**
+   * User.createdShipments
+   */
+  export type User$createdShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Shipment
+     */
+    select?: ShipmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Shipment
+     */
+    omit?: ShipmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipmentInclude<ExtArgs> | null
+    where?: ShipmentWhereInput
+    orderBy?: ShipmentOrderByWithRelationInput | ShipmentOrderByWithRelationInput[]
+    cursor?: ShipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipmentScalarFieldEnum | ShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.assignedShipments
+   */
+  export type User$assignedShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Shipment
+     */
+    select?: ShipmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Shipment
+     */
+    omit?: ShipmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipmentInclude<ExtArgs> | null
+    where?: ShipmentWhereInput
+    orderBy?: ShipmentOrderByWithRelationInput | ShipmentOrderByWithRelationInput[]
+    cursor?: ShipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipmentScalarFieldEnum | ShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.priceReviewedShipments
+   */
+  export type User$priceReviewedShipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Shipment
+     */
+    select?: ShipmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Shipment
+     */
+    omit?: ShipmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipmentInclude<ExtArgs> | null
+    where?: ShipmentWhereInput
+    orderBy?: ShipmentOrderByWithRelationInput | ShipmentOrderByWithRelationInput[]
+    cursor?: ShipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipmentScalarFieldEnum | ShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.driverApplications
+   */
+  export type User$driverApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    where?: DriverApplicationWhereInput
+    orderBy?: DriverApplicationOrderByWithRelationInput | DriverApplicationOrderByWithRelationInput[]
+    cursor?: DriverApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DriverApplicationScalarFieldEnum | DriverApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * User.reviewedApplications
+   */
+  export type User$reviewedApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    where?: DriverApplicationWhereInput
+    orderBy?: DriverApplicationOrderByWithRelationInput | DriverApplicationOrderByWithRelationInput[]
+    cursor?: DriverApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DriverApplicationScalarFieldEnum | DriverApplicationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2340,6 +2942,12 @@ export namespace Prisma {
     weight: number | null
     senderId: number | null
     driverId: number | null
+    companyId: number | null
+    createdById: number | null
+    assignedById: number | null
+    proposedPrice: Decimal | null
+    approvedPrice: Decimal | null
+    priceReviewedById: number | null
   }
 
   export type ShipmentSumAggregateOutputType = {
@@ -2347,6 +2955,12 @@ export namespace Prisma {
     weight: number | null
     senderId: number | null
     driverId: number | null
+    companyId: number | null
+    createdById: number | null
+    assignedById: number | null
+    proposedPrice: Decimal | null
+    approvedPrice: Decimal | null
+    priceReviewedById: number | null
   }
 
   export type ShipmentMinAggregateOutputType = {
@@ -2360,6 +2974,15 @@ export namespace Prisma {
     status: $Enums.ShipmentStatus | null
     senderId: number | null
     driverId: number | null
+    companyId: number | null
+    createdById: number | null
+    assignedById: number | null
+    proposedPrice: Decimal | null
+    approvedPrice: Decimal | null
+    priceReviewedById: number | null
+    priceReviewedAt: Date | null
+    paymentStatus: $Enums.PaymentStatus | null
+    paidAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2375,6 +2998,15 @@ export namespace Prisma {
     status: $Enums.ShipmentStatus | null
     senderId: number | null
     driverId: number | null
+    companyId: number | null
+    createdById: number | null
+    assignedById: number | null
+    proposedPrice: Decimal | null
+    approvedPrice: Decimal | null
+    priceReviewedById: number | null
+    priceReviewedAt: Date | null
+    paymentStatus: $Enums.PaymentStatus | null
+    paidAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2390,6 +3022,15 @@ export namespace Prisma {
     status: number
     senderId: number
     driverId: number
+    companyId: number
+    createdById: number
+    assignedById: number
+    proposedPrice: number
+    approvedPrice: number
+    priceReviewedById: number
+    priceReviewedAt: number
+    paymentStatus: number
+    paidAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2401,6 +3042,12 @@ export namespace Prisma {
     weight?: true
     senderId?: true
     driverId?: true
+    companyId?: true
+    createdById?: true
+    assignedById?: true
+    proposedPrice?: true
+    approvedPrice?: true
+    priceReviewedById?: true
   }
 
   export type ShipmentSumAggregateInputType = {
@@ -2408,6 +3055,12 @@ export namespace Prisma {
     weight?: true
     senderId?: true
     driverId?: true
+    companyId?: true
+    createdById?: true
+    assignedById?: true
+    proposedPrice?: true
+    approvedPrice?: true
+    priceReviewedById?: true
   }
 
   export type ShipmentMinAggregateInputType = {
@@ -2421,6 +3074,15 @@ export namespace Prisma {
     status?: true
     senderId?: true
     driverId?: true
+    companyId?: true
+    createdById?: true
+    assignedById?: true
+    proposedPrice?: true
+    approvedPrice?: true
+    priceReviewedById?: true
+    priceReviewedAt?: true
+    paymentStatus?: true
+    paidAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2436,6 +3098,15 @@ export namespace Prisma {
     status?: true
     senderId?: true
     driverId?: true
+    companyId?: true
+    createdById?: true
+    assignedById?: true
+    proposedPrice?: true
+    approvedPrice?: true
+    priceReviewedById?: true
+    priceReviewedAt?: true
+    paymentStatus?: true
+    paidAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2451,6 +3122,15 @@ export namespace Prisma {
     status?: true
     senderId?: true
     driverId?: true
+    companyId?: true
+    createdById?: true
+    assignedById?: true
+    proposedPrice?: true
+    approvedPrice?: true
+    priceReviewedById?: true
+    priceReviewedAt?: true
+    paymentStatus?: true
+    paidAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2553,6 +3233,15 @@ export namespace Prisma {
     status: $Enums.ShipmentStatus
     senderId: number
     driverId: number | null
+    companyId: number | null
+    createdById: number | null
+    assignedById: number | null
+    proposedPrice: Decimal | null
+    approvedPrice: Decimal | null
+    priceReviewedById: number | null
+    priceReviewedAt: Date | null
+    paymentStatus: $Enums.PaymentStatus
+    paidAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: ShipmentCountAggregateOutputType | null
@@ -2587,10 +3276,23 @@ export namespace Prisma {
     status?: boolean
     senderId?: boolean
     driverId?: boolean
+    companyId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    proposedPrice?: boolean
+    approvedPrice?: boolean
+    priceReviewedById?: boolean
+    priceReviewedAt?: boolean
+    paymentStatus?: boolean
+    paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sender?: boolean | UserDefaultArgs<ExtArgs>
     driver?: boolean | Shipment$driverArgs<ExtArgs>
+    company?: boolean | Shipment$companyArgs<ExtArgs>
+    createdBy?: boolean | Shipment$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Shipment$assignedByArgs<ExtArgs>
+    priceReviewedBy?: boolean | Shipment$priceReviewedByArgs<ExtArgs>
   }, ExtArgs["result"]["shipment"]>
 
   export type ShipmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2604,10 +3306,23 @@ export namespace Prisma {
     status?: boolean
     senderId?: boolean
     driverId?: boolean
+    companyId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    proposedPrice?: boolean
+    approvedPrice?: boolean
+    priceReviewedById?: boolean
+    priceReviewedAt?: boolean
+    paymentStatus?: boolean
+    paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sender?: boolean | UserDefaultArgs<ExtArgs>
     driver?: boolean | Shipment$driverArgs<ExtArgs>
+    company?: boolean | Shipment$companyArgs<ExtArgs>
+    createdBy?: boolean | Shipment$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Shipment$assignedByArgs<ExtArgs>
+    priceReviewedBy?: boolean | Shipment$priceReviewedByArgs<ExtArgs>
   }, ExtArgs["result"]["shipment"]>
 
   export type ShipmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2621,10 +3336,23 @@ export namespace Prisma {
     status?: boolean
     senderId?: boolean
     driverId?: boolean
+    companyId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    proposedPrice?: boolean
+    approvedPrice?: boolean
+    priceReviewedById?: boolean
+    priceReviewedAt?: boolean
+    paymentStatus?: boolean
+    paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sender?: boolean | UserDefaultArgs<ExtArgs>
     driver?: boolean | Shipment$driverArgs<ExtArgs>
+    company?: boolean | Shipment$companyArgs<ExtArgs>
+    createdBy?: boolean | Shipment$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Shipment$assignedByArgs<ExtArgs>
+    priceReviewedBy?: boolean | Shipment$priceReviewedByArgs<ExtArgs>
   }, ExtArgs["result"]["shipment"]>
 
   export type ShipmentSelectScalar = {
@@ -2638,22 +3366,43 @@ export namespace Prisma {
     status?: boolean
     senderId?: boolean
     driverId?: boolean
+    companyId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    proposedPrice?: boolean
+    approvedPrice?: boolean
+    priceReviewedById?: boolean
+    priceReviewedAt?: boolean
+    paymentStatus?: boolean
+    paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cargoType" | "weight" | "dimensions" | "origin" | "destination" | "timeline" | "status" | "senderId" | "driverId" | "createdAt" | "updatedAt", ExtArgs["result"]["shipment"]>
+  export type ShipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cargoType" | "weight" | "dimensions" | "origin" | "destination" | "timeline" | "status" | "senderId" | "driverId" | "companyId" | "createdById" | "assignedById" | "proposedPrice" | "approvedPrice" | "priceReviewedById" | "priceReviewedAt" | "paymentStatus" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["shipment"]>
   export type ShipmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sender?: boolean | UserDefaultArgs<ExtArgs>
     driver?: boolean | Shipment$driverArgs<ExtArgs>
+    company?: boolean | Shipment$companyArgs<ExtArgs>
+    createdBy?: boolean | Shipment$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Shipment$assignedByArgs<ExtArgs>
+    priceReviewedBy?: boolean | Shipment$priceReviewedByArgs<ExtArgs>
   }
   export type ShipmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sender?: boolean | UserDefaultArgs<ExtArgs>
     driver?: boolean | Shipment$driverArgs<ExtArgs>
+    company?: boolean | Shipment$companyArgs<ExtArgs>
+    createdBy?: boolean | Shipment$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Shipment$assignedByArgs<ExtArgs>
+    priceReviewedBy?: boolean | Shipment$priceReviewedByArgs<ExtArgs>
   }
   export type ShipmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sender?: boolean | UserDefaultArgs<ExtArgs>
     driver?: boolean | Shipment$driverArgs<ExtArgs>
+    company?: boolean | Shipment$companyArgs<ExtArgs>
+    createdBy?: boolean | Shipment$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Shipment$assignedByArgs<ExtArgs>
+    priceReviewedBy?: boolean | Shipment$priceReviewedByArgs<ExtArgs>
   }
 
   export type $ShipmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2661,6 +3410,10 @@ export namespace Prisma {
     objects: {
       sender: Prisma.$UserPayload<ExtArgs>
       driver: Prisma.$UserPayload<ExtArgs> | null
+      company: Prisma.$CompanyPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      assignedBy: Prisma.$UserPayload<ExtArgs> | null
+      priceReviewedBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2673,6 +3426,15 @@ export namespace Prisma {
       status: $Enums.ShipmentStatus
       senderId: number
       driverId: number | null
+      companyId: number | null
+      createdById: number | null
+      assignedById: number | null
+      proposedPrice: Prisma.Decimal | null
+      approvedPrice: Prisma.Decimal | null
+      priceReviewedById: number | null
+      priceReviewedAt: Date | null
+      paymentStatus: $Enums.PaymentStatus
+      paidAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["shipment"]>
@@ -3071,6 +3833,10 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     driver<T extends Shipment$driverArgs<ExtArgs> = {}>(args?: Subset<T, Shipment$driverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    company<T extends Shipment$companyArgs<ExtArgs> = {}>(args?: Subset<T, Shipment$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends Shipment$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Shipment$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assignedBy<T extends Shipment$assignedByArgs<ExtArgs> = {}>(args?: Subset<T, Shipment$assignedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    priceReviewedBy<T extends Shipment$priceReviewedByArgs<ExtArgs> = {}>(args?: Subset<T, Shipment$priceReviewedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3110,6 +3876,15 @@ export namespace Prisma {
     readonly status: FieldRef<"Shipment", 'ShipmentStatus'>
     readonly senderId: FieldRef<"Shipment", 'Int'>
     readonly driverId: FieldRef<"Shipment", 'Int'>
+    readonly companyId: FieldRef<"Shipment", 'Int'>
+    readonly createdById: FieldRef<"Shipment", 'Int'>
+    readonly assignedById: FieldRef<"Shipment", 'Int'>
+    readonly proposedPrice: FieldRef<"Shipment", 'Decimal'>
+    readonly approvedPrice: FieldRef<"Shipment", 'Decimal'>
+    readonly priceReviewedById: FieldRef<"Shipment", 'Int'>
+    readonly priceReviewedAt: FieldRef<"Shipment", 'DateTime'>
+    readonly paymentStatus: FieldRef<"Shipment", 'PaymentStatus'>
+    readonly paidAt: FieldRef<"Shipment", 'DateTime'>
     readonly createdAt: FieldRef<"Shipment", 'DateTime'>
     readonly updatedAt: FieldRef<"Shipment", 'DateTime'>
   }
@@ -3516,6 +4291,82 @@ export namespace Prisma {
    * Shipment.driver
    */
   export type Shipment$driverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Shipment.company
+   */
+  export type Shipment$companyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    where?: CompanyWhereInput
+  }
+
+  /**
+   * Shipment.createdBy
+   */
+  export type Shipment$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Shipment.assignedBy
+   */
+  export type Shipment$assignedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Shipment.priceReviewedBy
+   */
+  export type Shipment$priceReviewedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -4624,6 +5475,2456 @@ export namespace Prisma {
 
 
   /**
+   * Model Company
+   */
+
+  export type AggregateCompany = {
+    _count: CompanyCountAggregateOutputType | null
+    _avg: CompanyAvgAggregateOutputType | null
+    _sum: CompanySumAggregateOutputType | null
+    _min: CompanyMinAggregateOutputType | null
+    _max: CompanyMaxAggregateOutputType | null
+  }
+
+  export type CompanyAvgAggregateOutputType = {
+    id: number | null
+    managerId: number | null
+    createdById: number | null
+    assignedById: number | null
+  }
+
+  export type CompanySumAggregateOutputType = {
+    id: number | null
+    managerId: number | null
+    createdById: number | null
+    assignedById: number | null
+  }
+
+  export type CompanyMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    nit: string | null
+    address: string | null
+    isActive: boolean | null
+    managerId: number | null
+    createdById: number | null
+    assignedById: number | null
+    createdAt: Date | null
+  }
+
+  export type CompanyMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    nit: string | null
+    address: string | null
+    isActive: boolean | null
+    managerId: number | null
+    createdById: number | null
+    assignedById: number | null
+    createdAt: Date | null
+  }
+
+  export type CompanyCountAggregateOutputType = {
+    id: number
+    name: number
+    nit: number
+    address: number
+    isActive: number
+    managerId: number
+    createdById: number
+    assignedById: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CompanyAvgAggregateInputType = {
+    id?: true
+    managerId?: true
+    createdById?: true
+    assignedById?: true
+  }
+
+  export type CompanySumAggregateInputType = {
+    id?: true
+    managerId?: true
+    createdById?: true
+    assignedById?: true
+  }
+
+  export type CompanyMinAggregateInputType = {
+    id?: true
+    name?: true
+    nit?: true
+    address?: true
+    isActive?: true
+    managerId?: true
+    createdById?: true
+    assignedById?: true
+    createdAt?: true
+  }
+
+  export type CompanyMaxAggregateInputType = {
+    id?: true
+    name?: true
+    nit?: true
+    address?: true
+    isActive?: true
+    managerId?: true
+    createdById?: true
+    assignedById?: true
+    createdAt?: true
+  }
+
+  export type CompanyCountAggregateInputType = {
+    id?: true
+    name?: true
+    nit?: true
+    address?: true
+    isActive?: true
+    managerId?: true
+    createdById?: true
+    assignedById?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CompanyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Company to aggregate.
+     */
+    where?: CompanyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Companies to fetch.
+     */
+    orderBy?: CompanyOrderByWithRelationInput | CompanyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CompanyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Companies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Companies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Companies
+    **/
+    _count?: true | CompanyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CompanyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CompanySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CompanyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CompanyMaxAggregateInputType
+  }
+
+  export type GetCompanyAggregateType<T extends CompanyAggregateArgs> = {
+        [P in keyof T & keyof AggregateCompany]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCompany[P]>
+      : GetScalarType<T[P], AggregateCompany[P]>
+  }
+
+
+
+
+  export type CompanyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CompanyWhereInput
+    orderBy?: CompanyOrderByWithAggregationInput | CompanyOrderByWithAggregationInput[]
+    by: CompanyScalarFieldEnum[] | CompanyScalarFieldEnum
+    having?: CompanyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CompanyCountAggregateInputType | true
+    _avg?: CompanyAvgAggregateInputType
+    _sum?: CompanySumAggregateInputType
+    _min?: CompanyMinAggregateInputType
+    _max?: CompanyMaxAggregateInputType
+  }
+
+  export type CompanyGroupByOutputType = {
+    id: number
+    name: string
+    nit: string
+    address: string | null
+    isActive: boolean
+    managerId: number | null
+    createdById: number | null
+    assignedById: number | null
+    createdAt: Date
+    _count: CompanyCountAggregateOutputType | null
+    _avg: CompanyAvgAggregateOutputType | null
+    _sum: CompanySumAggregateOutputType | null
+    _min: CompanyMinAggregateOutputType | null
+    _max: CompanyMaxAggregateOutputType | null
+  }
+
+  type GetCompanyGroupByPayload<T extends CompanyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CompanyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CompanyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CompanyGroupByOutputType[P]>
+            : GetScalarType<T[P], CompanyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CompanySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    nit?: boolean
+    address?: boolean
+    isActive?: boolean
+    managerId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    createdAt?: boolean
+    manager?: boolean | Company$managerArgs<ExtArgs>
+    createdBy?: boolean | Company$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Company$assignedByArgs<ExtArgs>
+    users?: boolean | Company$usersArgs<ExtArgs>
+    shipments?: boolean | Company$shipmentsArgs<ExtArgs>
+    _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["company"]>
+
+  export type CompanySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    nit?: boolean
+    address?: boolean
+    isActive?: boolean
+    managerId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    createdAt?: boolean
+    manager?: boolean | Company$managerArgs<ExtArgs>
+    createdBy?: boolean | Company$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Company$assignedByArgs<ExtArgs>
+  }, ExtArgs["result"]["company"]>
+
+  export type CompanySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    nit?: boolean
+    address?: boolean
+    isActive?: boolean
+    managerId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    createdAt?: boolean
+    manager?: boolean | Company$managerArgs<ExtArgs>
+    createdBy?: boolean | Company$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Company$assignedByArgs<ExtArgs>
+  }, ExtArgs["result"]["company"]>
+
+  export type CompanySelectScalar = {
+    id?: boolean
+    name?: boolean
+    nit?: boolean
+    address?: boolean
+    isActive?: boolean
+    managerId?: boolean
+    createdById?: boolean
+    assignedById?: boolean
+    createdAt?: boolean
+  }
+
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "nit" | "address" | "isActive" | "managerId" | "createdById" | "assignedById" | "createdAt", ExtArgs["result"]["company"]>
+  export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    manager?: boolean | Company$managerArgs<ExtArgs>
+    createdBy?: boolean | Company$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Company$assignedByArgs<ExtArgs>
+    users?: boolean | Company$usersArgs<ExtArgs>
+    shipments?: boolean | Company$shipmentsArgs<ExtArgs>
+    _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CompanyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    manager?: boolean | Company$managerArgs<ExtArgs>
+    createdBy?: boolean | Company$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Company$assignedByArgs<ExtArgs>
+  }
+  export type CompanyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    manager?: boolean | Company$managerArgs<ExtArgs>
+    createdBy?: boolean | Company$createdByArgs<ExtArgs>
+    assignedBy?: boolean | Company$assignedByArgs<ExtArgs>
+  }
+
+  export type $CompanyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Company"
+    objects: {
+      manager: Prisma.$UserPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      assignedBy: Prisma.$UserPayload<ExtArgs> | null
+      users: Prisma.$UserPayload<ExtArgs>[]
+      shipments: Prisma.$ShipmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      nit: string
+      address: string | null
+      isActive: boolean
+      managerId: number | null
+      createdById: number | null
+      assignedById: number | null
+      createdAt: Date
+    }, ExtArgs["result"]["company"]>
+    composites: {}
+  }
+
+  type CompanyGetPayload<S extends boolean | null | undefined | CompanyDefaultArgs> = $Result.GetResult<Prisma.$CompanyPayload, S>
+
+  type CompanyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CompanyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CompanyCountAggregateInputType | true
+    }
+
+  export interface CompanyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Company'], meta: { name: 'Company' } }
+    /**
+     * Find zero or one Company that matches the filter.
+     * @param {CompanyFindUniqueArgs} args - Arguments to find a Company
+     * @example
+     * // Get one Company
+     * const company = await prisma.company.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CompanyFindUniqueArgs>(args: SelectSubset<T, CompanyFindUniqueArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Company that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CompanyFindUniqueOrThrowArgs} args - Arguments to find a Company
+     * @example
+     * // Get one Company
+     * const company = await prisma.company.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CompanyFindUniqueOrThrowArgs>(args: SelectSubset<T, CompanyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Company that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompanyFindFirstArgs} args - Arguments to find a Company
+     * @example
+     * // Get one Company
+     * const company = await prisma.company.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CompanyFindFirstArgs>(args?: SelectSubset<T, CompanyFindFirstArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Company that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompanyFindFirstOrThrowArgs} args - Arguments to find a Company
+     * @example
+     * // Get one Company
+     * const company = await prisma.company.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CompanyFindFirstOrThrowArgs>(args?: SelectSubset<T, CompanyFindFirstOrThrowArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Companies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompanyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Companies
+     * const companies = await prisma.company.findMany()
+     * 
+     * // Get first 10 Companies
+     * const companies = await prisma.company.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const companyWithIdOnly = await prisma.company.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CompanyFindManyArgs>(args?: SelectSubset<T, CompanyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Company.
+     * @param {CompanyCreateArgs} args - Arguments to create a Company.
+     * @example
+     * // Create one Company
+     * const Company = await prisma.company.create({
+     *   data: {
+     *     // ... data to create a Company
+     *   }
+     * })
+     * 
+     */
+    create<T extends CompanyCreateArgs>(args: SelectSubset<T, CompanyCreateArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Companies.
+     * @param {CompanyCreateManyArgs} args - Arguments to create many Companies.
+     * @example
+     * // Create many Companies
+     * const company = await prisma.company.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CompanyCreateManyArgs>(args?: SelectSubset<T, CompanyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Companies and returns the data saved in the database.
+     * @param {CompanyCreateManyAndReturnArgs} args - Arguments to create many Companies.
+     * @example
+     * // Create many Companies
+     * const company = await prisma.company.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Companies and only return the `id`
+     * const companyWithIdOnly = await prisma.company.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CompanyCreateManyAndReturnArgs>(args?: SelectSubset<T, CompanyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Company.
+     * @param {CompanyDeleteArgs} args - Arguments to delete one Company.
+     * @example
+     * // Delete one Company
+     * const Company = await prisma.company.delete({
+     *   where: {
+     *     // ... filter to delete one Company
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CompanyDeleteArgs>(args: SelectSubset<T, CompanyDeleteArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Company.
+     * @param {CompanyUpdateArgs} args - Arguments to update one Company.
+     * @example
+     * // Update one Company
+     * const company = await prisma.company.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CompanyUpdateArgs>(args: SelectSubset<T, CompanyUpdateArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Companies.
+     * @param {CompanyDeleteManyArgs} args - Arguments to filter Companies to delete.
+     * @example
+     * // Delete a few Companies
+     * const { count } = await prisma.company.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CompanyDeleteManyArgs>(args?: SelectSubset<T, CompanyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Companies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompanyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Companies
+     * const company = await prisma.company.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CompanyUpdateManyArgs>(args: SelectSubset<T, CompanyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Companies and returns the data updated in the database.
+     * @param {CompanyUpdateManyAndReturnArgs} args - Arguments to update many Companies.
+     * @example
+     * // Update many Companies
+     * const company = await prisma.company.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Companies and only return the `id`
+     * const companyWithIdOnly = await prisma.company.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CompanyUpdateManyAndReturnArgs>(args: SelectSubset<T, CompanyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Company.
+     * @param {CompanyUpsertArgs} args - Arguments to update or create a Company.
+     * @example
+     * // Update or create a Company
+     * const company = await prisma.company.upsert({
+     *   create: {
+     *     // ... data to create a Company
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Company we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CompanyUpsertArgs>(args: SelectSubset<T, CompanyUpsertArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Companies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompanyCountArgs} args - Arguments to filter Companies to count.
+     * @example
+     * // Count the number of Companies
+     * const count = await prisma.company.count({
+     *   where: {
+     *     // ... the filter for the Companies we want to count
+     *   }
+     * })
+    **/
+    count<T extends CompanyCountArgs>(
+      args?: Subset<T, CompanyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CompanyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Company.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompanyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CompanyAggregateArgs>(args: Subset<T, CompanyAggregateArgs>): Prisma.PrismaPromise<GetCompanyAggregateType<T>>
+
+    /**
+     * Group by Company.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CompanyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CompanyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CompanyGroupByArgs['orderBy'] }
+        : { orderBy?: CompanyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CompanyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCompanyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Company model
+   */
+  readonly fields: CompanyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Company.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    manager<T extends Company$managerArgs<ExtArgs> = {}>(args?: Subset<T, Company$managerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends Company$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Company$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assignedBy<T extends Company$assignedByArgs<ExtArgs> = {}>(args?: Subset<T, Company$assignedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    users<T extends Company$usersArgs<ExtArgs> = {}>(args?: Subset<T, Company$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    shipments<T extends Company$shipmentsArgs<ExtArgs> = {}>(args?: Subset<T, Company$shipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Company model
+   */
+  interface CompanyFieldRefs {
+    readonly id: FieldRef<"Company", 'Int'>
+    readonly name: FieldRef<"Company", 'String'>
+    readonly nit: FieldRef<"Company", 'String'>
+    readonly address: FieldRef<"Company", 'String'>
+    readonly isActive: FieldRef<"Company", 'Boolean'>
+    readonly managerId: FieldRef<"Company", 'Int'>
+    readonly createdById: FieldRef<"Company", 'Int'>
+    readonly assignedById: FieldRef<"Company", 'Int'>
+    readonly createdAt: FieldRef<"Company", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Company findUnique
+   */
+  export type CompanyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * Filter, which Company to fetch.
+     */
+    where: CompanyWhereUniqueInput
+  }
+
+  /**
+   * Company findUniqueOrThrow
+   */
+  export type CompanyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * Filter, which Company to fetch.
+     */
+    where: CompanyWhereUniqueInput
+  }
+
+  /**
+   * Company findFirst
+   */
+  export type CompanyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * Filter, which Company to fetch.
+     */
+    where?: CompanyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Companies to fetch.
+     */
+    orderBy?: CompanyOrderByWithRelationInput | CompanyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Companies.
+     */
+    cursor?: CompanyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Companies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Companies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Companies.
+     */
+    distinct?: CompanyScalarFieldEnum | CompanyScalarFieldEnum[]
+  }
+
+  /**
+   * Company findFirstOrThrow
+   */
+  export type CompanyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * Filter, which Company to fetch.
+     */
+    where?: CompanyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Companies to fetch.
+     */
+    orderBy?: CompanyOrderByWithRelationInput | CompanyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Companies.
+     */
+    cursor?: CompanyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Companies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Companies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Companies.
+     */
+    distinct?: CompanyScalarFieldEnum | CompanyScalarFieldEnum[]
+  }
+
+  /**
+   * Company findMany
+   */
+  export type CompanyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * Filter, which Companies to fetch.
+     */
+    where?: CompanyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Companies to fetch.
+     */
+    orderBy?: CompanyOrderByWithRelationInput | CompanyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Companies.
+     */
+    cursor?: CompanyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Companies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Companies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Companies.
+     */
+    distinct?: CompanyScalarFieldEnum | CompanyScalarFieldEnum[]
+  }
+
+  /**
+   * Company create
+   */
+  export type CompanyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Company.
+     */
+    data: XOR<CompanyCreateInput, CompanyUncheckedCreateInput>
+  }
+
+  /**
+   * Company createMany
+   */
+  export type CompanyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Companies.
+     */
+    data: CompanyCreateManyInput | CompanyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Company createManyAndReturn
+   */
+  export type CompanyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * The data used to create many Companies.
+     */
+    data: CompanyCreateManyInput | CompanyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Company update
+   */
+  export type CompanyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Company.
+     */
+    data: XOR<CompanyUpdateInput, CompanyUncheckedUpdateInput>
+    /**
+     * Choose, which Company to update.
+     */
+    where: CompanyWhereUniqueInput
+  }
+
+  /**
+   * Company updateMany
+   */
+  export type CompanyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Companies.
+     */
+    data: XOR<CompanyUpdateManyMutationInput, CompanyUncheckedUpdateManyInput>
+    /**
+     * Filter which Companies to update
+     */
+    where?: CompanyWhereInput
+    /**
+     * Limit how many Companies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Company updateManyAndReturn
+   */
+  export type CompanyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * The data used to update Companies.
+     */
+    data: XOR<CompanyUpdateManyMutationInput, CompanyUncheckedUpdateManyInput>
+    /**
+     * Filter which Companies to update
+     */
+    where?: CompanyWhereInput
+    /**
+     * Limit how many Companies to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Company upsert
+   */
+  export type CompanyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Company to update in case it exists.
+     */
+    where: CompanyWhereUniqueInput
+    /**
+     * In case the Company found by the `where` argument doesn't exist, create a new Company with this data.
+     */
+    create: XOR<CompanyCreateInput, CompanyUncheckedCreateInput>
+    /**
+     * In case the Company was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CompanyUpdateInput, CompanyUncheckedUpdateInput>
+  }
+
+  /**
+   * Company delete
+   */
+  export type CompanyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    /**
+     * Filter which Company to delete.
+     */
+    where: CompanyWhereUniqueInput
+  }
+
+  /**
+   * Company deleteMany
+   */
+  export type CompanyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Companies to delete
+     */
+    where?: CompanyWhereInput
+    /**
+     * Limit how many Companies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Company.manager
+   */
+  export type Company$managerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Company.createdBy
+   */
+  export type Company$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Company.assignedBy
+   */
+  export type Company$assignedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Company.users
+   */
+  export type Company$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Company.shipments
+   */
+  export type Company$shipmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Shipment
+     */
+    select?: ShipmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Shipment
+     */
+    omit?: ShipmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShipmentInclude<ExtArgs> | null
+    where?: ShipmentWhereInput
+    orderBy?: ShipmentOrderByWithRelationInput | ShipmentOrderByWithRelationInput[]
+    cursor?: ShipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShipmentScalarFieldEnum | ShipmentScalarFieldEnum[]
+  }
+
+  /**
+   * Company without action
+   */
+  export type CompanyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DriverApplication
+   */
+
+  export type AggregateDriverApplication = {
+    _count: DriverApplicationCountAggregateOutputType | null
+    _avg: DriverApplicationAvgAggregateOutputType | null
+    _sum: DriverApplicationSumAggregateOutputType | null
+    _min: DriverApplicationMinAggregateOutputType | null
+    _max: DriverApplicationMaxAggregateOutputType | null
+  }
+
+  export type DriverApplicationAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    reviewedById: number | null
+  }
+
+  export type DriverApplicationSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    reviewedById: number | null
+  }
+
+  export type DriverApplicationMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    status: $Enums.ApprovalStatus | null
+    reviewedById: number | null
+    notes: string | null
+    createdAt: Date | null
+    reviewedAt: Date | null
+  }
+
+  export type DriverApplicationMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    status: $Enums.ApprovalStatus | null
+    reviewedById: number | null
+    notes: string | null
+    createdAt: Date | null
+    reviewedAt: Date | null
+  }
+
+  export type DriverApplicationCountAggregateOutputType = {
+    id: number
+    userId: number
+    status: number
+    reviewedById: number
+    notes: number
+    createdAt: number
+    reviewedAt: number
+    _all: number
+  }
+
+
+  export type DriverApplicationAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    reviewedById?: true
+  }
+
+  export type DriverApplicationSumAggregateInputType = {
+    id?: true
+    userId?: true
+    reviewedById?: true
+  }
+
+  export type DriverApplicationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    reviewedById?: true
+    notes?: true
+    createdAt?: true
+    reviewedAt?: true
+  }
+
+  export type DriverApplicationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    reviewedById?: true
+    notes?: true
+    createdAt?: true
+    reviewedAt?: true
+  }
+
+  export type DriverApplicationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    reviewedById?: true
+    notes?: true
+    createdAt?: true
+    reviewedAt?: true
+    _all?: true
+  }
+
+  export type DriverApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DriverApplication to aggregate.
+     */
+    where?: DriverApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriverApplications to fetch.
+     */
+    orderBy?: DriverApplicationOrderByWithRelationInput | DriverApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DriverApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriverApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriverApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DriverApplications
+    **/
+    _count?: true | DriverApplicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DriverApplicationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DriverApplicationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DriverApplicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DriverApplicationMaxAggregateInputType
+  }
+
+  export type GetDriverApplicationAggregateType<T extends DriverApplicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateDriverApplication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDriverApplication[P]>
+      : GetScalarType<T[P], AggregateDriverApplication[P]>
+  }
+
+
+
+
+  export type DriverApplicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DriverApplicationWhereInput
+    orderBy?: DriverApplicationOrderByWithAggregationInput | DriverApplicationOrderByWithAggregationInput[]
+    by: DriverApplicationScalarFieldEnum[] | DriverApplicationScalarFieldEnum
+    having?: DriverApplicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DriverApplicationCountAggregateInputType | true
+    _avg?: DriverApplicationAvgAggregateInputType
+    _sum?: DriverApplicationSumAggregateInputType
+    _min?: DriverApplicationMinAggregateInputType
+    _max?: DriverApplicationMaxAggregateInputType
+  }
+
+  export type DriverApplicationGroupByOutputType = {
+    id: number
+    userId: number
+    status: $Enums.ApprovalStatus
+    reviewedById: number | null
+    notes: string | null
+    createdAt: Date
+    reviewedAt: Date | null
+    _count: DriverApplicationCountAggregateOutputType | null
+    _avg: DriverApplicationAvgAggregateOutputType | null
+    _sum: DriverApplicationSumAggregateOutputType | null
+    _min: DriverApplicationMinAggregateOutputType | null
+    _max: DriverApplicationMaxAggregateOutputType | null
+  }
+
+  type GetDriverApplicationGroupByPayload<T extends DriverApplicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DriverApplicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DriverApplicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DriverApplicationGroupByOutputType[P]>
+            : GetScalarType<T[P], DriverApplicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DriverApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    reviewedById?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    reviewedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | DriverApplication$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["driverApplication"]>
+
+  export type DriverApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    reviewedById?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    reviewedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | DriverApplication$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["driverApplication"]>
+
+  export type DriverApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    reviewedById?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    reviewedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | DriverApplication$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["driverApplication"]>
+
+  export type DriverApplicationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    reviewedById?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    reviewedAt?: boolean
+  }
+
+  export type DriverApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "status" | "reviewedById" | "notes" | "createdAt" | "reviewedAt", ExtArgs["result"]["driverApplication"]>
+  export type DriverApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | DriverApplication$reviewedByArgs<ExtArgs>
+  }
+  export type DriverApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | DriverApplication$reviewedByArgs<ExtArgs>
+  }
+  export type DriverApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | DriverApplication$reviewedByArgs<ExtArgs>
+  }
+
+  export type $DriverApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DriverApplication"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      reviewedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      status: $Enums.ApprovalStatus
+      reviewedById: number | null
+      notes: string | null
+      createdAt: Date
+      reviewedAt: Date | null
+    }, ExtArgs["result"]["driverApplication"]>
+    composites: {}
+  }
+
+  type DriverApplicationGetPayload<S extends boolean | null | undefined | DriverApplicationDefaultArgs> = $Result.GetResult<Prisma.$DriverApplicationPayload, S>
+
+  type DriverApplicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DriverApplicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DriverApplicationCountAggregateInputType | true
+    }
+
+  export interface DriverApplicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DriverApplication'], meta: { name: 'DriverApplication' } }
+    /**
+     * Find zero or one DriverApplication that matches the filter.
+     * @param {DriverApplicationFindUniqueArgs} args - Arguments to find a DriverApplication
+     * @example
+     * // Get one DriverApplication
+     * const driverApplication = await prisma.driverApplication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DriverApplicationFindUniqueArgs>(args: SelectSubset<T, DriverApplicationFindUniqueArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DriverApplication that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DriverApplicationFindUniqueOrThrowArgs} args - Arguments to find a DriverApplication
+     * @example
+     * // Get one DriverApplication
+     * const driverApplication = await prisma.driverApplication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DriverApplicationFindUniqueOrThrowArgs>(args: SelectSubset<T, DriverApplicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DriverApplication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriverApplicationFindFirstArgs} args - Arguments to find a DriverApplication
+     * @example
+     * // Get one DriverApplication
+     * const driverApplication = await prisma.driverApplication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DriverApplicationFindFirstArgs>(args?: SelectSubset<T, DriverApplicationFindFirstArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DriverApplication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriverApplicationFindFirstOrThrowArgs} args - Arguments to find a DriverApplication
+     * @example
+     * // Get one DriverApplication
+     * const driverApplication = await prisma.driverApplication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DriverApplicationFindFirstOrThrowArgs>(args?: SelectSubset<T, DriverApplicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DriverApplications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriverApplicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DriverApplications
+     * const driverApplications = await prisma.driverApplication.findMany()
+     * 
+     * // Get first 10 DriverApplications
+     * const driverApplications = await prisma.driverApplication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const driverApplicationWithIdOnly = await prisma.driverApplication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DriverApplicationFindManyArgs>(args?: SelectSubset<T, DriverApplicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DriverApplication.
+     * @param {DriverApplicationCreateArgs} args - Arguments to create a DriverApplication.
+     * @example
+     * // Create one DriverApplication
+     * const DriverApplication = await prisma.driverApplication.create({
+     *   data: {
+     *     // ... data to create a DriverApplication
+     *   }
+     * })
+     * 
+     */
+    create<T extends DriverApplicationCreateArgs>(args: SelectSubset<T, DriverApplicationCreateArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DriverApplications.
+     * @param {DriverApplicationCreateManyArgs} args - Arguments to create many DriverApplications.
+     * @example
+     * // Create many DriverApplications
+     * const driverApplication = await prisma.driverApplication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DriverApplicationCreateManyArgs>(args?: SelectSubset<T, DriverApplicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DriverApplications and returns the data saved in the database.
+     * @param {DriverApplicationCreateManyAndReturnArgs} args - Arguments to create many DriverApplications.
+     * @example
+     * // Create many DriverApplications
+     * const driverApplication = await prisma.driverApplication.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DriverApplications and only return the `id`
+     * const driverApplicationWithIdOnly = await prisma.driverApplication.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DriverApplicationCreateManyAndReturnArgs>(args?: SelectSubset<T, DriverApplicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DriverApplication.
+     * @param {DriverApplicationDeleteArgs} args - Arguments to delete one DriverApplication.
+     * @example
+     * // Delete one DriverApplication
+     * const DriverApplication = await prisma.driverApplication.delete({
+     *   where: {
+     *     // ... filter to delete one DriverApplication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DriverApplicationDeleteArgs>(args: SelectSubset<T, DriverApplicationDeleteArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DriverApplication.
+     * @param {DriverApplicationUpdateArgs} args - Arguments to update one DriverApplication.
+     * @example
+     * // Update one DriverApplication
+     * const driverApplication = await prisma.driverApplication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DriverApplicationUpdateArgs>(args: SelectSubset<T, DriverApplicationUpdateArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DriverApplications.
+     * @param {DriverApplicationDeleteManyArgs} args - Arguments to filter DriverApplications to delete.
+     * @example
+     * // Delete a few DriverApplications
+     * const { count } = await prisma.driverApplication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DriverApplicationDeleteManyArgs>(args?: SelectSubset<T, DriverApplicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DriverApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriverApplicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DriverApplications
+     * const driverApplication = await prisma.driverApplication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DriverApplicationUpdateManyArgs>(args: SelectSubset<T, DriverApplicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DriverApplications and returns the data updated in the database.
+     * @param {DriverApplicationUpdateManyAndReturnArgs} args - Arguments to update many DriverApplications.
+     * @example
+     * // Update many DriverApplications
+     * const driverApplication = await prisma.driverApplication.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DriverApplications and only return the `id`
+     * const driverApplicationWithIdOnly = await prisma.driverApplication.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DriverApplicationUpdateManyAndReturnArgs>(args: SelectSubset<T, DriverApplicationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DriverApplication.
+     * @param {DriverApplicationUpsertArgs} args - Arguments to update or create a DriverApplication.
+     * @example
+     * // Update or create a DriverApplication
+     * const driverApplication = await prisma.driverApplication.upsert({
+     *   create: {
+     *     // ... data to create a DriverApplication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DriverApplication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DriverApplicationUpsertArgs>(args: SelectSubset<T, DriverApplicationUpsertArgs<ExtArgs>>): Prisma__DriverApplicationClient<$Result.GetResult<Prisma.$DriverApplicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DriverApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriverApplicationCountArgs} args - Arguments to filter DriverApplications to count.
+     * @example
+     * // Count the number of DriverApplications
+     * const count = await prisma.driverApplication.count({
+     *   where: {
+     *     // ... the filter for the DriverApplications we want to count
+     *   }
+     * })
+    **/
+    count<T extends DriverApplicationCountArgs>(
+      args?: Subset<T, DriverApplicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DriverApplicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DriverApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriverApplicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DriverApplicationAggregateArgs>(args: Subset<T, DriverApplicationAggregateArgs>): Prisma.PrismaPromise<GetDriverApplicationAggregateType<T>>
+
+    /**
+     * Group by DriverApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DriverApplicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DriverApplicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DriverApplicationGroupByArgs['orderBy'] }
+        : { orderBy?: DriverApplicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DriverApplicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDriverApplicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DriverApplication model
+   */
+  readonly fields: DriverApplicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DriverApplication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DriverApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviewedBy<T extends DriverApplication$reviewedByArgs<ExtArgs> = {}>(args?: Subset<T, DriverApplication$reviewedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DriverApplication model
+   */
+  interface DriverApplicationFieldRefs {
+    readonly id: FieldRef<"DriverApplication", 'Int'>
+    readonly userId: FieldRef<"DriverApplication", 'Int'>
+    readonly status: FieldRef<"DriverApplication", 'ApprovalStatus'>
+    readonly reviewedById: FieldRef<"DriverApplication", 'Int'>
+    readonly notes: FieldRef<"DriverApplication", 'String'>
+    readonly createdAt: FieldRef<"DriverApplication", 'DateTime'>
+    readonly reviewedAt: FieldRef<"DriverApplication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DriverApplication findUnique
+   */
+  export type DriverApplicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which DriverApplication to fetch.
+     */
+    where: DriverApplicationWhereUniqueInput
+  }
+
+  /**
+   * DriverApplication findUniqueOrThrow
+   */
+  export type DriverApplicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which DriverApplication to fetch.
+     */
+    where: DriverApplicationWhereUniqueInput
+  }
+
+  /**
+   * DriverApplication findFirst
+   */
+  export type DriverApplicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which DriverApplication to fetch.
+     */
+    where?: DriverApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriverApplications to fetch.
+     */
+    orderBy?: DriverApplicationOrderByWithRelationInput | DriverApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DriverApplications.
+     */
+    cursor?: DriverApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriverApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriverApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DriverApplications.
+     */
+    distinct?: DriverApplicationScalarFieldEnum | DriverApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * DriverApplication findFirstOrThrow
+   */
+  export type DriverApplicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which DriverApplication to fetch.
+     */
+    where?: DriverApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriverApplications to fetch.
+     */
+    orderBy?: DriverApplicationOrderByWithRelationInput | DriverApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DriverApplications.
+     */
+    cursor?: DriverApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriverApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriverApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DriverApplications.
+     */
+    distinct?: DriverApplicationScalarFieldEnum | DriverApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * DriverApplication findMany
+   */
+  export type DriverApplicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which DriverApplications to fetch.
+     */
+    where?: DriverApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DriverApplications to fetch.
+     */
+    orderBy?: DriverApplicationOrderByWithRelationInput | DriverApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DriverApplications.
+     */
+    cursor?: DriverApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DriverApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DriverApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DriverApplications.
+     */
+    distinct?: DriverApplicationScalarFieldEnum | DriverApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * DriverApplication create
+   */
+  export type DriverApplicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DriverApplication.
+     */
+    data: XOR<DriverApplicationCreateInput, DriverApplicationUncheckedCreateInput>
+  }
+
+  /**
+   * DriverApplication createMany
+   */
+  export type DriverApplicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DriverApplications.
+     */
+    data: DriverApplicationCreateManyInput | DriverApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DriverApplication createManyAndReturn
+   */
+  export type DriverApplicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to create many DriverApplications.
+     */
+    data: DriverApplicationCreateManyInput | DriverApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DriverApplication update
+   */
+  export type DriverApplicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DriverApplication.
+     */
+    data: XOR<DriverApplicationUpdateInput, DriverApplicationUncheckedUpdateInput>
+    /**
+     * Choose, which DriverApplication to update.
+     */
+    where: DriverApplicationWhereUniqueInput
+  }
+
+  /**
+   * DriverApplication updateMany
+   */
+  export type DriverApplicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DriverApplications.
+     */
+    data: XOR<DriverApplicationUpdateManyMutationInput, DriverApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which DriverApplications to update
+     */
+    where?: DriverApplicationWhereInput
+    /**
+     * Limit how many DriverApplications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DriverApplication updateManyAndReturn
+   */
+  export type DriverApplicationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * The data used to update DriverApplications.
+     */
+    data: XOR<DriverApplicationUpdateManyMutationInput, DriverApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which DriverApplications to update
+     */
+    where?: DriverApplicationWhereInput
+    /**
+     * Limit how many DriverApplications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DriverApplication upsert
+   */
+  export type DriverApplicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DriverApplication to update in case it exists.
+     */
+    where: DriverApplicationWhereUniqueInput
+    /**
+     * In case the DriverApplication found by the `where` argument doesn't exist, create a new DriverApplication with this data.
+     */
+    create: XOR<DriverApplicationCreateInput, DriverApplicationUncheckedCreateInput>
+    /**
+     * In case the DriverApplication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DriverApplicationUpdateInput, DriverApplicationUncheckedUpdateInput>
+  }
+
+  /**
+   * DriverApplication delete
+   */
+  export type DriverApplicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+    /**
+     * Filter which DriverApplication to delete.
+     */
+    where: DriverApplicationWhereUniqueInput
+  }
+
+  /**
+   * DriverApplication deleteMany
+   */
+  export type DriverApplicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DriverApplications to delete
+     */
+    where?: DriverApplicationWhereInput
+    /**
+     * Limit how many DriverApplications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DriverApplication.reviewedBy
+   */
+  export type DriverApplication$reviewedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * DriverApplication without action
+   */
+  export type DriverApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DriverApplication
+     */
+    select?: DriverApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DriverApplication
+     */
+    omit?: DriverApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverApplicationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -4647,7 +7948,8 @@ export namespace Prisma {
     password: 'password',
     role: 'role',
     isActive: 'isActive',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    companyId: 'companyId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -4664,6 +7966,15 @@ export namespace Prisma {
     status: 'status',
     senderId: 'senderId',
     driverId: 'driverId',
+    companyId: 'companyId',
+    createdById: 'createdById',
+    assignedById: 'assignedById',
+    proposedPrice: 'proposedPrice',
+    approvedPrice: 'approvedPrice',
+    priceReviewedById: 'priceReviewedById',
+    priceReviewedAt: 'priceReviewedAt',
+    paymentStatus: 'paymentStatus',
+    paidAt: 'paidAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4683,6 +7994,34 @@ export namespace Prisma {
   };
 
   export type AgentScalarFieldEnum = (typeof AgentScalarFieldEnum)[keyof typeof AgentScalarFieldEnum]
+
+
+  export const CompanyScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    nit: 'nit',
+    address: 'address',
+    isActive: 'isActive',
+    managerId: 'managerId',
+    createdById: 'createdById',
+    assignedById: 'assignedById',
+    createdAt: 'createdAt'
+  };
+
+  export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
+
+
+  export const DriverApplicationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    status: 'status',
+    reviewedById: 'reviewedById',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    reviewedAt: 'reviewedAt'
+  };
+
+  export type DriverApplicationScalarFieldEnum = (typeof DriverApplicationScalarFieldEnum)[keyof typeof DriverApplicationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4823,6 +8162,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'PaymentStatus'
+   */
+  export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'PaymentStatus[]'
+   */
+  export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -4833,6 +8200,20 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApprovalStatus'
+   */
+  export type EnumApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApprovalStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ApprovalStatus[]'
+   */
+  export type ListEnumApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApprovalStatus[]'>
     
   /**
    * Deep Input Types
@@ -4853,8 +8234,18 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
+    companyId?: IntNullableFilter<"User"> | number | null
+    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
+    managedCompanies?: CompanyListRelationFilter
+    createdCompanies?: CompanyListRelationFilter
+    assignedCompanies?: CompanyListRelationFilter
     customerShipments?: ShipmentListRelationFilter
     driverShipments?: ShipmentListRelationFilter
+    createdShipments?: ShipmentListRelationFilter
+    assignedShipments?: ShipmentListRelationFilter
+    priceReviewedShipments?: ShipmentListRelationFilter
+    driverApplications?: DriverApplicationListRelationFilter
+    reviewedApplications?: DriverApplicationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4868,8 +8259,18 @@ export namespace Prisma {
     role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrderInput | SortOrder
+    company?: CompanyOrderByWithRelationInput
+    managedCompanies?: CompanyOrderByRelationAggregateInput
+    createdCompanies?: CompanyOrderByRelationAggregateInput
+    assignedCompanies?: CompanyOrderByRelationAggregateInput
     customerShipments?: ShipmentOrderByRelationAggregateInput
     driverShipments?: ShipmentOrderByRelationAggregateInput
+    createdShipments?: ShipmentOrderByRelationAggregateInput
+    assignedShipments?: ShipmentOrderByRelationAggregateInput
+    priceReviewedShipments?: ShipmentOrderByRelationAggregateInput
+    driverApplications?: DriverApplicationOrderByRelationAggregateInput
+    reviewedApplications?: DriverApplicationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4886,8 +8287,18 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
+    companyId?: IntNullableFilter<"User"> | number | null
+    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
+    managedCompanies?: CompanyListRelationFilter
+    createdCompanies?: CompanyListRelationFilter
+    assignedCompanies?: CompanyListRelationFilter
     customerShipments?: ShipmentListRelationFilter
     driverShipments?: ShipmentListRelationFilter
+    createdShipments?: ShipmentListRelationFilter
+    assignedShipments?: ShipmentListRelationFilter
+    priceReviewedShipments?: ShipmentListRelationFilter
+    driverApplications?: DriverApplicationListRelationFilter
+    reviewedApplications?: DriverApplicationListRelationFilter
   }, "id" | "email" | "nit">
 
   export type UserOrderByWithAggregationInput = {
@@ -4901,6 +8312,7 @@ export namespace Prisma {
     role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -4922,6 +8334,7 @@ export namespace Prisma {
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    companyId?: IntNullableWithAggregatesFilter<"User"> | number | null
   }
 
   export type ShipmentWhereInput = {
@@ -4938,10 +8351,23 @@ export namespace Prisma {
     status?: EnumShipmentStatusFilter<"Shipment"> | $Enums.ShipmentStatus
     senderId?: IntFilter<"Shipment"> | number
     driverId?: IntNullableFilter<"Shipment"> | number | null
+    companyId?: IntNullableFilter<"Shipment"> | number | null
+    createdById?: IntNullableFilter<"Shipment"> | number | null
+    assignedById?: IntNullableFilter<"Shipment"> | number | null
+    proposedPrice?: DecimalNullableFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: DecimalNullableFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: IntNullableFilter<"Shipment"> | number | null
+    priceReviewedAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
+    paymentStatus?: EnumPaymentStatusFilter<"Shipment"> | $Enums.PaymentStatus
+    paidAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeFilter<"Shipment"> | Date | string
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     driver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    priceReviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type ShipmentOrderByWithRelationInput = {
@@ -4955,10 +8381,23 @@ export namespace Prisma {
     status?: SortOrder
     senderId?: SortOrder
     driverId?: SortOrderInput | SortOrder
+    companyId?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    assignedById?: SortOrderInput | SortOrder
+    proposedPrice?: SortOrderInput | SortOrder
+    approvedPrice?: SortOrderInput | SortOrder
+    priceReviewedById?: SortOrderInput | SortOrder
+    priceReviewedAt?: SortOrderInput | SortOrder
+    paymentStatus?: SortOrder
+    paidAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     sender?: UserOrderByWithRelationInput
     driver?: UserOrderByWithRelationInput
+    company?: CompanyOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    assignedBy?: UserOrderByWithRelationInput
+    priceReviewedBy?: UserOrderByWithRelationInput
   }
 
   export type ShipmentWhereUniqueInput = Prisma.AtLeast<{
@@ -4975,10 +8414,23 @@ export namespace Prisma {
     status?: EnumShipmentStatusFilter<"Shipment"> | $Enums.ShipmentStatus
     senderId?: IntFilter<"Shipment"> | number
     driverId?: IntNullableFilter<"Shipment"> | number | null
+    companyId?: IntNullableFilter<"Shipment"> | number | null
+    createdById?: IntNullableFilter<"Shipment"> | number | null
+    assignedById?: IntNullableFilter<"Shipment"> | number | null
+    proposedPrice?: DecimalNullableFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: DecimalNullableFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: IntNullableFilter<"Shipment"> | number | null
+    priceReviewedAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
+    paymentStatus?: EnumPaymentStatusFilter<"Shipment"> | $Enums.PaymentStatus
+    paidAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeFilter<"Shipment"> | Date | string
     sender?: XOR<UserScalarRelationFilter, UserWhereInput>
     driver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    priceReviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type ShipmentOrderByWithAggregationInput = {
@@ -4992,6 +8444,15 @@ export namespace Prisma {
     status?: SortOrder
     senderId?: SortOrder
     driverId?: SortOrderInput | SortOrder
+    companyId?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    assignedById?: SortOrderInput | SortOrder
+    proposedPrice?: SortOrderInput | SortOrder
+    approvedPrice?: SortOrderInput | SortOrder
+    priceReviewedById?: SortOrderInput | SortOrder
+    priceReviewedAt?: SortOrderInput | SortOrder
+    paymentStatus?: SortOrder
+    paidAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ShipmentCountOrderByAggregateInput
@@ -5015,6 +8476,15 @@ export namespace Prisma {
     status?: EnumShipmentStatusWithAggregatesFilter<"Shipment"> | $Enums.ShipmentStatus
     senderId?: IntWithAggregatesFilter<"Shipment"> | number
     driverId?: IntNullableWithAggregatesFilter<"Shipment"> | number | null
+    companyId?: IntNullableWithAggregatesFilter<"Shipment"> | number | null
+    createdById?: IntNullableWithAggregatesFilter<"Shipment"> | number | null
+    assignedById?: IntNullableWithAggregatesFilter<"Shipment"> | number | null
+    proposedPrice?: DecimalNullableWithAggregatesFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: DecimalNullableWithAggregatesFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: IntNullableWithAggregatesFilter<"Shipment"> | number | null
+    priceReviewedAt?: DateTimeNullableWithAggregatesFilter<"Shipment"> | Date | string | null
+    paymentStatus?: EnumPaymentStatusWithAggregatesFilter<"Shipment"> | $Enums.PaymentStatus
+    paidAt?: DateTimeNullableWithAggregatesFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Shipment"> | Date | string
   }
@@ -5088,6 +8558,165 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Agent"> | Date | string
   }
 
+  export type CompanyWhereInput = {
+    AND?: CompanyWhereInput | CompanyWhereInput[]
+    OR?: CompanyWhereInput[]
+    NOT?: CompanyWhereInput | CompanyWhereInput[]
+    id?: IntFilter<"Company"> | number
+    name?: StringFilter<"Company"> | string
+    nit?: StringFilter<"Company"> | string
+    address?: StringNullableFilter<"Company"> | string | null
+    isActive?: BoolFilter<"Company"> | boolean
+    managerId?: IntNullableFilter<"Company"> | number | null
+    createdById?: IntNullableFilter<"Company"> | number | null
+    assignedById?: IntNullableFilter<"Company"> | number | null
+    createdAt?: DateTimeFilter<"Company"> | Date | string
+    manager?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    users?: UserListRelationFilter
+    shipments?: ShipmentListRelationFilter
+  }
+
+  export type CompanyOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    nit?: SortOrder
+    address?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    managerId?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    assignedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    manager?: UserOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    assignedBy?: UserOrderByWithRelationInput
+    users?: UserOrderByRelationAggregateInput
+    shipments?: ShipmentOrderByRelationAggregateInput
+  }
+
+  export type CompanyWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    nit?: string
+    AND?: CompanyWhereInput | CompanyWhereInput[]
+    OR?: CompanyWhereInput[]
+    NOT?: CompanyWhereInput | CompanyWhereInput[]
+    name?: StringFilter<"Company"> | string
+    address?: StringNullableFilter<"Company"> | string | null
+    isActive?: BoolFilter<"Company"> | boolean
+    managerId?: IntNullableFilter<"Company"> | number | null
+    createdById?: IntNullableFilter<"Company"> | number | null
+    assignedById?: IntNullableFilter<"Company"> | number | null
+    createdAt?: DateTimeFilter<"Company"> | Date | string
+    manager?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    users?: UserListRelationFilter
+    shipments?: ShipmentListRelationFilter
+  }, "id" | "nit">
+
+  export type CompanyOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    nit?: SortOrder
+    address?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    managerId?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    assignedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: CompanyCountOrderByAggregateInput
+    _avg?: CompanyAvgOrderByAggregateInput
+    _max?: CompanyMaxOrderByAggregateInput
+    _min?: CompanyMinOrderByAggregateInput
+    _sum?: CompanySumOrderByAggregateInput
+  }
+
+  export type CompanyScalarWhereWithAggregatesInput = {
+    AND?: CompanyScalarWhereWithAggregatesInput | CompanyScalarWhereWithAggregatesInput[]
+    OR?: CompanyScalarWhereWithAggregatesInput[]
+    NOT?: CompanyScalarWhereWithAggregatesInput | CompanyScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Company"> | number
+    name?: StringWithAggregatesFilter<"Company"> | string
+    nit?: StringWithAggregatesFilter<"Company"> | string
+    address?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    isActive?: BoolWithAggregatesFilter<"Company"> | boolean
+    managerId?: IntNullableWithAggregatesFilter<"Company"> | number | null
+    createdById?: IntNullableWithAggregatesFilter<"Company"> | number | null
+    assignedById?: IntNullableWithAggregatesFilter<"Company"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
+  }
+
+  export type DriverApplicationWhereInput = {
+    AND?: DriverApplicationWhereInput | DriverApplicationWhereInput[]
+    OR?: DriverApplicationWhereInput[]
+    NOT?: DriverApplicationWhereInput | DriverApplicationWhereInput[]
+    id?: IntFilter<"DriverApplication"> | number
+    userId?: IntFilter<"DriverApplication"> | number
+    status?: EnumApprovalStatusFilter<"DriverApplication"> | $Enums.ApprovalStatus
+    reviewedById?: IntNullableFilter<"DriverApplication"> | number | null
+    notes?: StringNullableFilter<"DriverApplication"> | string | null
+    createdAt?: DateTimeFilter<"DriverApplication"> | Date | string
+    reviewedAt?: DateTimeNullableFilter<"DriverApplication"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type DriverApplicationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    reviewedBy?: UserOrderByWithRelationInput
+  }
+
+  export type DriverApplicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId?: number
+    AND?: DriverApplicationWhereInput | DriverApplicationWhereInput[]
+    OR?: DriverApplicationWhereInput[]
+    NOT?: DriverApplicationWhereInput | DriverApplicationWhereInput[]
+    status?: EnumApprovalStatusFilter<"DriverApplication"> | $Enums.ApprovalStatus
+    reviewedById?: IntNullableFilter<"DriverApplication"> | number | null
+    notes?: StringNullableFilter<"DriverApplication"> | string | null
+    createdAt?: DateTimeFilter<"DriverApplication"> | Date | string
+    reviewedAt?: DateTimeNullableFilter<"DriverApplication"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "userId">
+
+  export type DriverApplicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    _count?: DriverApplicationCountOrderByAggregateInput
+    _avg?: DriverApplicationAvgOrderByAggregateInput
+    _max?: DriverApplicationMaxOrderByAggregateInput
+    _min?: DriverApplicationMinOrderByAggregateInput
+    _sum?: DriverApplicationSumOrderByAggregateInput
+  }
+
+  export type DriverApplicationScalarWhereWithAggregatesInput = {
+    AND?: DriverApplicationScalarWhereWithAggregatesInput | DriverApplicationScalarWhereWithAggregatesInput[]
+    OR?: DriverApplicationScalarWhereWithAggregatesInput[]
+    NOT?: DriverApplicationScalarWhereWithAggregatesInput | DriverApplicationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"DriverApplication"> | number
+    userId?: IntWithAggregatesFilter<"DriverApplication"> | number
+    status?: EnumApprovalStatusWithAggregatesFilter<"DriverApplication"> | $Enums.ApprovalStatus
+    reviewedById?: IntNullableWithAggregatesFilter<"DriverApplication"> | number | null
+    notes?: StringNullableWithAggregatesFilter<"DriverApplication"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DriverApplication"> | Date | string
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"DriverApplication"> | Date | string | null
+  }
+
   export type UserCreateInput = {
     name: string
     email: string
@@ -5098,8 +8727,17 @@ export namespace Prisma {
     role?: $Enums.Role
     isActive?: boolean
     createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
     customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
     driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -5113,8 +8751,17 @@ export namespace Prisma {
     role?: $Enums.Role
     isActive?: boolean
     createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
     customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
     driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUpdateInput = {
@@ -5127,8 +8774,17 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
     customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
     driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -5142,8 +8798,17 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
     customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
     driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -5157,6 +8822,7 @@ export namespace Prisma {
     role?: $Enums.Role
     isActive?: boolean
     createdAt?: Date | string
+    companyId?: number | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -5182,6 +8848,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ShipmentCreateInput = {
@@ -5192,10 +8859,19 @@ export namespace Prisma {
     destination: string
     timeline: string
     status?: $Enums.ShipmentStatus
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sender: UserCreateNestedOneWithoutCustomerShipmentsInput
     driver?: UserCreateNestedOneWithoutDriverShipmentsInput
+    company?: CompanyCreateNestedOneWithoutShipmentsInput
+    createdBy?: UserCreateNestedOneWithoutCreatedShipmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedShipmentsInput
+    priceReviewedBy?: UserCreateNestedOneWithoutPriceReviewedShipmentsInput
   }
 
   export type ShipmentUncheckedCreateInput = {
@@ -5209,6 +8885,15 @@ export namespace Prisma {
     status?: $Enums.ShipmentStatus
     senderId: number
     driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5221,10 +8906,19 @@ export namespace Prisma {
     destination?: StringFieldUpdateOperationsInput | string
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sender?: UserUpdateOneRequiredWithoutCustomerShipmentsNestedInput
     driver?: UserUpdateOneWithoutDriverShipmentsNestedInput
+    company?: CompanyUpdateOneWithoutShipmentsNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedShipmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedShipmentsNestedInput
+    priceReviewedBy?: UserUpdateOneWithoutPriceReviewedShipmentsNestedInput
   }
 
   export type ShipmentUncheckedUpdateInput = {
@@ -5238,6 +8932,15 @@ export namespace Prisma {
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
     senderId?: IntFieldUpdateOperationsInput | number
     driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5253,6 +8956,15 @@ export namespace Prisma {
     status?: $Enums.ShipmentStatus
     senderId: number
     driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5265,6 +8977,11 @@ export namespace Prisma {
     destination?: StringFieldUpdateOperationsInput | string
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5280,6 +8997,15 @@ export namespace Prisma {
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
     senderId?: IntFieldUpdateOperationsInput | number
     driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5358,6 +9084,157 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CompanyCreateInput = {
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    manager?: UserCreateNestedOneWithoutManagedCompaniesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedCompaniesInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedCompaniesInput
+    users?: UserCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    manager?: UserUpdateOneWithoutManagedCompaniesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedCompaniesNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedCompaniesNestedInput
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyCreateManyInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+  }
+
+  export type CompanyUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CompanyUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriverApplicationCreateInput = {
+    status?: $Enums.ApprovalStatus
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutDriverApplicationsInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedApplicationsInput
+  }
+
+  export type DriverApplicationUncheckedCreateInput = {
+    id?: number
+    userId: number
+    status?: $Enums.ApprovalStatus
+    reviewedById?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+  }
+
+  export type DriverApplicationUpdateInput = {
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutDriverApplicationsNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedApplicationsNestedInput
+  }
+
+  export type DriverApplicationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    reviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DriverApplicationCreateManyInput = {
+    id?: number
+    userId: number
+    status?: $Enums.ApprovalStatus
+    reviewedById?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+  }
+
+  export type DriverApplicationUpdateManyMutationInput = {
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DriverApplicationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    reviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -5422,10 +9299,38 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type CompanyNullableScalarRelationFilter = {
+    is?: CompanyWhereInput | null
+    isNot?: CompanyWhereInput | null
+  }
+
+  export type CompanyListRelationFilter = {
+    every?: CompanyWhereInput
+    some?: CompanyWhereInput
+    none?: CompanyWhereInput
+  }
+
   export type ShipmentListRelationFilter = {
     every?: ShipmentWhereInput
     some?: ShipmentWhereInput
     none?: ShipmentWhereInput
+  }
+
+  export type DriverApplicationListRelationFilter = {
+    every?: DriverApplicationWhereInput
+    some?: DriverApplicationWhereInput
+    none?: DriverApplicationWhereInput
   }
 
   export type SortOrderInput = {
@@ -5433,7 +9338,15 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
+  export type CompanyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ShipmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DriverApplicationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -5448,10 +9361,12 @@ export namespace Prisma {
     role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
+    companyId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -5465,6 +9380,7 @@ export namespace Prisma {
     role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -5478,10 +9394,12 @@ export namespace Prisma {
     role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    companyId?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
+    companyId?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -5568,6 +9486,22 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -5586,15 +9520,33 @@ export namespace Prisma {
     not?: NestedEnumShipmentStatusFilter<$PrismaModel> | $Enums.ShipmentStatus
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type EnumPaymentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
   export type UserScalarRelationFilter = {
@@ -5618,6 +9570,15 @@ export namespace Prisma {
     status?: SortOrder
     senderId?: SortOrder
     driverId?: SortOrder
+    companyId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    proposedPrice?: SortOrder
+    approvedPrice?: SortOrder
+    priceReviewedById?: SortOrder
+    priceReviewedAt?: SortOrder
+    paymentStatus?: SortOrder
+    paidAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5627,6 +9588,12 @@ export namespace Prisma {
     weight?: SortOrder
     senderId?: SortOrder
     driverId?: SortOrder
+    companyId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    proposedPrice?: SortOrder
+    approvedPrice?: SortOrder
+    priceReviewedById?: SortOrder
   }
 
   export type ShipmentMaxOrderByAggregateInput = {
@@ -5640,6 +9607,15 @@ export namespace Prisma {
     status?: SortOrder
     senderId?: SortOrder
     driverId?: SortOrder
+    companyId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    proposedPrice?: SortOrder
+    approvedPrice?: SortOrder
+    priceReviewedById?: SortOrder
+    priceReviewedAt?: SortOrder
+    paymentStatus?: SortOrder
+    paidAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5655,6 +9631,15 @@ export namespace Prisma {
     status?: SortOrder
     senderId?: SortOrder
     driverId?: SortOrder
+    companyId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    proposedPrice?: SortOrder
+    approvedPrice?: SortOrder
+    priceReviewedById?: SortOrder
+    priceReviewedAt?: SortOrder
+    paymentStatus?: SortOrder
+    paidAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5664,6 +9649,12 @@ export namespace Prisma {
     weight?: SortOrder
     senderId?: SortOrder
     driverId?: SortOrder
+    companyId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    proposedPrice?: SortOrder
+    approvedPrice?: SortOrder
+    priceReviewedById?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -5692,20 +9683,44 @@ export namespace Prisma {
     _max?: NestedEnumShipmentStatusFilter<$PrismaModel>
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
+    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -5798,6 +9813,152 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CompanyCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    nit?: SortOrder
+    address?: SortOrder
+    isActive?: SortOrder
+    managerId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CompanyAvgOrderByAggregateInput = {
+    id?: SortOrder
+    managerId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+  }
+
+  export type CompanyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    nit?: SortOrder
+    address?: SortOrder
+    isActive?: SortOrder
+    managerId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CompanyMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    nit?: SortOrder
+    address?: SortOrder
+    isActive?: SortOrder
+    managerId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CompanySumOrderByAggregateInput = {
+    id?: SortOrder
+    managerId?: SortOrder
+    createdById?: SortOrder
+    assignedById?: SortOrder
+  }
+
+  export type EnumApprovalStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusFilter<$PrismaModel> | $Enums.ApprovalStatus
+  }
+
+  export type DriverApplicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    reviewedById?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    reviewedAt?: SortOrder
+  }
+
+  export type DriverApplicationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewedById?: SortOrder
+  }
+
+  export type DriverApplicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    reviewedById?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    reviewedAt?: SortOrder
+  }
+
+  export type DriverApplicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    reviewedById?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    reviewedAt?: SortOrder
+  }
+
+  export type DriverApplicationSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    reviewedById?: SortOrder
+  }
+
+  export type EnumApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApprovalStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApprovalStatusFilter<$PrismaModel>
+    _max?: NestedEnumApprovalStatusFilter<$PrismaModel>
+  }
+
+  export type CompanyCreateNestedOneWithoutUsersInput = {
+    create?: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutUsersInput
+    connect?: CompanyWhereUniqueInput
+  }
+
+  export type CompanyCreateNestedManyWithoutManagerInput = {
+    create?: XOR<CompanyCreateWithoutManagerInput, CompanyUncheckedCreateWithoutManagerInput> | CompanyCreateWithoutManagerInput[] | CompanyUncheckedCreateWithoutManagerInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutManagerInput | CompanyCreateOrConnectWithoutManagerInput[]
+    createMany?: CompanyCreateManyManagerInputEnvelope
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+  }
+
+  export type CompanyCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<CompanyCreateWithoutCreatedByInput, CompanyUncheckedCreateWithoutCreatedByInput> | CompanyCreateWithoutCreatedByInput[] | CompanyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutCreatedByInput | CompanyCreateOrConnectWithoutCreatedByInput[]
+    createMany?: CompanyCreateManyCreatedByInputEnvelope
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+  }
+
+  export type CompanyCreateNestedManyWithoutAssignedByInput = {
+    create?: XOR<CompanyCreateWithoutAssignedByInput, CompanyUncheckedCreateWithoutAssignedByInput> | CompanyCreateWithoutAssignedByInput[] | CompanyUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutAssignedByInput | CompanyCreateOrConnectWithoutAssignedByInput[]
+    createMany?: CompanyCreateManyAssignedByInputEnvelope
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+  }
+
   export type ShipmentCreateNestedManyWithoutSenderInput = {
     create?: XOR<ShipmentCreateWithoutSenderInput, ShipmentUncheckedCreateWithoutSenderInput> | ShipmentCreateWithoutSenderInput[] | ShipmentUncheckedCreateWithoutSenderInput[]
     connectOrCreate?: ShipmentCreateOrConnectWithoutSenderInput | ShipmentCreateOrConnectWithoutSenderInput[]
@@ -5812,6 +9973,62 @@ export namespace Prisma {
     connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
   }
 
+  export type ShipmentCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ShipmentCreateWithoutCreatedByInput, ShipmentUncheckedCreateWithoutCreatedByInput> | ShipmentCreateWithoutCreatedByInput[] | ShipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCreatedByInput | ShipmentCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ShipmentCreateManyCreatedByInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type ShipmentCreateNestedManyWithoutAssignedByInput = {
+    create?: XOR<ShipmentCreateWithoutAssignedByInput, ShipmentUncheckedCreateWithoutAssignedByInput> | ShipmentCreateWithoutAssignedByInput[] | ShipmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutAssignedByInput | ShipmentCreateOrConnectWithoutAssignedByInput[]
+    createMany?: ShipmentCreateManyAssignedByInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type ShipmentCreateNestedManyWithoutPriceReviewedByInput = {
+    create?: XOR<ShipmentCreateWithoutPriceReviewedByInput, ShipmentUncheckedCreateWithoutPriceReviewedByInput> | ShipmentCreateWithoutPriceReviewedByInput[] | ShipmentUncheckedCreateWithoutPriceReviewedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutPriceReviewedByInput | ShipmentCreateOrConnectWithoutPriceReviewedByInput[]
+    createMany?: ShipmentCreateManyPriceReviewedByInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type DriverApplicationCreateNestedManyWithoutUserInput = {
+    create?: XOR<DriverApplicationCreateWithoutUserInput, DriverApplicationUncheckedCreateWithoutUserInput> | DriverApplicationCreateWithoutUserInput[] | DriverApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutUserInput | DriverApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: DriverApplicationCreateManyUserInputEnvelope
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+  }
+
+  export type DriverApplicationCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<DriverApplicationCreateWithoutReviewedByInput, DriverApplicationUncheckedCreateWithoutReviewedByInput> | DriverApplicationCreateWithoutReviewedByInput[] | DriverApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutReviewedByInput | DriverApplicationCreateOrConnectWithoutReviewedByInput[]
+    createMany?: DriverApplicationCreateManyReviewedByInputEnvelope
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+  }
+
+  export type CompanyUncheckedCreateNestedManyWithoutManagerInput = {
+    create?: XOR<CompanyCreateWithoutManagerInput, CompanyUncheckedCreateWithoutManagerInput> | CompanyCreateWithoutManagerInput[] | CompanyUncheckedCreateWithoutManagerInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutManagerInput | CompanyCreateOrConnectWithoutManagerInput[]
+    createMany?: CompanyCreateManyManagerInputEnvelope
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+  }
+
+  export type CompanyUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<CompanyCreateWithoutCreatedByInput, CompanyUncheckedCreateWithoutCreatedByInput> | CompanyCreateWithoutCreatedByInput[] | CompanyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutCreatedByInput | CompanyCreateOrConnectWithoutCreatedByInput[]
+    createMany?: CompanyCreateManyCreatedByInputEnvelope
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+  }
+
+  export type CompanyUncheckedCreateNestedManyWithoutAssignedByInput = {
+    create?: XOR<CompanyCreateWithoutAssignedByInput, CompanyUncheckedCreateWithoutAssignedByInput> | CompanyCreateWithoutAssignedByInput[] | CompanyUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutAssignedByInput | CompanyCreateOrConnectWithoutAssignedByInput[]
+    createMany?: CompanyCreateManyAssignedByInputEnvelope
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+  }
+
   export type ShipmentUncheckedCreateNestedManyWithoutSenderInput = {
     create?: XOR<ShipmentCreateWithoutSenderInput, ShipmentUncheckedCreateWithoutSenderInput> | ShipmentCreateWithoutSenderInput[] | ShipmentUncheckedCreateWithoutSenderInput[]
     connectOrCreate?: ShipmentCreateOrConnectWithoutSenderInput | ShipmentCreateOrConnectWithoutSenderInput[]
@@ -5824,6 +10041,41 @@ export namespace Prisma {
     connectOrCreate?: ShipmentCreateOrConnectWithoutDriverInput | ShipmentCreateOrConnectWithoutDriverInput[]
     createMany?: ShipmentCreateManyDriverInputEnvelope
     connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type ShipmentUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ShipmentCreateWithoutCreatedByInput, ShipmentUncheckedCreateWithoutCreatedByInput> | ShipmentCreateWithoutCreatedByInput[] | ShipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCreatedByInput | ShipmentCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ShipmentCreateManyCreatedByInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type ShipmentUncheckedCreateNestedManyWithoutAssignedByInput = {
+    create?: XOR<ShipmentCreateWithoutAssignedByInput, ShipmentUncheckedCreateWithoutAssignedByInput> | ShipmentCreateWithoutAssignedByInput[] | ShipmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutAssignedByInput | ShipmentCreateOrConnectWithoutAssignedByInput[]
+    createMany?: ShipmentCreateManyAssignedByInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput = {
+    create?: XOR<ShipmentCreateWithoutPriceReviewedByInput, ShipmentUncheckedCreateWithoutPriceReviewedByInput> | ShipmentCreateWithoutPriceReviewedByInput[] | ShipmentUncheckedCreateWithoutPriceReviewedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutPriceReviewedByInput | ShipmentCreateOrConnectWithoutPriceReviewedByInput[]
+    createMany?: ShipmentCreateManyPriceReviewedByInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type DriverApplicationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<DriverApplicationCreateWithoutUserInput, DriverApplicationUncheckedCreateWithoutUserInput> | DriverApplicationCreateWithoutUserInput[] | DriverApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutUserInput | DriverApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: DriverApplicationCreateManyUserInputEnvelope
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+  }
+
+  export type DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<DriverApplicationCreateWithoutReviewedByInput, DriverApplicationUncheckedCreateWithoutReviewedByInput> | DriverApplicationCreateWithoutReviewedByInput[] | DriverApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutReviewedByInput | DriverApplicationCreateOrConnectWithoutReviewedByInput[]
+    createMany?: DriverApplicationCreateManyReviewedByInputEnvelope
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5844,6 +10096,58 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type CompanyUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutUsersInput
+    upsert?: CompanyUpsertWithoutUsersInput
+    disconnect?: CompanyWhereInput | boolean
+    delete?: CompanyWhereInput | boolean
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutUsersInput, CompanyUpdateWithoutUsersInput>, CompanyUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type CompanyUpdateManyWithoutManagerNestedInput = {
+    create?: XOR<CompanyCreateWithoutManagerInput, CompanyUncheckedCreateWithoutManagerInput> | CompanyCreateWithoutManagerInput[] | CompanyUncheckedCreateWithoutManagerInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutManagerInput | CompanyCreateOrConnectWithoutManagerInput[]
+    upsert?: CompanyUpsertWithWhereUniqueWithoutManagerInput | CompanyUpsertWithWhereUniqueWithoutManagerInput[]
+    createMany?: CompanyCreateManyManagerInputEnvelope
+    set?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    disconnect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    delete?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    update?: CompanyUpdateWithWhereUniqueWithoutManagerInput | CompanyUpdateWithWhereUniqueWithoutManagerInput[]
+    updateMany?: CompanyUpdateManyWithWhereWithoutManagerInput | CompanyUpdateManyWithWhereWithoutManagerInput[]
+    deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
+  }
+
+  export type CompanyUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<CompanyCreateWithoutCreatedByInput, CompanyUncheckedCreateWithoutCreatedByInput> | CompanyCreateWithoutCreatedByInput[] | CompanyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutCreatedByInput | CompanyCreateOrConnectWithoutCreatedByInput[]
+    upsert?: CompanyUpsertWithWhereUniqueWithoutCreatedByInput | CompanyUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: CompanyCreateManyCreatedByInputEnvelope
+    set?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    disconnect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    delete?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    update?: CompanyUpdateWithWhereUniqueWithoutCreatedByInput | CompanyUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: CompanyUpdateManyWithWhereWithoutCreatedByInput | CompanyUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
+  }
+
+  export type CompanyUpdateManyWithoutAssignedByNestedInput = {
+    create?: XOR<CompanyCreateWithoutAssignedByInput, CompanyUncheckedCreateWithoutAssignedByInput> | CompanyCreateWithoutAssignedByInput[] | CompanyUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutAssignedByInput | CompanyCreateOrConnectWithoutAssignedByInput[]
+    upsert?: CompanyUpsertWithWhereUniqueWithoutAssignedByInput | CompanyUpsertWithWhereUniqueWithoutAssignedByInput[]
+    createMany?: CompanyCreateManyAssignedByInputEnvelope
+    set?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    disconnect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    delete?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    update?: CompanyUpdateWithWhereUniqueWithoutAssignedByInput | CompanyUpdateWithWhereUniqueWithoutAssignedByInput[]
+    updateMany?: CompanyUpdateManyWithWhereWithoutAssignedByInput | CompanyUpdateManyWithWhereWithoutAssignedByInput[]
+    deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
   }
 
   export type ShipmentUpdateManyWithoutSenderNestedInput = {
@@ -5874,12 +10178,132 @@ export namespace Prisma {
     deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
   }
 
+  export type ShipmentUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ShipmentCreateWithoutCreatedByInput, ShipmentUncheckedCreateWithoutCreatedByInput> | ShipmentCreateWithoutCreatedByInput[] | ShipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCreatedByInput | ShipmentCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutCreatedByInput | ShipmentUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ShipmentCreateManyCreatedByInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutCreatedByInput | ShipmentUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutCreatedByInput | ShipmentUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type ShipmentUpdateManyWithoutAssignedByNestedInput = {
+    create?: XOR<ShipmentCreateWithoutAssignedByInput, ShipmentUncheckedCreateWithoutAssignedByInput> | ShipmentCreateWithoutAssignedByInput[] | ShipmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutAssignedByInput | ShipmentCreateOrConnectWithoutAssignedByInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutAssignedByInput | ShipmentUpsertWithWhereUniqueWithoutAssignedByInput[]
+    createMany?: ShipmentCreateManyAssignedByInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutAssignedByInput | ShipmentUpdateWithWhereUniqueWithoutAssignedByInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutAssignedByInput | ShipmentUpdateManyWithWhereWithoutAssignedByInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type ShipmentUpdateManyWithoutPriceReviewedByNestedInput = {
+    create?: XOR<ShipmentCreateWithoutPriceReviewedByInput, ShipmentUncheckedCreateWithoutPriceReviewedByInput> | ShipmentCreateWithoutPriceReviewedByInput[] | ShipmentUncheckedCreateWithoutPriceReviewedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutPriceReviewedByInput | ShipmentCreateOrConnectWithoutPriceReviewedByInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutPriceReviewedByInput | ShipmentUpsertWithWhereUniqueWithoutPriceReviewedByInput[]
+    createMany?: ShipmentCreateManyPriceReviewedByInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutPriceReviewedByInput | ShipmentUpdateWithWhereUniqueWithoutPriceReviewedByInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutPriceReviewedByInput | ShipmentUpdateManyWithWhereWithoutPriceReviewedByInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type DriverApplicationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DriverApplicationCreateWithoutUserInput, DriverApplicationUncheckedCreateWithoutUserInput> | DriverApplicationCreateWithoutUserInput[] | DriverApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutUserInput | DriverApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: DriverApplicationUpsertWithWhereUniqueWithoutUserInput | DriverApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DriverApplicationCreateManyUserInputEnvelope
+    set?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    disconnect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    delete?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    update?: DriverApplicationUpdateWithWhereUniqueWithoutUserInput | DriverApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DriverApplicationUpdateManyWithWhereWithoutUserInput | DriverApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DriverApplicationScalarWhereInput | DriverApplicationScalarWhereInput[]
+  }
+
+  export type DriverApplicationUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<DriverApplicationCreateWithoutReviewedByInput, DriverApplicationUncheckedCreateWithoutReviewedByInput> | DriverApplicationCreateWithoutReviewedByInput[] | DriverApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutReviewedByInput | DriverApplicationCreateOrConnectWithoutReviewedByInput[]
+    upsert?: DriverApplicationUpsertWithWhereUniqueWithoutReviewedByInput | DriverApplicationUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: DriverApplicationCreateManyReviewedByInputEnvelope
+    set?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    disconnect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    delete?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    update?: DriverApplicationUpdateWithWhereUniqueWithoutReviewedByInput | DriverApplicationUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: DriverApplicationUpdateManyWithWhereWithoutReviewedByInput | DriverApplicationUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: DriverApplicationScalarWhereInput | DriverApplicationScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type CompanyUncheckedUpdateManyWithoutManagerNestedInput = {
+    create?: XOR<CompanyCreateWithoutManagerInput, CompanyUncheckedCreateWithoutManagerInput> | CompanyCreateWithoutManagerInput[] | CompanyUncheckedCreateWithoutManagerInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutManagerInput | CompanyCreateOrConnectWithoutManagerInput[]
+    upsert?: CompanyUpsertWithWhereUniqueWithoutManagerInput | CompanyUpsertWithWhereUniqueWithoutManagerInput[]
+    createMany?: CompanyCreateManyManagerInputEnvelope
+    set?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    disconnect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    delete?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    update?: CompanyUpdateWithWhereUniqueWithoutManagerInput | CompanyUpdateWithWhereUniqueWithoutManagerInput[]
+    updateMany?: CompanyUpdateManyWithWhereWithoutManagerInput | CompanyUpdateManyWithWhereWithoutManagerInput[]
+    deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
+  }
+
+  export type CompanyUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<CompanyCreateWithoutCreatedByInput, CompanyUncheckedCreateWithoutCreatedByInput> | CompanyCreateWithoutCreatedByInput[] | CompanyUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutCreatedByInput | CompanyCreateOrConnectWithoutCreatedByInput[]
+    upsert?: CompanyUpsertWithWhereUniqueWithoutCreatedByInput | CompanyUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: CompanyCreateManyCreatedByInputEnvelope
+    set?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    disconnect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    delete?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    update?: CompanyUpdateWithWhereUniqueWithoutCreatedByInput | CompanyUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: CompanyUpdateManyWithWhereWithoutCreatedByInput | CompanyUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
+  }
+
+  export type CompanyUncheckedUpdateManyWithoutAssignedByNestedInput = {
+    create?: XOR<CompanyCreateWithoutAssignedByInput, CompanyUncheckedCreateWithoutAssignedByInput> | CompanyCreateWithoutAssignedByInput[] | CompanyUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: CompanyCreateOrConnectWithoutAssignedByInput | CompanyCreateOrConnectWithoutAssignedByInput[]
+    upsert?: CompanyUpsertWithWhereUniqueWithoutAssignedByInput | CompanyUpsertWithWhereUniqueWithoutAssignedByInput[]
+    createMany?: CompanyCreateManyAssignedByInputEnvelope
+    set?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    disconnect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    delete?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    connect?: CompanyWhereUniqueInput | CompanyWhereUniqueInput[]
+    update?: CompanyUpdateWithWhereUniqueWithoutAssignedByInput | CompanyUpdateWithWhereUniqueWithoutAssignedByInput[]
+    updateMany?: CompanyUpdateManyWithWhereWithoutAssignedByInput | CompanyUpdateManyWithWhereWithoutAssignedByInput[]
+    deleteMany?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
   }
 
   export type ShipmentUncheckedUpdateManyWithoutSenderNestedInput = {
@@ -5910,6 +10334,76 @@ export namespace Prisma {
     deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
   }
 
+  export type ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ShipmentCreateWithoutCreatedByInput, ShipmentUncheckedCreateWithoutCreatedByInput> | ShipmentCreateWithoutCreatedByInput[] | ShipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCreatedByInput | ShipmentCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutCreatedByInput | ShipmentUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ShipmentCreateManyCreatedByInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutCreatedByInput | ShipmentUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutCreatedByInput | ShipmentUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput = {
+    create?: XOR<ShipmentCreateWithoutAssignedByInput, ShipmentUncheckedCreateWithoutAssignedByInput> | ShipmentCreateWithoutAssignedByInput[] | ShipmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutAssignedByInput | ShipmentCreateOrConnectWithoutAssignedByInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutAssignedByInput | ShipmentUpsertWithWhereUniqueWithoutAssignedByInput[]
+    createMany?: ShipmentCreateManyAssignedByInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutAssignedByInput | ShipmentUpdateWithWhereUniqueWithoutAssignedByInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutAssignedByInput | ShipmentUpdateManyWithWhereWithoutAssignedByInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput = {
+    create?: XOR<ShipmentCreateWithoutPriceReviewedByInput, ShipmentUncheckedCreateWithoutPriceReviewedByInput> | ShipmentCreateWithoutPriceReviewedByInput[] | ShipmentUncheckedCreateWithoutPriceReviewedByInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutPriceReviewedByInput | ShipmentCreateOrConnectWithoutPriceReviewedByInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutPriceReviewedByInput | ShipmentUpsertWithWhereUniqueWithoutPriceReviewedByInput[]
+    createMany?: ShipmentCreateManyPriceReviewedByInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutPriceReviewedByInput | ShipmentUpdateWithWhereUniqueWithoutPriceReviewedByInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutPriceReviewedByInput | ShipmentUpdateManyWithWhereWithoutPriceReviewedByInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type DriverApplicationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DriverApplicationCreateWithoutUserInput, DriverApplicationUncheckedCreateWithoutUserInput> | DriverApplicationCreateWithoutUserInput[] | DriverApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutUserInput | DriverApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: DriverApplicationUpsertWithWhereUniqueWithoutUserInput | DriverApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DriverApplicationCreateManyUserInputEnvelope
+    set?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    disconnect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    delete?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    update?: DriverApplicationUpdateWithWhereUniqueWithoutUserInput | DriverApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DriverApplicationUpdateManyWithWhereWithoutUserInput | DriverApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DriverApplicationScalarWhereInput | DriverApplicationScalarWhereInput[]
+  }
+
+  export type DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<DriverApplicationCreateWithoutReviewedByInput, DriverApplicationUncheckedCreateWithoutReviewedByInput> | DriverApplicationCreateWithoutReviewedByInput[] | DriverApplicationUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: DriverApplicationCreateOrConnectWithoutReviewedByInput | DriverApplicationCreateOrConnectWithoutReviewedByInput[]
+    upsert?: DriverApplicationUpsertWithWhereUniqueWithoutReviewedByInput | DriverApplicationUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: DriverApplicationCreateManyReviewedByInputEnvelope
+    set?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    disconnect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    delete?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    connect?: DriverApplicationWhereUniqueInput | DriverApplicationWhereUniqueInput[]
+    update?: DriverApplicationUpdateWithWhereUniqueWithoutReviewedByInput | DriverApplicationUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: DriverApplicationUpdateManyWithWhereWithoutReviewedByInput | DriverApplicationUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: DriverApplicationScalarWhereInput | DriverApplicationScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutCustomerShipmentsInput = {
     create?: XOR<UserCreateWithoutCustomerShipmentsInput, UserUncheckedCreateWithoutCustomerShipmentsInput>
     connectOrCreate?: UserCreateOrConnectWithoutCustomerShipmentsInput
@@ -5919,6 +10413,30 @@ export namespace Prisma {
   export type UserCreateNestedOneWithoutDriverShipmentsInput = {
     create?: XOR<UserCreateWithoutDriverShipmentsInput, UserUncheckedCreateWithoutDriverShipmentsInput>
     connectOrCreate?: UserCreateOrConnectWithoutDriverShipmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CompanyCreateNestedOneWithoutShipmentsInput = {
+    create?: XOR<CompanyCreateWithoutShipmentsInput, CompanyUncheckedCreateWithoutShipmentsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutShipmentsInput
+    connect?: CompanyWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCreatedShipmentsInput = {
+    create?: XOR<UserCreateWithoutCreatedShipmentsInput, UserUncheckedCreateWithoutCreatedShipmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedShipmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAssignedShipmentsInput = {
+    create?: XOR<UserCreateWithoutAssignedShipmentsInput, UserUncheckedCreateWithoutAssignedShipmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedShipmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPriceReviewedShipmentsInput = {
+    create?: XOR<UserCreateWithoutPriceReviewedShipmentsInput, UserUncheckedCreateWithoutPriceReviewedShipmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPriceReviewedShipmentsInput
     connect?: UserWhereUniqueInput
   }
 
@@ -5932,6 +10450,22 @@ export namespace Prisma {
 
   export type EnumShipmentStatusFieldUpdateOperationsInput = {
     set?: $Enums.ShipmentStatus
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type EnumPaymentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentStatus
   }
 
   export type UserUpdateOneRequiredWithoutCustomerShipmentsNestedInput = {
@@ -5952,12 +10486,210 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDriverShipmentsInput, UserUpdateWithoutDriverShipmentsInput>, UserUncheckedUpdateWithoutDriverShipmentsInput>
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type CompanyUpdateOneWithoutShipmentsNestedInput = {
+    create?: XOR<CompanyCreateWithoutShipmentsInput, CompanyUncheckedCreateWithoutShipmentsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutShipmentsInput
+    upsert?: CompanyUpsertWithoutShipmentsInput
+    disconnect?: CompanyWhereInput | boolean
+    delete?: CompanyWhereInput | boolean
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutShipmentsInput, CompanyUpdateWithoutShipmentsInput>, CompanyUncheckedUpdateWithoutShipmentsInput>
+  }
+
+  export type UserUpdateOneWithoutCreatedShipmentsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedShipmentsInput, UserUncheckedCreateWithoutCreatedShipmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedShipmentsInput
+    upsert?: UserUpsertWithoutCreatedShipmentsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedShipmentsInput, UserUpdateWithoutCreatedShipmentsInput>, UserUncheckedUpdateWithoutCreatedShipmentsInput>
+  }
+
+  export type UserUpdateOneWithoutAssignedShipmentsNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedShipmentsInput, UserUncheckedCreateWithoutAssignedShipmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedShipmentsInput
+    upsert?: UserUpsertWithoutAssignedShipmentsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedShipmentsInput, UserUpdateWithoutAssignedShipmentsInput>, UserUncheckedUpdateWithoutAssignedShipmentsInput>
+  }
+
+  export type UserUpdateOneWithoutPriceReviewedShipmentsNestedInput = {
+    create?: XOR<UserCreateWithoutPriceReviewedShipmentsInput, UserUncheckedCreateWithoutPriceReviewedShipmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPriceReviewedShipmentsInput
+    upsert?: UserUpsertWithoutPriceReviewedShipmentsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPriceReviewedShipmentsInput, UserUpdateWithoutPriceReviewedShipmentsInput>, UserUncheckedUpdateWithoutPriceReviewedShipmentsInput>
+  }
+
+  export type UserCreateNestedOneWithoutManagedCompaniesInput = {
+    create?: XOR<UserCreateWithoutManagedCompaniesInput, UserUncheckedCreateWithoutManagedCompaniesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedCompaniesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCreatedCompaniesInput = {
+    create?: XOR<UserCreateWithoutCreatedCompaniesInput, UserUncheckedCreateWithoutCreatedCompaniesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedCompaniesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAssignedCompaniesInput = {
+    create?: XOR<UserCreateWithoutAssignedCompaniesInput, UserUncheckedCreateWithoutAssignedCompaniesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedCompaniesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
+    createMany?: UserCreateManyCompanyInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ShipmentCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<ShipmentCreateWithoutCompanyInput, ShipmentUncheckedCreateWithoutCompanyInput> | ShipmentCreateWithoutCompanyInput[] | ShipmentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCompanyInput | ShipmentCreateOrConnectWithoutCompanyInput[]
+    createMany?: ShipmentCreateManyCompanyInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
+    createMany?: UserCreateManyCompanyInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type ShipmentUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<ShipmentCreateWithoutCompanyInput, ShipmentUncheckedCreateWithoutCompanyInput> | ShipmentCreateWithoutCompanyInput[] | ShipmentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCompanyInput | ShipmentCreateOrConnectWithoutCompanyInput[]
+    createMany?: ShipmentCreateManyCompanyInputEnvelope
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneWithoutManagedCompaniesNestedInput = {
+    create?: XOR<UserCreateWithoutManagedCompaniesInput, UserUncheckedCreateWithoutManagedCompaniesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedCompaniesInput
+    upsert?: UserUpsertWithoutManagedCompaniesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutManagedCompaniesInput, UserUpdateWithoutManagedCompaniesInput>, UserUncheckedUpdateWithoutManagedCompaniesInput>
+  }
+
+  export type UserUpdateOneWithoutCreatedCompaniesNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedCompaniesInput, UserUncheckedCreateWithoutCreatedCompaniesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedCompaniesInput
+    upsert?: UserUpsertWithoutCreatedCompaniesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedCompaniesInput, UserUpdateWithoutCreatedCompaniesInput>, UserUncheckedUpdateWithoutCreatedCompaniesInput>
+  }
+
+  export type UserUpdateOneWithoutAssignedCompaniesNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedCompaniesInput, UserUncheckedCreateWithoutAssignedCompaniesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedCompaniesInput
+    upsert?: UserUpsertWithoutAssignedCompaniesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedCompaniesInput, UserUpdateWithoutAssignedCompaniesInput>, UserUncheckedUpdateWithoutAssignedCompaniesInput>
+  }
+
+  export type UserUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutCompanyInput | UserUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: UserCreateManyCompanyInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutCompanyInput | UserUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutCompanyInput | UserUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ShipmentUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<ShipmentCreateWithoutCompanyInput, ShipmentUncheckedCreateWithoutCompanyInput> | ShipmentCreateWithoutCompanyInput[] | ShipmentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCompanyInput | ShipmentCreateOrConnectWithoutCompanyInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutCompanyInput | ShipmentUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: ShipmentCreateManyCompanyInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutCompanyInput | ShipmentUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutCompanyInput | ShipmentUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutCompanyInput | UserUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: UserCreateManyCompanyInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutCompanyInput | UserUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutCompanyInput | UserUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type ShipmentUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<ShipmentCreateWithoutCompanyInput, ShipmentUncheckedCreateWithoutCompanyInput> | ShipmentCreateWithoutCompanyInput[] | ShipmentUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: ShipmentCreateOrConnectWithoutCompanyInput | ShipmentCreateOrConnectWithoutCompanyInput[]
+    upsert?: ShipmentUpsertWithWhereUniqueWithoutCompanyInput | ShipmentUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: ShipmentCreateManyCompanyInputEnvelope
+    set?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    disconnect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    delete?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    connect?: ShipmentWhereUniqueInput | ShipmentWhereUniqueInput[]
+    update?: ShipmentUpdateWithWhereUniqueWithoutCompanyInput | ShipmentUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: ShipmentUpdateManyWithWhereWithoutCompanyInput | ShipmentUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: ShipmentScalarWhereInput | ShipmentScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutDriverApplicationsInput = {
+    create?: XOR<UserCreateWithoutDriverApplicationsInput, UserUncheckedCreateWithoutDriverApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDriverApplicationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReviewedApplicationsInput = {
+    create?: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedApplicationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumApprovalStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ApprovalStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutDriverApplicationsNestedInput = {
+    create?: XOR<UserCreateWithoutDriverApplicationsInput, UserUncheckedCreateWithoutDriverApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDriverApplicationsInput
+    upsert?: UserUpsertWithoutDriverApplicationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDriverApplicationsInput, UserUpdateWithoutDriverApplicationsInput>, UserUncheckedUpdateWithoutDriverApplicationsInput>
+  }
+
+  export type UserUpdateOneWithoutReviewedApplicationsNestedInput = {
+    create?: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedApplicationsInput
+    upsert?: UserUpsertWithoutReviewedApplicationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedApplicationsInput, UserUpdateWithoutReviewedApplicationsInput>, UserUncheckedUpdateWithoutReviewedApplicationsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -6022,6 +10754,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -6083,17 +10826,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
@@ -6126,11 +10858,67 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumShipmentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ShipmentStatus | EnumShipmentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ShipmentStatus[] | ListEnumShipmentStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ShipmentStatus[] | ListEnumShipmentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumShipmentStatusFilter<$PrismaModel> | $Enums.ShipmentStatus
+  }
+
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumPaymentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -6159,31 +10947,44 @@ export namespace Prisma {
     _max?: NestedEnumShipmentStatusFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentStatus | EnumPaymentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.PaymentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
+    _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -6209,6 +11010,158 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumApprovalStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusFilter<$PrismaModel> | $Enums.ApprovalStatus
+  }
+
+  export type NestedEnumApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApprovalStatus | EnumApprovalStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApprovalStatus[] | ListEnumApprovalStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApprovalStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApprovalStatusFilter<$PrismaModel>
+    _max?: NestedEnumApprovalStatusFilter<$PrismaModel>
+  }
+
+  export type CompanyCreateWithoutUsersInput = {
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    manager?: UserCreateNestedOneWithoutManagedCompaniesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedCompaniesInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedCompaniesInput
+    shipments?: ShipmentCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutUsersInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+    shipments?: ShipmentUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutUsersInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
+  }
+
+  export type CompanyCreateWithoutManagerInput = {
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutCreatedCompaniesInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedCompaniesInput
+    users?: UserCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutManagerInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdById?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutManagerInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutManagerInput, CompanyUncheckedCreateWithoutManagerInput>
+  }
+
+  export type CompanyCreateManyManagerInputEnvelope = {
+    data: CompanyCreateManyManagerInput | CompanyCreateManyManagerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CompanyCreateWithoutCreatedByInput = {
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    manager?: UserCreateNestedOneWithoutManagedCompaniesInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedCompaniesInput
+    users?: UserCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutCreatedByInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutCreatedByInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutCreatedByInput, CompanyUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type CompanyCreateManyCreatedByInputEnvelope = {
+    data: CompanyCreateManyCreatedByInput | CompanyCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CompanyCreateWithoutAssignedByInput = {
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    manager?: UserCreateNestedOneWithoutManagedCompaniesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedCompaniesInput
+    users?: UserCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutAssignedByInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdById?: number | null
+    createdAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    shipments?: ShipmentUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutAssignedByInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutAssignedByInput, CompanyUncheckedCreateWithoutAssignedByInput>
+  }
+
+  export type CompanyCreateManyAssignedByInputEnvelope = {
+    data: CompanyCreateManyAssignedByInput | CompanyCreateManyAssignedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ShipmentCreateWithoutSenderInput = {
     cargoType: string
     weight: number
@@ -6217,9 +11170,18 @@ export namespace Prisma {
     destination: string
     timeline: string
     status?: $Enums.ShipmentStatus
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     driver?: UserCreateNestedOneWithoutDriverShipmentsInput
+    company?: CompanyCreateNestedOneWithoutShipmentsInput
+    createdBy?: UserCreateNestedOneWithoutCreatedShipmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedShipmentsInput
+    priceReviewedBy?: UserCreateNestedOneWithoutPriceReviewedShipmentsInput
   }
 
   export type ShipmentUncheckedCreateWithoutSenderInput = {
@@ -6232,6 +11194,15 @@ export namespace Prisma {
     timeline: string
     status?: $Enums.ShipmentStatus
     driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6254,9 +11225,18 @@ export namespace Prisma {
     destination: string
     timeline: string
     status?: $Enums.ShipmentStatus
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     sender: UserCreateNestedOneWithoutCustomerShipmentsInput
+    company?: CompanyCreateNestedOneWithoutShipmentsInput
+    createdBy?: UserCreateNestedOneWithoutCreatedShipmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedShipmentsInput
+    priceReviewedBy?: UserCreateNestedOneWithoutPriceReviewedShipmentsInput
   }
 
   export type ShipmentUncheckedCreateWithoutDriverInput = {
@@ -6269,6 +11249,15 @@ export namespace Prisma {
     timeline: string
     status?: $Enums.ShipmentStatus
     senderId: number
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6281,6 +11270,324 @@ export namespace Prisma {
   export type ShipmentCreateManyDriverInputEnvelope = {
     data: ShipmentCreateManyDriverInput | ShipmentCreateManyDriverInput[]
     skipDuplicates?: boolean
+  }
+
+  export type ShipmentCreateWithoutCreatedByInput = {
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender: UserCreateNestedOneWithoutCustomerShipmentsInput
+    driver?: UserCreateNestedOneWithoutDriverShipmentsInput
+    company?: CompanyCreateNestedOneWithoutShipmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedShipmentsInput
+    priceReviewedBy?: UserCreateNestedOneWithoutPriceReviewedShipmentsInput
+  }
+
+  export type ShipmentUncheckedCreateWithoutCreatedByInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    companyId?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipmentCreateOrConnectWithoutCreatedByInput = {
+    where: ShipmentWhereUniqueInput
+    create: XOR<ShipmentCreateWithoutCreatedByInput, ShipmentUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ShipmentCreateManyCreatedByInputEnvelope = {
+    data: ShipmentCreateManyCreatedByInput | ShipmentCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShipmentCreateWithoutAssignedByInput = {
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender: UserCreateNestedOneWithoutCustomerShipmentsInput
+    driver?: UserCreateNestedOneWithoutDriverShipmentsInput
+    company?: CompanyCreateNestedOneWithoutShipmentsInput
+    createdBy?: UserCreateNestedOneWithoutCreatedShipmentsInput
+    priceReviewedBy?: UserCreateNestedOneWithoutPriceReviewedShipmentsInput
+  }
+
+  export type ShipmentUncheckedCreateWithoutAssignedByInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipmentCreateOrConnectWithoutAssignedByInput = {
+    where: ShipmentWhereUniqueInput
+    create: XOR<ShipmentCreateWithoutAssignedByInput, ShipmentUncheckedCreateWithoutAssignedByInput>
+  }
+
+  export type ShipmentCreateManyAssignedByInputEnvelope = {
+    data: ShipmentCreateManyAssignedByInput | ShipmentCreateManyAssignedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShipmentCreateWithoutPriceReviewedByInput = {
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender: UserCreateNestedOneWithoutCustomerShipmentsInput
+    driver?: UserCreateNestedOneWithoutDriverShipmentsInput
+    company?: CompanyCreateNestedOneWithoutShipmentsInput
+    createdBy?: UserCreateNestedOneWithoutCreatedShipmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedShipmentsInput
+  }
+
+  export type ShipmentUncheckedCreateWithoutPriceReviewedByInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipmentCreateOrConnectWithoutPriceReviewedByInput = {
+    where: ShipmentWhereUniqueInput
+    create: XOR<ShipmentCreateWithoutPriceReviewedByInput, ShipmentUncheckedCreateWithoutPriceReviewedByInput>
+  }
+
+  export type ShipmentCreateManyPriceReviewedByInputEnvelope = {
+    data: ShipmentCreateManyPriceReviewedByInput | ShipmentCreateManyPriceReviewedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DriverApplicationCreateWithoutUserInput = {
+    status?: $Enums.ApprovalStatus
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+    reviewedBy?: UserCreateNestedOneWithoutReviewedApplicationsInput
+  }
+
+  export type DriverApplicationUncheckedCreateWithoutUserInput = {
+    id?: number
+    status?: $Enums.ApprovalStatus
+    reviewedById?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+  }
+
+  export type DriverApplicationCreateOrConnectWithoutUserInput = {
+    where: DriverApplicationWhereUniqueInput
+    create: XOR<DriverApplicationCreateWithoutUserInput, DriverApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type DriverApplicationCreateManyUserInputEnvelope = {
+    data: DriverApplicationCreateManyUserInput | DriverApplicationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DriverApplicationCreateWithoutReviewedByInput = {
+    status?: $Enums.ApprovalStatus
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutDriverApplicationsInput
+  }
+
+  export type DriverApplicationUncheckedCreateWithoutReviewedByInput = {
+    id?: number
+    userId: number
+    status?: $Enums.ApprovalStatus
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+  }
+
+  export type DriverApplicationCreateOrConnectWithoutReviewedByInput = {
+    where: DriverApplicationWhereUniqueInput
+    create: XOR<DriverApplicationCreateWithoutReviewedByInput, DriverApplicationUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type DriverApplicationCreateManyReviewedByInputEnvelope = {
+    data: DriverApplicationCreateManyReviewedByInput | DriverApplicationCreateManyReviewedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CompanyUpsertWithoutUsersInput = {
+    update: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
+    create: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
+    where?: CompanyWhereInput
+  }
+
+  export type CompanyUpdateToOneWithWhereWithoutUsersInput = {
+    where?: CompanyWhereInput
+    data: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type CompanyUpdateWithoutUsersInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    manager?: UserUpdateOneWithoutManagedCompaniesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedCompaniesNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedCompaniesNestedInput
+    shipments?: ShipmentUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shipments?: ShipmentUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUpsertWithWhereUniqueWithoutManagerInput = {
+    where: CompanyWhereUniqueInput
+    update: XOR<CompanyUpdateWithoutManagerInput, CompanyUncheckedUpdateWithoutManagerInput>
+    create: XOR<CompanyCreateWithoutManagerInput, CompanyUncheckedCreateWithoutManagerInput>
+  }
+
+  export type CompanyUpdateWithWhereUniqueWithoutManagerInput = {
+    where: CompanyWhereUniqueInput
+    data: XOR<CompanyUpdateWithoutManagerInput, CompanyUncheckedUpdateWithoutManagerInput>
+  }
+
+  export type CompanyUpdateManyWithWhereWithoutManagerInput = {
+    where: CompanyScalarWhereInput
+    data: XOR<CompanyUpdateManyMutationInput, CompanyUncheckedUpdateManyWithoutManagerInput>
+  }
+
+  export type CompanyScalarWhereInput = {
+    AND?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
+    OR?: CompanyScalarWhereInput[]
+    NOT?: CompanyScalarWhereInput | CompanyScalarWhereInput[]
+    id?: IntFilter<"Company"> | number
+    name?: StringFilter<"Company"> | string
+    nit?: StringFilter<"Company"> | string
+    address?: StringNullableFilter<"Company"> | string | null
+    isActive?: BoolFilter<"Company"> | boolean
+    managerId?: IntNullableFilter<"Company"> | number | null
+    createdById?: IntNullableFilter<"Company"> | number | null
+    assignedById?: IntNullableFilter<"Company"> | number | null
+    createdAt?: DateTimeFilter<"Company"> | Date | string
+  }
+
+  export type CompanyUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: CompanyWhereUniqueInput
+    update: XOR<CompanyUpdateWithoutCreatedByInput, CompanyUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<CompanyCreateWithoutCreatedByInput, CompanyUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type CompanyUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: CompanyWhereUniqueInput
+    data: XOR<CompanyUpdateWithoutCreatedByInput, CompanyUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type CompanyUpdateManyWithWhereWithoutCreatedByInput = {
+    where: CompanyScalarWhereInput
+    data: XOR<CompanyUpdateManyMutationInput, CompanyUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type CompanyUpsertWithWhereUniqueWithoutAssignedByInput = {
+    where: CompanyWhereUniqueInput
+    update: XOR<CompanyUpdateWithoutAssignedByInput, CompanyUncheckedUpdateWithoutAssignedByInput>
+    create: XOR<CompanyCreateWithoutAssignedByInput, CompanyUncheckedCreateWithoutAssignedByInput>
+  }
+
+  export type CompanyUpdateWithWhereUniqueWithoutAssignedByInput = {
+    where: CompanyWhereUniqueInput
+    data: XOR<CompanyUpdateWithoutAssignedByInput, CompanyUncheckedUpdateWithoutAssignedByInput>
+  }
+
+  export type CompanyUpdateManyWithWhereWithoutAssignedByInput = {
+    where: CompanyScalarWhereInput
+    data: XOR<CompanyUpdateManyMutationInput, CompanyUncheckedUpdateManyWithoutAssignedByInput>
   }
 
   export type ShipmentUpsertWithWhereUniqueWithoutSenderInput = {
@@ -6313,6 +11620,15 @@ export namespace Prisma {
     status?: EnumShipmentStatusFilter<"Shipment"> | $Enums.ShipmentStatus
     senderId?: IntFilter<"Shipment"> | number
     driverId?: IntNullableFilter<"Shipment"> | number | null
+    companyId?: IntNullableFilter<"Shipment"> | number | null
+    createdById?: IntNullableFilter<"Shipment"> | number | null
+    assignedById?: IntNullableFilter<"Shipment"> | number | null
+    proposedPrice?: DecimalNullableFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: DecimalNullableFilter<"Shipment"> | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: IntNullableFilter<"Shipment"> | number | null
+    priceReviewedAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
+    paymentStatus?: EnumPaymentStatusFilter<"Shipment"> | $Enums.PaymentStatus
+    paidAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeFilter<"Shipment"> | Date | string
   }
@@ -6333,6 +11649,99 @@ export namespace Prisma {
     data: XOR<ShipmentUpdateManyMutationInput, ShipmentUncheckedUpdateManyWithoutDriverInput>
   }
 
+  export type ShipmentUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: ShipmentWhereUniqueInput
+    update: XOR<ShipmentUpdateWithoutCreatedByInput, ShipmentUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<ShipmentCreateWithoutCreatedByInput, ShipmentUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ShipmentUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: ShipmentWhereUniqueInput
+    data: XOR<ShipmentUpdateWithoutCreatedByInput, ShipmentUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type ShipmentUpdateManyWithWhereWithoutCreatedByInput = {
+    where: ShipmentScalarWhereInput
+    data: XOR<ShipmentUpdateManyMutationInput, ShipmentUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type ShipmentUpsertWithWhereUniqueWithoutAssignedByInput = {
+    where: ShipmentWhereUniqueInput
+    update: XOR<ShipmentUpdateWithoutAssignedByInput, ShipmentUncheckedUpdateWithoutAssignedByInput>
+    create: XOR<ShipmentCreateWithoutAssignedByInput, ShipmentUncheckedCreateWithoutAssignedByInput>
+  }
+
+  export type ShipmentUpdateWithWhereUniqueWithoutAssignedByInput = {
+    where: ShipmentWhereUniqueInput
+    data: XOR<ShipmentUpdateWithoutAssignedByInput, ShipmentUncheckedUpdateWithoutAssignedByInput>
+  }
+
+  export type ShipmentUpdateManyWithWhereWithoutAssignedByInput = {
+    where: ShipmentScalarWhereInput
+    data: XOR<ShipmentUpdateManyMutationInput, ShipmentUncheckedUpdateManyWithoutAssignedByInput>
+  }
+
+  export type ShipmentUpsertWithWhereUniqueWithoutPriceReviewedByInput = {
+    where: ShipmentWhereUniqueInput
+    update: XOR<ShipmentUpdateWithoutPriceReviewedByInput, ShipmentUncheckedUpdateWithoutPriceReviewedByInput>
+    create: XOR<ShipmentCreateWithoutPriceReviewedByInput, ShipmentUncheckedCreateWithoutPriceReviewedByInput>
+  }
+
+  export type ShipmentUpdateWithWhereUniqueWithoutPriceReviewedByInput = {
+    where: ShipmentWhereUniqueInput
+    data: XOR<ShipmentUpdateWithoutPriceReviewedByInput, ShipmentUncheckedUpdateWithoutPriceReviewedByInput>
+  }
+
+  export type ShipmentUpdateManyWithWhereWithoutPriceReviewedByInput = {
+    where: ShipmentScalarWhereInput
+    data: XOR<ShipmentUpdateManyMutationInput, ShipmentUncheckedUpdateManyWithoutPriceReviewedByInput>
+  }
+
+  export type DriverApplicationUpsertWithWhereUniqueWithoutUserInput = {
+    where: DriverApplicationWhereUniqueInput
+    update: XOR<DriverApplicationUpdateWithoutUserInput, DriverApplicationUncheckedUpdateWithoutUserInput>
+    create: XOR<DriverApplicationCreateWithoutUserInput, DriverApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type DriverApplicationUpdateWithWhereUniqueWithoutUserInput = {
+    where: DriverApplicationWhereUniqueInput
+    data: XOR<DriverApplicationUpdateWithoutUserInput, DriverApplicationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type DriverApplicationUpdateManyWithWhereWithoutUserInput = {
+    where: DriverApplicationScalarWhereInput
+    data: XOR<DriverApplicationUpdateManyMutationInput, DriverApplicationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type DriverApplicationScalarWhereInput = {
+    AND?: DriverApplicationScalarWhereInput | DriverApplicationScalarWhereInput[]
+    OR?: DriverApplicationScalarWhereInput[]
+    NOT?: DriverApplicationScalarWhereInput | DriverApplicationScalarWhereInput[]
+    id?: IntFilter<"DriverApplication"> | number
+    userId?: IntFilter<"DriverApplication"> | number
+    status?: EnumApprovalStatusFilter<"DriverApplication"> | $Enums.ApprovalStatus
+    reviewedById?: IntNullableFilter<"DriverApplication"> | number | null
+    notes?: StringNullableFilter<"DriverApplication"> | string | null
+    createdAt?: DateTimeFilter<"DriverApplication"> | Date | string
+    reviewedAt?: DateTimeNullableFilter<"DriverApplication"> | Date | string | null
+  }
+
+  export type DriverApplicationUpsertWithWhereUniqueWithoutReviewedByInput = {
+    where: DriverApplicationWhereUniqueInput
+    update: XOR<DriverApplicationUpdateWithoutReviewedByInput, DriverApplicationUncheckedUpdateWithoutReviewedByInput>
+    create: XOR<DriverApplicationCreateWithoutReviewedByInput, DriverApplicationUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type DriverApplicationUpdateWithWhereUniqueWithoutReviewedByInput = {
+    where: DriverApplicationWhereUniqueInput
+    data: XOR<DriverApplicationUpdateWithoutReviewedByInput, DriverApplicationUncheckedUpdateWithoutReviewedByInput>
+  }
+
+  export type DriverApplicationUpdateManyWithWhereWithoutReviewedByInput = {
+    where: DriverApplicationScalarWhereInput
+    data: XOR<DriverApplicationUpdateManyMutationInput, DriverApplicationUncheckedUpdateManyWithoutReviewedByInput>
+  }
+
   export type UserCreateWithoutCustomerShipmentsInput = {
     name: string
     email: string
@@ -6343,7 +11752,16 @@ export namespace Prisma {
     role?: $Enums.Role
     isActive?: boolean
     createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
     driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCustomerShipmentsInput = {
@@ -6357,7 +11775,16 @@ export namespace Prisma {
     role?: $Enums.Role
     isActive?: boolean
     createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
     driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCustomerShipmentsInput = {
@@ -6375,7 +11802,16 @@ export namespace Prisma {
     role?: $Enums.Role
     isActive?: boolean
     createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
     customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutDriverShipmentsInput = {
@@ -6389,12 +11825,201 @@ export namespace Prisma {
     role?: $Enums.Role
     isActive?: boolean
     createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
     customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutDriverShipmentsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutDriverShipmentsInput, UserUncheckedCreateWithoutDriverShipmentsInput>
+  }
+
+  export type CompanyCreateWithoutShipmentsInput = {
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    manager?: UserCreateNestedOneWithoutManagedCompaniesInput
+    createdBy?: UserCreateNestedOneWithoutCreatedCompaniesInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedCompaniesInput
+    users?: UserCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutShipmentsInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutShipmentsInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutShipmentsInput, CompanyUncheckedCreateWithoutShipmentsInput>
+  }
+
+  export type UserCreateWithoutCreatedShipmentsInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedShipmentsInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedShipmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedShipmentsInput, UserUncheckedCreateWithoutCreatedShipmentsInput>
+  }
+
+  export type UserCreateWithoutAssignedShipmentsInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedShipmentsInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedShipmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedShipmentsInput, UserUncheckedCreateWithoutAssignedShipmentsInput>
+  }
+
+  export type UserCreateWithoutPriceReviewedShipmentsInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutPriceReviewedShipmentsInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutPriceReviewedShipmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPriceReviewedShipmentsInput, UserUncheckedCreateWithoutPriceReviewedShipmentsInput>
   }
 
   export type UserUpsertWithoutCustomerShipmentsInput = {
@@ -6418,7 +12043,16 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
     driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCustomerShipmentsInput = {
@@ -6432,7 +12066,16 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
     driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutDriverShipmentsInput = {
@@ -6456,7 +12099,16 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
     customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDriverShipmentsInput = {
@@ -6470,7 +12122,942 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
     customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type CompanyUpsertWithoutShipmentsInput = {
+    update: XOR<CompanyUpdateWithoutShipmentsInput, CompanyUncheckedUpdateWithoutShipmentsInput>
+    create: XOR<CompanyCreateWithoutShipmentsInput, CompanyUncheckedCreateWithoutShipmentsInput>
+    where?: CompanyWhereInput
+  }
+
+  export type CompanyUpdateToOneWithWhereWithoutShipmentsInput = {
+    where?: CompanyWhereInput
+    data: XOR<CompanyUpdateWithoutShipmentsInput, CompanyUncheckedUpdateWithoutShipmentsInput>
+  }
+
+  export type CompanyUpdateWithoutShipmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    manager?: UserUpdateOneWithoutManagedCompaniesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedCompaniesNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedCompaniesNestedInput
+    users?: UserUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutShipmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedShipmentsInput = {
+    update: XOR<UserUpdateWithoutCreatedShipmentsInput, UserUncheckedUpdateWithoutCreatedShipmentsInput>
+    create: XOR<UserCreateWithoutCreatedShipmentsInput, UserUncheckedCreateWithoutCreatedShipmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedShipmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedShipmentsInput, UserUncheckedUpdateWithoutCreatedShipmentsInput>
+  }
+
+  export type UserUpdateWithoutCreatedShipmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedShipmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithoutAssignedShipmentsInput = {
+    update: XOR<UserUpdateWithoutAssignedShipmentsInput, UserUncheckedUpdateWithoutAssignedShipmentsInput>
+    create: XOR<UserCreateWithoutAssignedShipmentsInput, UserUncheckedCreateWithoutAssignedShipmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedShipmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedShipmentsInput, UserUncheckedUpdateWithoutAssignedShipmentsInput>
+  }
+
+  export type UserUpdateWithoutAssignedShipmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedShipmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithoutPriceReviewedShipmentsInput = {
+    update: XOR<UserUpdateWithoutPriceReviewedShipmentsInput, UserUncheckedUpdateWithoutPriceReviewedShipmentsInput>
+    create: XOR<UserCreateWithoutPriceReviewedShipmentsInput, UserUncheckedCreateWithoutPriceReviewedShipmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPriceReviewedShipmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPriceReviewedShipmentsInput, UserUncheckedUpdateWithoutPriceReviewedShipmentsInput>
+  }
+
+  export type UserUpdateWithoutPriceReviewedShipmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPriceReviewedShipmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserCreateWithoutManagedCompaniesInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutManagedCompaniesInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutManagedCompaniesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutManagedCompaniesInput, UserUncheckedCreateWithoutManagedCompaniesInput>
+  }
+
+  export type UserCreateWithoutCreatedCompaniesInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedCompaniesInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedCompaniesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedCompaniesInput, UserUncheckedCreateWithoutCreatedCompaniesInput>
+  }
+
+  export type UserCreateWithoutAssignedCompaniesInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedCompaniesInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedCompaniesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedCompaniesInput, UserUncheckedCreateWithoutAssignedCompaniesInput>
+  }
+
+  export type UserCreateWithoutCompanyInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCompanyInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCompanyInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type UserCreateManyCompanyInputEnvelope = {
+    data: UserCreateManyCompanyInput | UserCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ShipmentCreateWithoutCompanyInput = {
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sender: UserCreateNestedOneWithoutCustomerShipmentsInput
+    driver?: UserCreateNestedOneWithoutDriverShipmentsInput
+    createdBy?: UserCreateNestedOneWithoutCreatedShipmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssignedShipmentsInput
+    priceReviewedBy?: UserCreateNestedOneWithoutPriceReviewedShipmentsInput
+  }
+
+  export type ShipmentUncheckedCreateWithoutCompanyInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipmentCreateOrConnectWithoutCompanyInput = {
+    where: ShipmentWhereUniqueInput
+    create: XOR<ShipmentCreateWithoutCompanyInput, ShipmentUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type ShipmentCreateManyCompanyInputEnvelope = {
+    data: ShipmentCreateManyCompanyInput | ShipmentCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutManagedCompaniesInput = {
+    update: XOR<UserUpdateWithoutManagedCompaniesInput, UserUncheckedUpdateWithoutManagedCompaniesInput>
+    create: XOR<UserCreateWithoutManagedCompaniesInput, UserUncheckedCreateWithoutManagedCompaniesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutManagedCompaniesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutManagedCompaniesInput, UserUncheckedUpdateWithoutManagedCompaniesInput>
+  }
+
+  export type UserUpdateWithoutManagedCompaniesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutManagedCompaniesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedCompaniesInput = {
+    update: XOR<UserUpdateWithoutCreatedCompaniesInput, UserUncheckedUpdateWithoutCreatedCompaniesInput>
+    create: XOR<UserCreateWithoutCreatedCompaniesInput, UserUncheckedCreateWithoutCreatedCompaniesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedCompaniesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedCompaniesInput, UserUncheckedUpdateWithoutCreatedCompaniesInput>
+  }
+
+  export type UserUpdateWithoutCreatedCompaniesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedCompaniesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithoutAssignedCompaniesInput = {
+    update: XOR<UserUpdateWithoutAssignedCompaniesInput, UserUncheckedUpdateWithoutAssignedCompaniesInput>
+    create: XOR<UserCreateWithoutAssignedCompaniesInput, UserUncheckedCreateWithoutAssignedCompaniesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedCompaniesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedCompaniesInput, UserUncheckedUpdateWithoutAssignedCompaniesInput>
+  }
+
+  export type UserUpdateWithoutAssignedCompaniesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedCompaniesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutCompanyInput, UserUncheckedUpdateWithoutCompanyInput>
+    create: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutCompanyInput, UserUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutCompanyInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: IntFilter<"User"> | number
+    name?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    nit?: StringNullableFilter<"User"> | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    phone?: StringNullableFilter<"User"> | string | null
+    password?: StringFilter<"User"> | string
+    role?: EnumRoleFilter<"User"> | $Enums.Role
+    isActive?: BoolFilter<"User"> | boolean
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    companyId?: IntNullableFilter<"User"> | number | null
+  }
+
+  export type ShipmentUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: ShipmentWhereUniqueInput
+    update: XOR<ShipmentUpdateWithoutCompanyInput, ShipmentUncheckedUpdateWithoutCompanyInput>
+    create: XOR<ShipmentCreateWithoutCompanyInput, ShipmentUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type ShipmentUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: ShipmentWhereUniqueInput
+    data: XOR<ShipmentUpdateWithoutCompanyInput, ShipmentUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type ShipmentUpdateManyWithWhereWithoutCompanyInput = {
+    where: ShipmentScalarWhereInput
+    data: XOR<ShipmentUpdateManyMutationInput, ShipmentUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type UserCreateWithoutDriverApplicationsInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    reviewedApplications?: DriverApplicationCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutDriverApplicationsInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    reviewedApplications?: DriverApplicationUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutDriverApplicationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDriverApplicationsInput, UserUncheckedCreateWithoutDriverApplicationsInput>
+  }
+
+  export type UserCreateWithoutReviewedApplicationsInput = {
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    managedCompanies?: CompanyCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewedApplicationsInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+    companyId?: number | null
+    managedCompanies?: CompanyUncheckedCreateNestedManyWithoutManagerInput
+    createdCompanies?: CompanyUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedCompanies?: CompanyUncheckedCreateNestedManyWithoutAssignedByInput
+    customerShipments?: ShipmentUncheckedCreateNestedManyWithoutSenderInput
+    driverShipments?: ShipmentUncheckedCreateNestedManyWithoutDriverInput
+    createdShipments?: ShipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedShipments?: ShipmentUncheckedCreateNestedManyWithoutAssignedByInput
+    priceReviewedShipments?: ShipmentUncheckedCreateNestedManyWithoutPriceReviewedByInput
+    driverApplications?: DriverApplicationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewedApplicationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+  }
+
+  export type UserUpsertWithoutDriverApplicationsInput = {
+    update: XOR<UserUpdateWithoutDriverApplicationsInput, UserUncheckedUpdateWithoutDriverApplicationsInput>
+    create: XOR<UserCreateWithoutDriverApplicationsInput, UserUncheckedCreateWithoutDriverApplicationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDriverApplicationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDriverApplicationsInput, UserUncheckedUpdateWithoutDriverApplicationsInput>
+  }
+
+  export type UserUpdateWithoutDriverApplicationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDriverApplicationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithoutReviewedApplicationsInput = {
+    update: XOR<UserUpdateWithoutReviewedApplicationsInput, UserUncheckedUpdateWithoutReviewedApplicationsInput>
+    create: XOR<UserCreateWithoutReviewedApplicationsInput, UserUncheckedCreateWithoutReviewedApplicationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReviewedApplicationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReviewedApplicationsInput, UserUncheckedUpdateWithoutReviewedApplicationsInput>
+  }
+
+  export type UserUpdateWithoutReviewedApplicationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReviewedApplicationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CompanyCreateManyManagerInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    createdById?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+  }
+
+  export type CompanyCreateManyCreatedByInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    assignedById?: number | null
+    createdAt?: Date | string
+  }
+
+  export type CompanyCreateManyAssignedByInput = {
+    id?: number
+    name: string
+    nit: string
+    address?: string | null
+    isActive?: boolean
+    managerId?: number | null
+    createdById?: number | null
+    createdAt?: Date | string
   }
 
   export type ShipmentCreateManySenderInput = {
@@ -6483,6 +13070,15 @@ export namespace Prisma {
     timeline: string
     status?: $Enums.ShipmentStatus
     driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6497,8 +13093,212 @@ export namespace Prisma {
     timeline: string
     status?: $Enums.ShipmentStatus
     senderId: number
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ShipmentCreateManyCreatedByInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    companyId?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipmentCreateManyAssignedByInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShipmentCreateManyPriceReviewedByInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    companyId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DriverApplicationCreateManyUserInput = {
+    id?: number
+    status?: $Enums.ApprovalStatus
+    reviewedById?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+  }
+
+  export type DriverApplicationCreateManyReviewedByInput = {
+    id?: number
+    userId: number
+    status?: $Enums.ApprovalStatus
+    notes?: string | null
+    createdAt?: Date | string
+    reviewedAt?: Date | string | null
+  }
+
+  export type CompanyUpdateWithoutManagerInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutCreatedCompaniesNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedCompaniesNestedInput
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutManagerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateManyWithoutManagerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CompanyUpdateWithoutCreatedByInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    manager?: UserUpdateOneWithoutManagedCompaniesNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedCompaniesNestedInput
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutCreatedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CompanyUpdateWithoutAssignedByInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    manager?: UserUpdateOneWithoutManagedCompaniesNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedCompaniesNestedInput
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutAssignedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    shipments?: ShipmentUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateManyWithoutAssignedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    nit?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    managerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShipmentUpdateWithoutSenderInput = {
@@ -6509,9 +13309,18 @@ export namespace Prisma {
     destination?: StringFieldUpdateOperationsInput | string
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     driver?: UserUpdateOneWithoutDriverShipmentsNestedInput
+    company?: CompanyUpdateOneWithoutShipmentsNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedShipmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedShipmentsNestedInput
+    priceReviewedBy?: UserUpdateOneWithoutPriceReviewedShipmentsNestedInput
   }
 
   export type ShipmentUncheckedUpdateWithoutSenderInput = {
@@ -6524,6 +13333,15 @@ export namespace Prisma {
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
     driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6538,6 +13356,15 @@ export namespace Prisma {
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
     driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6550,9 +13377,18 @@ export namespace Prisma {
     destination?: StringFieldUpdateOperationsInput | string
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sender?: UserUpdateOneRequiredWithoutCustomerShipmentsNestedInput
+    company?: CompanyUpdateOneWithoutShipmentsNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedShipmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedShipmentsNestedInput
+    priceReviewedBy?: UserUpdateOneWithoutPriceReviewedShipmentsNestedInput
   }
 
   export type ShipmentUncheckedUpdateWithoutDriverInput = {
@@ -6565,6 +13401,15 @@ export namespace Prisma {
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
     senderId?: IntFieldUpdateOperationsInput | number
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6579,6 +13424,433 @@ export namespace Prisma {
     timeline?: StringFieldUpdateOperationsInput | string
     status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
     senderId?: IntFieldUpdateOperationsInput | number
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUpdateWithoutCreatedByInput = {
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: UserUpdateOneRequiredWithoutCustomerShipmentsNestedInput
+    driver?: UserUpdateOneWithoutDriverShipmentsNestedInput
+    company?: CompanyUpdateOneWithoutShipmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedShipmentsNestedInput
+    priceReviewedBy?: UserUpdateOneWithoutPriceReviewedShipmentsNestedInput
+  }
+
+  export type ShipmentUncheckedUpdateWithoutCreatedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUpdateWithoutAssignedByInput = {
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: UserUpdateOneRequiredWithoutCustomerShipmentsNestedInput
+    driver?: UserUpdateOneWithoutDriverShipmentsNestedInput
+    company?: CompanyUpdateOneWithoutShipmentsNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedShipmentsNestedInput
+    priceReviewedBy?: UserUpdateOneWithoutPriceReviewedShipmentsNestedInput
+  }
+
+  export type ShipmentUncheckedUpdateWithoutAssignedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUncheckedUpdateManyWithoutAssignedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUpdateWithoutPriceReviewedByInput = {
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: UserUpdateOneRequiredWithoutCustomerShipmentsNestedInput
+    driver?: UserUpdateOneWithoutDriverShipmentsNestedInput
+    company?: CompanyUpdateOneWithoutShipmentsNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedShipmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedShipmentsNestedInput
+  }
+
+  export type ShipmentUncheckedUpdateWithoutPriceReviewedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUncheckedUpdateManyWithoutPriceReviewedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    companyId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DriverApplicationUpdateWithoutUserInput = {
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedBy?: UserUpdateOneWithoutReviewedApplicationsNestedInput
+  }
+
+  export type DriverApplicationUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    reviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DriverApplicationUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    reviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DriverApplicationUpdateWithoutReviewedByInput = {
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutDriverApplicationsNestedInput
+  }
+
+  export type DriverApplicationUncheckedUpdateWithoutReviewedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type DriverApplicationUncheckedUpdateManyWithoutReviewedByInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    status?: EnumApprovalStatusFieldUpdateOperationsInput | $Enums.ApprovalStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserCreateManyCompanyInput = {
+    id?: number
+    name: string
+    email: string
+    nit?: string | null
+    address?: string | null
+    phone?: string | null
+    password: string
+    role?: $Enums.Role
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type ShipmentCreateManyCompanyInput = {
+    id?: number
+    cargoType: string
+    weight: number
+    dimensions?: string | null
+    origin: string
+    destination: string
+    timeline: string
+    status?: $Enums.ShipmentStatus
+    senderId: number
+    driverId?: number | null
+    createdById?: number | null
+    assignedById?: number | null
+    proposedPrice?: Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: number | null
+    priceReviewedAt?: Date | string | null
+    paymentStatus?: $Enums.PaymentStatus
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUpdateWithoutCompanyInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    managedCompanies?: CompanyUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    managedCompanies?: CompanyUncheckedUpdateManyWithoutManagerNestedInput
+    createdCompanies?: CompanyUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedCompanies?: CompanyUncheckedUpdateManyWithoutAssignedByNestedInput
+    customerShipments?: ShipmentUncheckedUpdateManyWithoutSenderNestedInput
+    driverShipments?: ShipmentUncheckedUpdateManyWithoutDriverNestedInput
+    createdShipments?: ShipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedShipments?: ShipmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    priceReviewedShipments?: ShipmentUncheckedUpdateManyWithoutPriceReviewedByNestedInput
+    driverApplications?: DriverApplicationUncheckedUpdateManyWithoutUserNestedInput
+    reviewedApplications?: DriverApplicationUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    nit?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUpdateWithoutCompanyInput = {
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: UserUpdateOneRequiredWithoutCustomerShipmentsNestedInput
+    driver?: UserUpdateOneWithoutDriverShipmentsNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedShipmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssignedShipmentsNestedInput
+    priceReviewedBy?: UserUpdateOneWithoutPriceReviewedShipmentsNestedInput
+  }
+
+  export type ShipmentUncheckedUpdateWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShipmentUncheckedUpdateManyWithoutCompanyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cargoType?: StringFieldUpdateOperationsInput | string
+    weight?: FloatFieldUpdateOperationsInput | number
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    origin?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    timeline?: StringFieldUpdateOperationsInput | string
+    status?: EnumShipmentStatusFieldUpdateOperationsInput | $Enums.ShipmentStatus
+    senderId?: IntFieldUpdateOperationsInput | number
+    driverId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdById?: NullableIntFieldUpdateOperationsInput | number | null
+    assignedById?: NullableIntFieldUpdateOperationsInput | number | null
+    proposedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
+    priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

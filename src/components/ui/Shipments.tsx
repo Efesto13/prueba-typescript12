@@ -6,7 +6,7 @@ import { User } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/ui/Header';
 
-type ShipmentStatus = 'PENDING' | 'ASSIGNED' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED';
+type ShipmentStatus = 'PENDING' | 'PENDING_SUPERADMIN_REVIEW' | 'ASSIGNED' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED';
 
 type Shipment = {
     id: number;
@@ -17,7 +17,7 @@ type Shipment = {
     destination: string;
     timeline: string;
     status: ShipmentStatus;
-    customer: { id: number; name: string; email: string };
+    sender: { id: number; name: string; email: string };
     driver: { id: number; name: string; email: string } | null;
     createdAt: string;
 };
@@ -46,6 +46,8 @@ export default function DriverCommandCenter() {
     const [userName, setUserName] = useState<string>('ADMIN');
     const [users, setUsers] = useState<User[]>([]);
 
+
+
     async function handleLogout() {
         try {
             await fetch('/api/auth/logout', { method: 'POST' });
@@ -62,7 +64,9 @@ export default function DriverCommandCenter() {
         try {
             setLoading(true);
             const token = localStorage.getItem('accessToken');
-            const headers = { Authorization: `Bearer ${token}` };
+            const storedUser = JSON.parse(localStorage.getItem('usuario-logueado') || '{}');
+
+            const headers = { 'Authorization': `Bearer ${token}`, 'x-user-id': storedUser.id?.toString() || '', 'x-user-role': storedUser.role || '' };
 
             const [shipmentsRes, usersRes] = await Promise.all([
                 fetch('/api/shipments', { headers }),
@@ -73,7 +77,7 @@ export default function DriverCommandCenter() {
             const usersData = await usersRes.json();
 
 
-            setShipments(shipmentsData.filter((s: Shipment) => s.status === 'PENDING'));
+            setShipments(shipmentsData.filter((s: Shipment) => s.status === 'PENDING' || s.status === 'PENDING_SUPERADMIN_REVIEW'));
             setDrivers(usersData.filter((u: Driver) => u.role === 'DRIVER' && u.isActive));
             setUsers(usersData);
         } catch {
@@ -106,12 +110,13 @@ export default function DriverCommandCenter() {
 
         setAssigning(true);
         try {
+            const storedUser = JSON.parse(localStorage.getItem('usuario-logueado') || '{}');
             const token = localStorage.getItem('accessToken');
             const res = await fetch(`/api/shipments/${selectedShipment.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`, 'x-user-id': storedUser.id?.toString() || '', 'x-user-role': storedUser.role || ''
                 },
                 body: JSON.stringify({ driverId }),
             });
