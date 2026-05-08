@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { cargoType, weight, dimensions, origin, destination, timeline } = body;
+        const { cargoType, weight, dimensions, origin, destination, timeline, proposedPrice } = body;
 
         if (!cargoType || !weight || !origin || !destination || !timeline) {
             return NextResponse.json(
@@ -98,6 +98,7 @@ export async function POST(request: NextRequest) {
                 destination,
                 timeline,
                 senderId: authUser.id,
+                proposedPrice: proposedPrice,
             },
             include: {
                 sender: {

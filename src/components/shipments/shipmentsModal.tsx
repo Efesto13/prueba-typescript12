@@ -23,6 +23,12 @@ type FormErrors = {
     destination?: string;
 };
 
+type Price = {
+    unitRate: number;
+    subtotal: number;
+    total: number;
+};
+
 export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentModalProps) {
     const [formData, setFormData] = useState<FormData>({
         cargoType: '',
@@ -35,17 +41,28 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
     const [errors, setErrors] = useState<FormErrors>({});
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState<string | null>(null);
+    const [showPriceModal, setShowPriceModal] = useState(false);
+    const [price, setPrice] = useState<Price>({
+        unitRate: 500,
+        subtotal: 0,
+        total: 0,
+    });
+
+    function calcularPrecio() {
+        const weight = Number(formData.weight) || 0;
+        const unitRate = price.unitRate;
+        const subtotal = weight * unitRate;
+        const total = subtotal * 1.16;
+        setPrice({ ...price, subtotal: Number(subtotal.toFixed(2)), total: Number(total.toFixed(2)) });
+    }
 
     function validate(): boolean {
         const newErrors: FormErrors = {};
-        if (!formData.cargoType.trim()) newErrors.cargoType = 'Required';
-        if (!formData.weight) {
-            newErrors.weight = 'Required';
-        } else if (isNaN(Number(formData.weight)) || Number(formData.weight) <= 0) {
-            newErrors.weight = 'Must be a valid number';
-        }
-        if (!formData.origin.trim()) newErrors.origin = 'Required';
-        if (!formData.destination.trim()) newErrors.destination = 'Required';
+        if (!formData.cargoType) newErrors.cargoType = 'Required';
+        if (!formData.weight || isNaN(Number(formData.weight))) newErrors.weight = 'Invalid weight';
+        if (!formData.origin) newErrors.origin = 'Required';
+        if (!formData.destination) newErrors.destination = 'Required';
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     }
@@ -54,11 +71,17 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
         setFormData({ cargoType: '', weight: '', dimensions: '', origin: '', destination: '', timeline: 'STANDARD' });
         setErrors({});
         setServerError(null);
+        setShowPriceModal(false);
         onClose();
     }
 
-    async function handleSubmit() {
+    function handleSubmit() {
         if (!validate()) return;
+        calcularPrecio();
+        setShowPriceModal(true);
+    }
+
+    async function confirmSubmission() {
         setLoading(true);
         setServerError(null);
 
@@ -77,12 +100,14 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                     origin: formData.origin,
                     destination: formData.destination,
                     timeline: formData.timeline,
+                    proposedPrice: price.total,
                 }),
             });
 
             const data = await res.json();
             if (!res.ok) {
                 setServerError(data.error || 'Error creating shipment');
+                setShowPriceModal(false);
                 return;
             }
 
@@ -130,28 +155,22 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                 )}
 
                 <div className="space-y-5">
-
-                    {/* Cargo Type */}
-                    <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#e2e2e2]/40 mb-2">
-                            Cargo Information
-                        </label>
-                        <input
-                            type="text"
-                            value={formData.cargoType}
-                            onChange={(e) => setFormData({ ...formData, cargoType: e.target.value })}
-                            className={`w-full bg-[#131313] border-b py-3 px-0 text-[#e2e2e2] text-sm outline-none transition-all placeholder:text-[#e2e2e2]/20
-                                ${errors.cargoType ? 'border-red-500' : 'border-[#504532]/30 focus:border-[#ffbf00]'}`}
-                            placeholder="Type of Cargo (e.g. Industrial Equipment)"
-                        />
-                        {errors.cargoType && <p className="text-red-400 text-xs mt-1">{errors.cargoType}</p>}
-                    </div>
-
-                    {/* Weight and Dimensions */}
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* Cargo & Weight */}
+                    <div className="grid grid-cols-2 gap-6">
                         <div>
                             <input
-                                type="number"
+                                type="text"
+                                value={formData.cargoType}
+                                onChange={(e) => setFormData({ ...formData, cargoType: e.target.value })}
+                                className={`w-full bg-[#131313] border-b py-3 px-0 text-[#e2e2e2] text-sm outline-none transition-all placeholder:text-[#e2e2e2]/20
+                                    ${errors.cargoType ? 'border-red-500' : 'border-[#504532]/30 focus:border-[#ffbf00]'}`}
+                                placeholder="Cargo Type (e.g. Electronics)"
+                            />
+                            {errors.cargoType && <p className="text-red-400 text-xs mt-1">{errors.cargoType}</p>}
+                        </div>
+                        <div>
+                            <input
+                                type="text"
                                 value={formData.weight}
                                 onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
                                 className={`w-full bg-[#131313] border-b py-3 px-0 text-[#e2e2e2] text-sm outline-none transition-all placeholder:text-[#e2e2e2]/20
@@ -160,15 +179,16 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                             />
                             {errors.weight && <p className="text-red-400 text-xs mt-1">{errors.weight}</p>}
                         </div>
-                        <div>
-                            <input
-                                type="text"
-                                value={formData.dimensions}
-                                onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
-                                className="w-full bg-[#131313] border-b border-[#504532]/30 focus:border-[#ffbf00] py-3 px-0 text-[#e2e2e2] text-sm outline-none transition-all placeholder:text-[#e2e2e2]/20"
-                                placeholder="Dimensions (LxWxH) optional"
-                            />
-                        </div>
+                    </div>
+
+                    <div>
+                        <input
+                            type="text"
+                            value={formData.dimensions}
+                            onChange={(e) => setFormData({ ...formData, dimensions: e.target.value })}
+                            className="w-full bg-[#131313] border-b border-[#504532]/30 focus:border-[#ffbf00] py-3 px-0 text-[#e2e2e2] text-sm outline-none transition-all placeholder:text-[#e2e2e2]/20"
+                            placeholder="Dimensions (LxWxH) optional"
+                        />
                     </div>
 
                     {/* Origin */}
@@ -179,7 +199,7 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                             onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
                             className={`w-full bg-[#131313] border-b py-3 px-0 text-[#e2e2e2] text-sm outline-none transition-all placeholder:text-[#e2e2e2]/20
                                 ${errors.origin ? 'border-red-500' : 'border-[#504532]/30 focus:border-[#ffbf00]'}`}
-                            placeholder="Origin (e.g. Port Alpha, Houston TX)"
+                            placeholder="Origin City / Port"
                         />
                         {errors.origin && <p className="text-red-400 text-xs mt-1">{errors.origin}</p>}
                     </div>
@@ -192,16 +212,14 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                             onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
                             className={`w-full bg-[#131313] border-b py-3 px-0 text-[#e2e2e2] text-sm outline-none transition-all placeholder:text-[#e2e2e2]/20
                                 ${errors.destination ? 'border-red-500' : 'border-[#504532]/30 focus:border-[#ffbf00]'}`}
-                            placeholder="Destination (e.g. Warehouse 7, Chicago IL)"
+                            placeholder="Destination City / Hub"
                         />
                         {errors.destination && <p className="text-red-400 text-xs mt-1">{errors.destination}</p>}
                     </div>
 
                     {/* Timeline */}
                     <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-[#e2e2e2]/40 mb-3">
-                            Timeline
-                        </label>
+                        <label className="text-[#e2e2e2]/30 text-[9px] font-black uppercase tracking-[0.3em] mb-3 block">Service Level</label>
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setFormData({ ...formData, timeline: 'URGENT' })}
@@ -210,7 +228,7 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                                     : 'bg-[#131313] border border-[#504532]/30 text-[#e2e2e2]/60 hover:border-[#ffbf00]/40'
                                     }`}
                             >
-                                Urgent (ASAP)
+                                Urgent (Expedited)
                             </button>
                             <button
                                 onClick={() => setFormData({ ...formData, timeline: 'STANDARD' })}
@@ -229,16 +247,64 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                 <div className="mt-8">
                     <button
                         onClick={handleSubmit}
-                        disabled={loading}
-                        className="w-full py-4 bg-[#ffbf00] hover:bg-[#ffbf00]/90 text-black font-black uppercase tracking-widest text-sm rounded-xl transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full py-4 bg-[#ffbf00] hover:bg-[#ffbf00]/90 text-black font-black uppercase tracking-widest text-sm rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2"
                     >
-                        {loading && (
-                            <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
-                        )}
-                        {loading ? 'Submitting...' : 'Request Load'}
+                        Request Load
                     </button>
                 </div>
             </div>
+
+            {/* Price Summary Confirmation Modal */}
+            {showPriceModal && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setShowPriceModal(false)} />
+                    <div className="relative z-10 bg-[#131313] border border-[#ffbf00]/30 rounded-2xl p-8 w-full max-w-sm shadow-[0_0_50px_rgba(255,191,0,0.1)]">
+                        <h3 className="text-white font-black italic uppercase tracking-tighter text-2xl mb-6">Quote Summary</h3>
+
+                        <div className="space-y-4 mb-8">
+                            <div className="flex justify-between items-center text-xs uppercase tracking-widest font-bold">
+                                <span className="text-[#e2e2e2]/30">Cargo Weight</span>
+                                <span className="text-white">{formData.weight} Tons</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs uppercase tracking-widest font-bold">
+                                <span className="text-[#e2e2e2]/30">Rate per Ton</span>
+                                <span className="text-white">${price.unitRate.toFixed(2)}</span>
+                            </div>
+                            <div className="h-[1px] bg-white/5 my-4" />
+                            <div className="flex justify-between items-center text-xs uppercase tracking-widest font-bold">
+                                <span className="text-[#e2e2e2]/30">Subtotal</span>
+                                <span className="text-white">${price.subtotal.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs uppercase tracking-widest font-bold">
+                                <span className="text-[#e2e2e2]/30">Surcharge (16%)</span>
+                                <span className="text-white">${(price.total - price.subtotal).toFixed(2)}</span>
+                            </div>
+                            <div className="bg-[#ffbf00]/10 p-4 mt-6 border border-[#ffbf00]/20">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[#ffbf00] text-[10px] font-black uppercase tracking-[0.2em]">Total to Pay</span>
+                                    <span className="text-[#ffbf00] text-2xl font-black italic tracking-tighter">${price.total.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <button
+                                onClick={() => setShowPriceModal(false)}
+                                className="py-3 text-[#e2e2e2]/40 font-bold uppercase text-[10px] tracking-widest border border-white/10 hover:bg-white/5 transition-all"
+                            >
+                                Edit Data
+                            </button>
+                            <button
+                                onClick={confirmSubmission}
+                                disabled={loading}
+                                className="py-3 bg-[#ffbf00] text-black font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all disabled:opacity-50 flex items-center justify-center"
+                            >
+                                {loading ? '...' : 'Confirm & Pay'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

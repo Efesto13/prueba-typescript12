@@ -14,6 +14,7 @@ type Shipment = {
     timeline: string;
     status: ShipmentStatus;
     driver: { id: number; name: string; email: string } | null;
+    proposedPrice: number;
     createdAt: string;
 };
 
@@ -80,6 +81,7 @@ export default function Company() {
 
     const activeShipments = shipments.filter(s => ['PENDING', 'ASSIGNED', 'IN_TRANSIT'].includes(s.status));
     const inTransit = shipments.filter(s => s.status === 'IN_TRANSIT');
+    const totalPrice = shipments.reduce((total, shipment) => total + (Number(shipment.proposedPrice) || 0), 0);
 
     return (
         <div className="overflow-x-hidden" style={{ backgroundColor: '#131313', color: '#e2e2e2', fontFamily: "'Inter', sans-serif" }}>
@@ -328,8 +330,8 @@ export default function Company() {
                                                 <p className="text-sm font-bold text-on-surface italic">{inTransit[0].cargoType}</p>
                                             </div>
                                             <div>
-                                                <p className="text-[10px] text-outline uppercase font-black tracking-widest mb-1">Payload Weight</p>
-                                                <p className="text-sm font-bold text-on-surface">{inTransit[0].weight} Metric Tons</p>
+                                                <p className="text-[10px] text-outline uppercase font-black tracking-widest mb-1">Total Price</p>
+                                                <p className="text-sm font-bold text-on-surface">${Number(inTransit[0].proposedPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -378,7 +380,7 @@ export default function Company() {
                                             <th className="px-8 py-6 text-[10px] uppercase tracking-[0.2em] text-outline font-black">Operational Route</th>
                                             <th className="px-8 py-6 text-[10px] uppercase tracking-[0.2em] text-outline font-black">Status</th>
                                             <th className="px-8 py-6 text-[10px] uppercase tracking-[0.2em] text-outline font-black">Operator</th>
-                                            <th className="px-8 py-6 text-[10px] uppercase tracking-[0.2em] text-outline font-black text-right">Payload</th>
+                                            <th className="px-8 py-6 text-[10px] uppercase tracking-[0.2em] text-outline font-black text-right">Total Price</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-outline-variant/5">
@@ -438,8 +440,8 @@ export default function Company() {
                                                     </div>
                                                 </td>
                                                 <td className="px-8 py-6 text-right">
-                                                    <span className="text-sm font-black text-[#ffbf00]">{shipment.weight}</span>
-                                                    <span className="text-[9px] text-outline uppercase font-bold ml-1">Tons</span>
+                                                    <span className="text-sm font-black text-[#ffbf00]">${Number(shipment.proposedPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                                    <span className="text-[9px] text-outline uppercase font-bold ml-1">USD</span>
                                                 </td>
                                             </tr>
                                         ))}
