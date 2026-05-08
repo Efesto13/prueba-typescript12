@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import UserModal from '@/components/users/userModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
-import Link from 'next/link';
 import { User } from '@/types/user';
 import { Role } from '@/generated/prisma';
 import jsPDF from "jspdf";
@@ -75,21 +74,6 @@ export default function MasterAdmin() {
     }
 
 
-    const exportShipmentsPDF = (users: User[]) => {
-        const doc = new jsPDF();
-
-        autoTable(doc, {
-            head: [["ID", "Nombre", "Correo", "Rol"]],
-            body: users.map(u => [
-                u.id,
-                u.name,
-                u.email,
-                u.role,
-            ]),
-        });
-
-        doc.save("envios.pdf");
-    };
 
     async function fetchUsers() {
         try {

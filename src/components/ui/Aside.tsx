@@ -19,7 +19,12 @@ const exportShipmentsPDF = (users: User[]) => {
     doc.save("envios.pdf");
 };
 
-export function Aside({ userName, users, handleLogout }: { userName: string, users: User[], handleLogout: () => void }) {
+export function Aside({ userName, users, handleLogout, shipments }: {
+    userName: string,
+    users: User[],
+    handleLogout: () => void,
+    shipments?: any[]
+}) {
     return (
 
         <aside className="fixed left-0 top-0 h-screen w-64 bg-[#1b1b1b] text-sm font-medium font-inter border-r border-slate-800 flex-col p-4 gap-6 z-50 hidden lg:flex">
@@ -39,22 +44,24 @@ export function Aside({ userName, users, handleLogout }: { userName: string, use
             <nav className="flex-1 space-y-1">
                 <div className="px-3">
                     <div className="px-3">
-                        <a className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all" href="#">
+                        <div className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all">
                             <span className="material-symbols-outlined">badge</span>
                             <Link href="/masterAdmin">Master Admin</Link>
-                        </a>
+                        </div>
                     </div>
                     <div className="px-3">
-                        <a className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all" href="#">
+                        <div className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all">
                             <span className="material-symbols-outlined">badge</span>
                             <Link href="/shipments">Shipments</Link>
-                        </a>
+                        </div>
                     </div>
                     <div className="px-3">
-                        <a className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all" href="#">
+                        <div className="flex items-center gap-3 px-4 py-3 text-[#e2e2e2]/40 hover:bg-[#353535]/50 hover:text-[#ffbf00] rounded-r-full font-['Inter'] uppercase tracking-[0.05em] text-xs font-semibold transition-all">
                             <span className="material-symbols-outlined">receipt</span>
                             <Link href="/quotation">Quotation</Link>
-                        </a>
+                        </div>
+
+
                     </div>
 
                 </div>

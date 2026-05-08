@@ -5,10 +5,27 @@ import { User } from '@/types/user';
 import { useState, useEffect } from "react";
 import { Header } from "./Header";
 
+type ShipmentStatus = 'PENDING' | 'PENDING_SUPERADMIN_REVIEW' | 'PENDING_FOR_PAY' | 'AVAILABLE_FOR_ASSIGNMENT' | 'ASSIGNED' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED' | 'REJECTED';
+
+type Shipment = {
+    id: number;
+    cargoType: string;
+    weight: number;
+    dimensions: string | null;
+    origin: string;
+    destination: string;
+    timeline: string;
+    status: ShipmentStatus;
+    proposedPrice: number | null;
+    createdAt: string;
+};
+
 export default function Quotation() {
     const router = useRouter()
     const [userName, setUserName] = useState<string>('ADMIN')
     const [users, setUsers] = useState<User[]>([])
+    const [shipments, setShipments] = useState<Shipment[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const storedUser = localStorage.getItem('usuario-logueado')
@@ -30,7 +47,31 @@ export default function Quotation() {
                 console.error("Error fetching users", e)
             }
         }
+
+        async function fetchShipments() {
+            try {
+                setLoading(true)
+                const token = localStorage.getItem('accessToken');
+                const storedUser = JSON.parse(localStorage.getItem('usuario-logueado') || '{}');
+                const headers = { 
+                    'Authorization': `Bearer ${token}`, 
+                    'x-user-id': storedUser.id?.toString() || '', 
+                    'x-user-role': storedUser.role || '' 
+                };
+
+                const res = await fetch('/api/shipments', { headers })
+                const data = await res.json()
+                // Filter shipments that have a proposed price and are pending payment/review
+                setShipments(data.filter((s: Shipment) => s.proposedPrice !== null))
+            } catch (e) {
+                console.error("Error fetching shipments", e)
+            } finally {
+                setLoading(false)
+            }
+        }
+
         fetchUsers()
+        fetchShipments()
     }, [])
 
     async function handleLogout() {
@@ -46,7 +87,7 @@ export default function Quotation() {
 
     return (
         <div className="font-body selection:bg-primary-container selection:text-on-primary">
-            <Aside userName={userName} users={users} handleLogout={handleLogout} />
+            <Aside userName={userName} users={users} handleLogout={handleLogout} shipments={shipments} />
 
             <main className="flex-1 ml-64 min-h-screen relative overflow-y-auto">
                 {/* Background Pattern */}
@@ -86,30 +127,46 @@ export default function Quotation() {
 
                     {/* Selectable Shipment Items */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                        {[1].map((id) => (
-                            <div key={id} className="bg-[#1b1b1b] p-10 border-l-[3px] border-[#ffbf00] relative overflow-hidden group hover:bg-[#222222] transition-colors duration-500 cursor-pointer">
-                                <div className="absolute top-0 right-0 w-32 h-30 bg-[#ffbf00]/5 blur-3xl rounded-full -mr-16 -mt-16"></div>
-                                <p className="text-[#e2e2e2]/30 uppercase text-[9px] tracking-[0.4em] font-black mb-8">Shipment Unit ID-00{id}</p>
-                                <div className="flex items-baseline gap-1 mb-10">
-                                    <span className="text-4xl font-black tracking-tighter text-white">$2,840.</span>
-                                    <span className="text-2xl font-black text-[#e2e2e2]/20">00</span>
-                                </div>
-                                <div className="space-y-5 border-t border-white/5 pt-8">
-                                    <div className="flex justify-between text-[11px] tracking-[0.2em] uppercase">
-                                        <span className="text-[#e2e2e2]/30 font-bold">Line Haul</span>
-                                        <span className="font-black text-[#e2e2e2]">$2,150.00</span>
-                                    </div>
-                                    <div className="flex justify-between text-[11px] tracking-[0.2em] uppercase">
-                                        <span className="text-[#e2e2e2]/30 font-bold">Fuel Surcharge</span>
-                                        <span className="font-black text-[#e2e2e2]">$485.00</span>
-                                    </div>
-                                    <div className="flex justify-between text-[11px] tracking-[0.2em] uppercase">
-                                        <span className="text-[#e2e2e2]/30 font-bold">Hazmat Fee</span>
-                                        <span className="font-black text-[#ffbf00] animate-pulse-subtle">$205.00</span>
-                                    </div>
-                                </div>
+                        {loading ? (
+                            <div className="col-span-full py-12 text-center text-zinc-500">
+                                <span className="material-symbols-outlined animate-spin block mx-auto mb-2 text-amber-400">progress_activity</span>
+                                Syncing Quotations...
                             </div>
-                        ))}
+                        ) : shipments.length === 0 ? (
+                            <div className="col-span-full py-12 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">
+                                <span className="material-symbols-outlined block mx-auto mb-2 text-zinc-600">receipt_long</span>
+                                No active quotations found.
+                            </div>
+                        ) : (
+                            shipments.map((shipment) => (
+                                <div key={shipment.id} className="bg-[#1b1b1b] p-10 border-l-[3px] border-[#ffbf00] relative overflow-hidden group hover:bg-[#222222] transition-colors duration-500 cursor-pointer">
+                                    <div className="absolute top-0 right-0 w-32 h-30 bg-[#ffbf00]/5 blur-3xl rounded-full -mr-16 -mt-16"></div>
+                                    <p className="text-[#e2e2e2]/30 uppercase text-[9px] tracking-[0.4em] font-black mb-8">Shipment Unit ID-SHP-{String(shipment.id).padStart(4, '0')}</p>
+                                    <div className="flex items-baseline gap-1 mb-10">
+                                        <span className="text-4xl font-black tracking-tighter text-white">${Number(shipment.proposedPrice).toLocaleString('en-US', { minimumFractionDigits: 0 })}.</span>
+                                        <span className="text-2xl font-black text-[#e2e2e2]/20">00</span>
+                                    </div>
+                                    <div className="space-y-5 border-t border-white/5 pt-8">
+                                        <div className="flex justify-between text-[11px] tracking-[0.2em] uppercase">
+                                            <span className="text-[#e2e2e2]/30 font-bold">Cargo Type</span>
+                                            <span className="font-black text-[#e2e2e2]">{shipment.cargoType}</span>
+                                        </div>
+                                        <div className="flex justify-between text-[11px] tracking-[0.2em] uppercase">
+                                            <span className="text-[#e2e2e2]/30 font-bold">Origin</span>
+                                            <span className="font-black text-[#e2e2e2]">{shipment.origin}</span>
+                                        </div>
+                                        <div className="flex justify-between text-[11px] tracking-[0.2em] uppercase">
+                                            <span className="text-[#e2e2e2]/30 font-bold">Destination</span>
+                                            <span className="font-black text-[#ffbf00] animate-pulse-subtle">{shipment.destination}</span>
+                                        </div>
+                                        <div className="flex justify-between text-[11px] tracking-[0.2em] uppercase mt-4 pt-4 border-t border-white/5">
+                                            <span className="text-[#e2e2e2]/30 font-bold">Weight</span>
+                                            <span className="font-black text-[#e2e2e2]">{shipment.weight} Tons</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
 
                     {/* Action Bar */}

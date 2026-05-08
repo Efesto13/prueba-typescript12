@@ -97,18 +97,7 @@ export default function Company() {
                         <span className="material-symbols-outlined">dashboard</span>
                         <span className="font-['Inter'] text-sm tracking-[0.05em] uppercase font-bold">Dashboard</span>
                     </a>
-                    <a className="text-[#e2e2e2] opacity-60 flex items-center gap-4 px-8 py-4 hover:bg-[#353535] hover:text-[#ffbf00] transition-all hover:translate-x-1" href="#">
-                        <span className="material-symbols-outlined">local_shipping</span>
-                        <span className="font-['Inter'] text-sm tracking-[0.05em] uppercase">My Shipments</span>
-                    </a>
-                    <a className="text-[#e2e2e2] opacity-60 flex items-center gap-4 px-8 py-4 hover:bg-[#353535] hover:text-[#ffbf00] transition-all hover:translate-x-1" href="#">
-                        <span className="material-symbols-outlined">receipt_long</span>
-                        <span className="font-['Inter'] text-sm tracking-[0.05em] uppercase">Billing</span>
-                    </a>
-                    <a className="text-[#e2e2e2] opacity-60 flex items-center gap-4 px-8 py-4 hover:bg-[#353535] hover:text-[#ffbf00] transition-all hover:translate-x-1" href="#">
-                        <span className="material-symbols-outlined">contact_support</span>
-                        <span className="font-['Inter'] text-sm tracking-[0.05em] uppercase">Support</span>
-                    </a>
+
                 </nav>
                 <div className="px-6 mt-auto">
                     <button
@@ -230,46 +219,7 @@ export default function Company() {
                             )}
                         </div>
 
-                        {/* Right Column: Billing Overview */}
-                        <div className="lg:col-span-4 space-y-6">
-                            <h4 className="font-['Inter'] text-[11px] tracking-[0.2em] uppercase font-bold text-outline">Billing Overview</h4>
-                            <div className="bg-[#1b1b1b] rounded-2xl p-8 border border-outline-variant/5 shadow-2xl relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffbf00]/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
 
-                                <p className="text-[10px] text-outline uppercase font-bold mb-6 tracking-widest">Upcoming Invoices</p>
-                                <div className="space-y-6">
-                                    <div className="flex justify-between items-center group cursor-pointer">
-                                        <div>
-                                            <p className="text-xs font-bold text-on-surface group-hover:text-[#ffbf00] transition-colors">INV-2024-081</p>
-                                            <p className="text-[10px] text-outline mt-0.5">Due in 4 days</p>
-                                        </div>
-                                        <p className="text-sm font-black text-on-surface">$1,450.00</p>
-                                    </div>
-                                    <div className="flex justify-between items-center group cursor-pointer">
-                                        <div>
-                                            <p className="text-xs font-bold text-on-surface group-hover:text-[#ffbf00] transition-colors">INV-2024-079</p>
-                                            <p className="text-[10px] text-outline mt-0.5">Due in 12 days</p>
-                                        </div>
-                                        <p className="text-sm font-black text-on-surface">$2,830.00</p>
-                                    </div>
-                                </div>
-
-                                <div className="mt-10 pt-8 border-t border-outline-variant/10">
-                                    <div className="flex justify-between items-end mb-6">
-                                        <div>
-                                            <p className="text-[10px] text-outline uppercase font-bold leading-none mb-2 tracking-widest">Total Outstanding</p>
-                                            <p className="text-3xl font-black text-on-surface tracking-tighter">$4,280.00</p>
-                                        </div>
-                                        <div className="w-12 h-12 bg-[#ffbf00]/10 rounded-xl flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-[#ffbf00]">payments</span>
-                                        </div>
-                                    </div>
-                                    <button className="w-full py-4 bg-[#ffbf00]/5 text-[#ffbf00] font-black text-[10px] uppercase tracking-[0.2em] rounded-xl border border-[#ffbf00]/20 hover:bg-[#ffbf00] hover:text-black transition-all duration-300">
-                                        Manage Billing
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </section>
                     {/* Featured Shipment Card - Most Recent In Transit */}
                     {inTransit.length > 0 && (

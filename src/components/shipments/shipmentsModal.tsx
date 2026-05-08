@@ -52,7 +52,7 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
         const weight = Number(formData.weight) || 0;
         const unitRate = price.unitRate;
         const subtotal = weight * unitRate;
-        const total = subtotal * 1.16;
+        const total = subtotal
         setPrice({ ...price, subtotal: Number(subtotal.toFixed(2)), total: Number(total.toFixed(2)) });
     }
 
@@ -271,14 +271,7 @@ export default function ShipmentModal({ isOpen, onClose, onSuccess }: ShipmentMo
                                 <span className="text-white">${price.unitRate.toFixed(2)}</span>
                             </div>
                             <div className="h-[1px] bg-white/5 my-4" />
-                            <div className="flex justify-between items-center text-xs uppercase tracking-widest font-bold">
-                                <span className="text-[#e2e2e2]/30">Subtotal</span>
-                                <span className="text-white">${price.subtotal.toFixed(2)}</span>
-                            </div>
-                            <div className="flex justify-between items-center text-xs uppercase tracking-widest font-bold">
-                                <span className="text-[#e2e2e2]/30">Surcharge (16%)</span>
-                                <span className="text-white">${(price.total - price.subtotal).toFixed(2)}</span>
-                            </div>
+
                             <div className="bg-[#ffbf00]/10 p-4 mt-6 border border-[#ffbf00]/20">
                                 <div className="flex justify-between items-center">
                                     <span className="text-[#ffbf00] text-[10px] font-black uppercase tracking-[0.2em]">Total to Pay</span>
