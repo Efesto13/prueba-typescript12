@@ -33,8 +33,10 @@ export default function RegisterForm() {
             });
             localStorage.setItem("accessToken", data.accessToken)
             localStorage.setItem("usuario-logueado", JSON.stringify({
+                id: data.user.id,
                 email: data.user.email,
-                name: data.user.name
+                name: data.user.name,
+                role: data.user.role
             }));
             //redirigir segun el rol
             const role = data.user.role;

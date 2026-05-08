@@ -29,7 +29,7 @@ export async function PATCH(
         }
 
         const body = await request.json();
-        const { driverId, status } = body;
+        const { driverId, status, rejectionReason } = body;
 
         // Admin puede asignar driver y cambiar estado
         if (authUser.role === "ADMIN") {
@@ -38,6 +38,7 @@ export async function PATCH(
                 data: {
                     ...(driverId && { driverId, status: "ASSIGNED" }),
                     ...(status && { status }),
+                    ...(rejectionReason && { rejectionReason, status: "REJECTED" }),
                 },
                 include: {
                     sender: { select: { id: true, name: true, email: true } },

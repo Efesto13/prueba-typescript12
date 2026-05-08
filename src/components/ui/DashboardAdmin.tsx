@@ -9,6 +9,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Aside } from './Aside';
 import { Header } from './Header';
+import { Shipment, ShipmentStatus } from '@/types/shipment';
 
 
 
@@ -47,7 +48,7 @@ function RoleBadge({ role }: { role: Role }) {
     );
 }
 
-type TabType = 'ALL' | 'CUSTOMER' | 'COMPANY' | 'DRIVER';
+type TabType = 'ALL' | 'CUSTOMER' | 'COMPANY' | 'DRIVER' | 'PENDING_SHIPMENTS';
 
 export default function MasterAdmin() {
     const router = useRouter();
@@ -61,6 +62,8 @@ export default function MasterAdmin() {
     const [confirmUser, setConfirmUser] = useState<User | null>(null);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [userName, setUserName] = useState<string>('ADMIN');
+    const [shipments, setShipments] = useState<Shipment[]>([]);
+    const [shipmentsLoading, setShipmentsLoading] = useState(false);
 
     async function handleLogout() {
         try {
@@ -74,6 +77,29 @@ export default function MasterAdmin() {
     }
 
 
+
+    async function fetchShipments() {
+        try {
+            setShipmentsLoading(true);
+            const token = localStorage.getItem('accessToken');
+            const storedUser = JSON.parse(localStorage.getItem('usuario-logueado') || '{}');
+            const res = await fetch('/api/shipments', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'x-user-id': storedUser.id?.toString() || '',
+                    'x-user-role': storedUser.role || ''
+                }
+            });
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                setShipments(data);
+            }
+        } catch (err) {
+            console.error('Error fetching shipments', err);
+        } finally {
+            setShipmentsLoading(false);
+        }
+    }
 
     async function fetchUsers() {
         try {
@@ -114,6 +140,7 @@ export default function MasterAdmin() {
 
     useEffect(() => {
         fetchUsers();
+        fetchShipments();
         const storedUser = localStorage.getItem('usuario-logueado');
         if (storedUser) {
             const { name } = JSON.parse(storedUser);
@@ -167,10 +194,9 @@ export default function MasterAdmin() {
                     <div className="flex items-center gap-1 border-b border-zinc-800/30 overflow-x-auto scrollbar-none">
                         {([
                             { key: 'ALL', label: 'All Entities' },
-                            { key: 'CUSTOMER', label: 'Clients' },
-                            { key: 'COMPANY', label: 'COmpany' },
+                            { key: 'COMPANY', label: 'Company' },
                             { key: 'DRIVER', label: 'Partners' },
-                            // { key: 'ADMIN', label: 'Internal' },
+                            { key: 'PENDING_SHIPMENTS', label: 'Pending Shipments' },
                         ] as { key: TabType; label: string }[]).map((tab) => (
                             <button
                                 key={tab.key}
@@ -188,98 +214,161 @@ export default function MasterAdmin() {
                     {/* Tabla — scroll horizontal en mobile */}
                     <section className="bg-surface-container-low rounded-2xl overflow-hidden shadow-2xl border border-white/[0.02]">
                         <div className="overflow-x-auto">
-                            <table className="w-full min-w-[600px] text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-surface-container-high/50 border-b border-zinc-800">
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Entity Name</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Type</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Email</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">NIT</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Phone</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Address</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Registered</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-zinc-800/50">
-                                    {loading && (
-                                        <tr>
-                                            <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
-                                                <span className="material-symbols-outlined animate-spin block mx-auto mb-2">progress_activity</span>
-                                                Loading entities...
-                                            </td>
+                            {activeTab === 'PENDING_SHIPMENTS' ? (
+                                <table className="w-full min-w-[600px] text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-surface-container-high/50 border-b border-zinc-800">
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">ID</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Origin / Dest</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Status</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Cargo</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Weight</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Proposed Price</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500 text-right">Date</th>
                                         </tr>
-                                    )}
-                                    {!loading && error && (
-                                        <tr>
-                                            <td colSpan={5} className="px-6 py-12 text-center text-red-400">
-                                                <span className="material-symbols-outlined block mx-auto mb-2">error</span>
-                                                {error}
-                                            </td>
+                                    </thead>
+                                    <tbody className="divide-y divide-zinc-800/50">
+                                        {shipmentsLoading && (
+                                            <tr>
+                                                <td colSpan={7} className="px-6 py-12 text-center text-zinc-500">
+                                                    <span className="material-symbols-outlined animate-spin block mx-auto mb-2">progress_activity</span>
+                                                    Loading shipments...
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!shipmentsLoading && shipments.filter(s => ['PENDING', 'PENDING_SUPERADMIN_REVIEW', 'PENDING_FOR_PAY', 'AVAILABLE_FOR_ASSIGNMENT'].includes(s.status)).length === 0 && (
+                                            <tr>
+                                                <td colSpan={7} className="px-6 py-12 text-center text-zinc-500">
+                                                    No pending shipments found
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {shipments.filter(s => ['PENDING', 'PENDING_SUPERADMIN_REVIEW', 'PENDING_FOR_PAY', 'AVAILABLE_FOR_ASSIGNMENT'].includes(s.status)).map((s) => (
+                                            <tr key={s.id} className="hover:bg-surface-container-highest/30 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="font-bold text-amber-400 text-sm">#SHP-{String(s.id).padStart(4, '0')}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-sm font-medium text-zinc-200">{s.origin}</div>
+                                                    <div className="text-[10px] text-zinc-500">→ {s.destination}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
+                                                        s.status === 'PENDING_SUPERADMIN_REVIEW' ? 'bg-amber-900/20 text-amber-200 border border-amber-900/30' :
+                                                        s.status === 'PENDING_FOR_PAY' ? 'bg-purple-900/20 text-purple-200 border border-purple-900/30' :
+                                                        'bg-zinc-800 text-zinc-400'
+                                                    }`}>
+                                                        {s.status.replace(/_/g, ' ')}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 text-sm text-zinc-300">{s.cargoType}</td>
+                                                <td className="px-6 py-4 text-sm text-zinc-300">{s.weight} Tons</td>
+                                                <td className="px-6 py-4 text-sm font-bold text-amber-400">
+                                                    {s.proposedPrice ? `$${Number(s.proposedPrice).toLocaleString()}` : '-'}
+                                                </td>
+                                                <td className="px-6 py-4 text-right text-[11px] text-zinc-500">
+                                                    {formatDate(s.createdAt)}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <table className="w-full min-w-[600px] text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-surface-container-high/50 border-b border-zinc-800">
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Entity Name</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Type</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Email</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">NIT</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Phone</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Address</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500">Registered</th>
+                                            <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-[0.1em] text-zinc-500 text-right">Actions</th>
                                         </tr>
-                                    )}
-                                    {!loading && !error && filteredUsers.length === 0 && (
-                                        <tr>
-                                            <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
-                                                <span className="material-symbols-outlined block mx-auto mb-2">group_off</span>
-                                                No entities found
-                                            </td>
-                                        </tr>
-                                    )}
-                                    {!loading && !error && filteredUsers.map((user) => (
-                                        <tr key={user.id} className="hover:bg-surface-container-highest/30 transition-colors group">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-amber-400 font-bold text-xs group-hover:scale-110 transition-transform shrink-0">
-                                                        {getInitials(user.name)}
+                                    </thead>
+                                    <tbody className="divide-y divide-zinc-800/50">
+                                        {loading && (
+                                            <tr>
+                                                <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
+                                                    <span className="material-symbols-outlined animate-spin block mx-auto mb-2">progress_activity</span>
+                                                    Loading entities...
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!loading && error && (
+                                            <tr>
+                                                <td colSpan={5} className="px-6 py-12 text-center text-red-400">
+                                                    <span className="material-symbols-outlined block mx-auto mb-2">error</span>
+                                                    {error}
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!loading && !error && filteredUsers.length === 0 && (
+                                            <tr>
+                                                <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
+                                                    <span className="material-symbols-outlined block mx-auto mb-2">group_off</span>
+                                                    No entities found
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!loading && !error && filteredUsers.map((user) => (
+                                            <tr key={user.id} className="hover:bg-surface-container-highest/30 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-amber-400 font-bold text-xs group-hover:scale-110 transition-transform shrink-0">
+                                                            {getInitials(user.name)}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <div className="font-bold text-on-surface text-sm truncate">{user.name}</div>
+                                                            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">ID: #{String(user.id).padStart(4, '0')}</div>
+                                                        </div>
                                                     </div>
-                                                    <div className="min-w-0">
-                                                        <div className="font-bold text-on-surface text-sm truncate">{user.name}</div>
-                                                        <div className="text-[10px] text-zinc-500 uppercase tracking-wider">ID: #{String(user.id).padStart(4, '0')}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <RoleBadge role={user.role} />
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-sm text-zinc-300 truncate max-w-[180px]">{user.email}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-sm text-zinc-300 truncate max-w-[180px]">{user.nit}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-[11px] text-zinc-500 whitespace-nowrap">{user.phone}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-[11px] text-zinc-500 whitespace-nowrap">{user.address}</div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-[11px] text-zinc-500 whitespace-nowrap">{formatDate(user.createdAt)}</div>
-                                            </td>
-                                            <td className="px-6 py-4 text-right space-x-2">
-                                                <button onClick={() => {
-                                                    setConfirmUser(user);
-                                                    setConfirmOpen(true);
-                                                }} className="p-2 text-zinc-500 hover:text-amber-400 hover:bg-amber-400/10 rounded-lg transition-all">
-                                                    <span className="material-symbols-outlined text-[20px]">{user.isActive ? 'block' : 'check_circle'}</span>
-                                                </button>
-                                                <button onClick={() => {
-                                                    setSelectedUser(user);
-                                                    setIsModalOpen(true);
-                                                }} className="p-2 text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 rounded-lg transition-all">
-                                                    <span className="material-symbols-outlined text-[20px]">edit_note</span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <RoleBadge role={user.role} />
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-sm text-zinc-300 truncate max-w-[180px]">{user.email}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-sm text-zinc-300 truncate max-w-[180px]">{user.nit}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-[11px] text-zinc-500 whitespace-nowrap">{user.phone}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-[11px] text-zinc-500 whitespace-nowrap">{user.address}</div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="text-[11px] text-zinc-500 whitespace-nowrap">{formatDate(user.createdAt)}</div>
+                                                </td>
+                                                <td className="px-6 py-4 text-right space-x-2">
+                                                    <button onClick={() => {
+                                                        setConfirmUser(user);
+                                                        setConfirmOpen(true);
+                                                    }} className="p-2 text-zinc-500 hover:text-amber-400 hover:bg-amber-400/10 rounded-lg transition-all">
+                                                        <span className="material-symbols-outlined text-[20px]">{user.isActive ? 'block' : 'check_circle'}</span>
+                                                    </button>
+                                                    <button onClick={() => {
+                                                        setSelectedUser(user);
+                                                        setIsModalOpen(true);
+                                                    }} className="p-2 text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 rounded-lg transition-all">
+                                                        <span className="material-symbols-outlined text-[20px]">edit_note</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
                         </div>
 
                         <div className="bg-surface-container-high px-6 py-4 flex items-center justify-between border-t border-zinc-800">
                             <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
-                                {loading ? '...' : `Showing ${filteredUsers.length} of ${users.length} Entries`}
+                                {activeTab === 'PENDING_SHIPMENTS' 
+                                    ? `Total Pending: ${shipments.filter(s => ['PENDING', 'PENDING_SUPERADMIN_REVIEW', 'PENDING_FOR_PAY', 'AVAILABLE_FOR_ASSIGNMENT'].includes(s.status)).length}`
+                                    : (loading ? '...' : `Showing ${filteredUsers.length} of ${users.length} Entries`)}
                             </p>
                         </div>
                     </section>

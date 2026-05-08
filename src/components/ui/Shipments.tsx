@@ -4,22 +4,8 @@ import { Aside } from '@/components/ui/Aside';
 import { User } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/ui/Header';
-
-type ShipmentStatus = 'PENDING' | 'PENDING_SUPERADMIN_REVIEW' | 'ASSIGNED' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED';
-
-type Shipment = {
-    id: number;
-    cargoType: string;
-    weight: number;
-    dimensions: string | null;
-    origin: string;
-    destination: string;
-    timeline: string;
-    status: ShipmentStatus;
-    sender: { id: number; name: string; email: string };
-    driver: { id: number; name: string; email: string } | null;
-    createdAt: string;
-};
+import Swal from 'sweetalert2';
+import { Shipment, ShipmentStatus } from '@/types/shipment';
 
 type Driver = {
     id: number;
@@ -43,7 +29,20 @@ export default function DriverCommandCenter() {
     const [assigning, setAssigning] = useState(false);
     const [warning, setWarning] = useState<string | null>(null);
     const [userName, setUserName] = useState<string>('ADMIN');
+    const [userRole, setUserRole] = useState<string>('DRIVER');
     const [users, setUsers] = useState<User[]>([]);
+    const [statusFilter, setStatusFilter] = useState<string>('ALL');
+
+    const ALL_STATUSES = [
+        { key: 'ALL', label: 'All' },
+        { key: 'PENDING_SUPERADMIN_REVIEW', label: 'Review' },
+        { key: 'PENDING_FOR_PAY', label: 'Payment' },
+        { key: 'AVAILABLE_FOR_ASSIGNMENT', label: 'Available' },
+        { key: 'ASSIGNED', label: 'Assigned' },
+        { key: 'IN_TRANSIT', label: 'In Transit' },
+        { key: 'DELIVERED', label: 'Delivered' },
+        { key: 'REJECTED', label: 'Rejected' },
+    ];
 
 
 
@@ -75,10 +74,25 @@ export default function DriverCommandCenter() {
             const shipmentsData = await shipmentsRes.json();
             const usersData = await usersRes.json();
 
+            if (Array.isArray(shipmentsData)) {
+                if (storedUser.role === 'ADMIN') {
+                    // Admin ve todo para poder gestionar y asignar
+                    setShipments(shipmentsData);
+                } else if (storedUser.role === 'COMPANY') {
+                    // La empresa debe ver todos sus envíos en cualquier estado
+                    setShipments(shipmentsData);
+                } else {
+                    // Otros (Drivers) solo ven lo disponible para asignar
+                    setShipments(shipmentsData.filter((s: Shipment) => s.status === 'AVAILABLE_FOR_ASSIGNMENT'));
+                }
+            } else {
+                setShipments([]);
+            }
 
-            setShipments(shipmentsData.filter((s: Shipment) => s.status === 'PENDING' || s.status === 'PENDING_SUPERADMIN_REVIEW'));
-            setDrivers(usersData.filter((u: Driver) => u.role === 'DRIVER' && u.isActive));
-            setUsers(usersData);
+            if (Array.isArray(usersData)) {
+                setDrivers(usersData.filter((u: Driver) => u.role === 'DRIVER' && u.isActive));
+                setUsers(usersData);
+            }
         } catch {
             console.error('Error al cargar datos');
         } finally {
@@ -91,8 +105,9 @@ export default function DriverCommandCenter() {
         const storedUser = localStorage.getItem('usuario-logueado');
         if (storedUser) {
             try {
-                const { name } = JSON.parse(storedUser);
-                if (name) setUserName(name);
+                const parsedUser = JSON.parse(storedUser);
+                if (parsedUser.name) setUserName(parsedUser.name);
+                if (parsedUser.role) setUserRole(parsedUser.role);
             } catch (e) {
                 console.error("Error parsing stored user", e);
             }
@@ -131,6 +146,56 @@ export default function DriverCommandCenter() {
         }
     }
 
+    async function handleReject() {
+        if (!selectedShipment) {
+            setWarning('Select a shipment first before rejecting');
+            setTimeout(() => setWarning(null), 3000);
+            return;
+        }
+
+        const { value: reason } = await Swal.fire({
+            title: 'Reject Shipment',
+            input: 'textarea',
+            inputLabel: 'Reason for rejection',
+            inputPlaceholder: 'Type your reason here...',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Reject Shipment'
+        });
+
+        if (reason) {
+            setAssigning(true);
+            try {
+                const storedUser = JSON.parse(localStorage.getItem('usuario-logueado') || '{}');
+                const token = localStorage.getItem('accessToken');
+                const res = await fetch(`/api/shipments/${selectedShipment.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`, 'x-user-id': storedUser.id?.toString() || '', 'x-user-role': storedUser.role || ''
+                    },
+                    body: JSON.stringify({ rejectionReason: reason }),
+                });
+
+                if (!res.ok) throw new Error();
+
+                setSelectedShipment(null);
+                fetchData();
+                Swal.fire('Rejected', 'Shipment has been rejected', 'info');
+            } catch {
+                console.error('Error al rechazar envío');
+                Swal.fire('Error', 'Could not reject shipment', 'error');
+            } finally {
+                setAssigning(false);
+            }
+        }
+    }
+
+    const filteredShipments = shipments.filter(s => {
+        if (statusFilter === 'ALL') return true;
+        return s.status === statusFilter;
+    });
+
     return (
         <div className="flex min-h-screen overflow-hidden" style={{ backgroundColor: '#131313', color: '#e2e2e2', fontFamily: "'Inter', sans-serif" }}>
 
@@ -161,16 +226,40 @@ export default function DriverCommandCenter() {
                         <div className="flex items-center justify-between">
                             <div>
                                 <h2 className="text-3xl font-black text-on-background tracking-tighter uppercase italic">
-                                    Unassigned Shipments
+                                    {userRole === 'ADMIN' ? 'Global Shipment Fleet' : 'Unassigned Shipments'}
                                 </h2>
                                 <p className="text-[#e2e2e2]/40 text-xs tracking-[0.2em] font-semibold uppercase mt-1">
-                                    {loading ? '...' : `${shipments.length} Pending Rapid Deployment`}
+                                    {loading ? '...' : `${shipments.length} Active Shipments`}
                                 </p>
                             </div>
                             <span className="bg-[#ffbf00]/10 text-[#ffbf00] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase flex items-center">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#ffbf00] mr-2 animate-pulse"></span>
-                                Priority: High
+                                Live Ops
                             </span>
+                        </div>
+
+                        {/* Status Filters */}
+                        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                            {ALL_STATUSES.map((status) => (
+                                <button
+                                    key={status.key}
+                                    onClick={() => setStatusFilter(status.key)}
+                                    className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all border ${
+                                        statusFilter === status.key
+                                            ? 'bg-amber-400 text-black border-amber-400 shadow-[0_0_15px_rgba(255,191,0,0.3)]'
+                                            : 'bg-[#1b1b1b] text-zinc-500 border-zinc-800 hover:border-zinc-600'
+                                    }`}
+                                >
+                                    {status.label}
+                                    <span className={`ml-2 px-1.5 py-0.5 rounded-full text-[8px] ${
+                                        statusFilter === status.key ? 'bg-black/20 text-black' : 'bg-zinc-800 text-zinc-400'
+                                    }`}>
+                                        {status.key === 'ALL' 
+                                            ? shipments.length 
+                                            : shipments.filter(s => s.status === status.key).length}
+                                    </span>
+                                </button>
+                            ))}
                         </div>
 
                         {/* Shipments Grid */}
@@ -185,15 +274,15 @@ export default function DriverCommandCenter() {
                             )}
 
                             {/* Vacío */}
-                            {!loading && shipments.length === 0 && (
+                            {!loading && filteredShipments.length === 0 && (
                                 <div className="xl:col-span-2 flex flex-col items-center justify-center py-12 text-[#e2e2e2]/40">
                                     <span className="material-symbols-outlined text-4xl mb-2">inventory_2</span>
-                                    <p className="text-xs uppercase tracking-widest font-bold">No pending shipments</p>
+                                    <p className="text-xs uppercase tracking-widest font-bold">No shipments found for this status</p>
                                 </div>
                             )}
 
                             {/* Shipment Cards */}
-                            {!loading && shipments.map((shipment) => (
+                            {!loading && filteredShipments.map((shipment) => (
                                 <div
                                     key={shipment.id}
                                     onClick={() => setSelectedShipment(
@@ -223,6 +312,28 @@ export default function DriverCommandCenter() {
                                                 <p className={`text-[10px] font-black tracking-widest uppercase ${shipment.timeline === 'URGENT' ? 'text-[#ffbf00]' : 'text-[#e2e2e2]/40'}`}>
                                                     {shipment.timeline === 'URGENT' ? 'URGENT: 24H WINDOW' : 'STANDARD EXPEDITE'}
                                                 </p>
+                                                <div className="flex flex-wrap gap-2 mt-2">
+                                                    <span className={`inline-block px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase border ${
+                                                        shipment.status === 'DELIVERED' ? 'border-green-500/50 text-green-400 bg-green-500/10' :
+                                                        shipment.status === 'IN_TRANSIT' ? 'border-blue-500/50 text-blue-400 bg-blue-500/10' :
+                                                        shipment.status === 'AVAILABLE_FOR_ASSIGNMENT' ? 'border-amber-500/50 text-amber-400 bg-amber-500/10' :
+                                                        shipment.status === 'REJECTED' || shipment.status === 'CANCELLED' ? 'border-red-500/50 text-red-400 bg-red-500/10' :
+                                                        shipment.status === 'PENDING_FOR_PAY' ? 'border-purple-500/50 text-purple-400 bg-purple-500/10' :
+                                                        'border-zinc-500/50 text-zinc-400 bg-zinc-500/10'
+                                                    }`}>
+                                                        {shipment.status.replace(/_/g, ' ')}
+                                                    </span>
+                                                    {shipment.paymentStatus === 'PAID' && (
+                                                        <span className="inline-block px-2 py-0.5 rounded text-[8px] font-black tracking-widest uppercase border border-emerald-500/50 text-emerald-400 bg-emerald-500/10">
+                                                            PAID
+                                                        </span>
+                                                    )}
+                                                    {shipment.rejectionReason && (
+                                                        <div className="w-full mt-2 p-2 bg-red-500/10 border border-red-500/20 rounded text-[9px] text-red-400 italic">
+                                                            Reason: {shipment.rejectionReason}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4 mt-2">
@@ -245,8 +356,42 @@ export default function DriverCommandCenter() {
                                                     <label className="text-[#e2e2e2]/30 text-[9px] font-bold tracking-widest uppercase block">Weight</label>
                                                     <span className="text-on-background text-xs font-medium">{shipment.weight} Tons</span>
                                                 </div>
+                                                {shipment.dimensions && (
+                                                    <div>
+                                                        <label className="text-[#e2e2e2]/30 text-[9px] font-bold tracking-widest uppercase block">Dims</label>
+                                                        <span className="text-on-background text-xs font-medium">{shipment.dimensions}</span>
+                                                    </div>
+                                                )}
+                                                {shipment.proposedPrice && (
+                                                    <div>
+                                                        <label className="text-[#e2e2e2]/30 text-[9px] font-bold tracking-widest uppercase block">Proposed</label>
+                                                        <span className="text-amber-400 text-xs font-bold">${Number(shipment.proposedPrice).toLocaleString()}</span>
+                                                    </div>
+                                                )}
+                                                {shipment.approvedPrice && (
+                                                    <div>
+                                                        <label className="text-[#e2e2e2]/30 text-[9px] font-bold tracking-widest uppercase block">Approved</label>
+                                                        <span className="text-green-400 text-xs font-bold">${Number(shipment.approvedPrice).toLocaleString()}</span>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className={`h-10 px-4 rounded-lg font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 ${selectedShipment?.id === shipment.id
+                                            <div className="flex flex-col gap-2 pt-3 border-t border-white/5">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-[#e2e2e2]/30 text-[9px] font-bold uppercase tracking-widest">Client</span>
+                                                    <span className="text-[#e2e2e2] text-[10px] font-semibold">{shipment.sender.name}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-[#e2e2e2]/30 text-[9px] font-bold uppercase tracking-widest">Driver</span>
+                                                    <span className={`${shipment.driver ? 'text-[#ffbf00]' : 'text-zinc-600'} text-[10px] font-semibold`}>
+                                                        {shipment.driver ? shipment.driver.name : 'UNASSIGNED'}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-[#e2e2e2]/30 text-[9px] font-bold uppercase tracking-widest">Date</span>
+                                                    <span className="text-zinc-500 text-[10px]">{new Date(shipment.createdAt).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+                                            <div className={`h-10 px-4 rounded-lg font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 mt-2 ${selectedShipment?.id === shipment.id
                                                 ? 'bg-[#ffbf00] text-black'
                                                 : 'bg-[#353535] text-[#ffbf00]'
                                                 }`}>
@@ -277,11 +422,22 @@ export default function DriverCommandCenter() {
 
                             {/* Selected shipment indicator */}
                             {selectedShipment && (
-                                <div className="mb-4 p-3 bg-[#ffbf00]/10 border border-[#ffbf00]/20 rounded-lg">
-                                    <p className="text-[#ffbf00] text-[10px] font-black uppercase tracking-widest">Shipment Selected</p>
-                                    <p className="text-[#e2e2e2] text-xs font-semibold mt-1">
-                                        SHP-{String(selectedShipment.id).padStart(4, '0')} — {selectedShipment.origin} → {selectedShipment.destination}
-                                    </p>
+                                <div className="mb-4 p-4 bg-[#ffbf00]/10 border border-[#ffbf00]/20 rounded-xl">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <p className="text-[#ffbf00] text-[10px] font-black uppercase tracking-widest">Shipment Selected</p>
+                                            <p className="text-[#e2e2e2] text-xs font-semibold mt-1">
+                                                SHP-{String(selectedShipment.id).padStart(4, '0')} — {selectedShipment.origin} → {selectedShipment.destination}
+                                            </p>
+                                        </div>
+                                        <button 
+                                            onClick={handleReject}
+                                            disabled={assigning}
+                                            className="px-3 py-1.5 bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white rounded-lg text-[9px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                                        >
+                                            Reject
+                                        </button>
+                                    </div>
                                 </div>
                             )}
 

@@ -2982,6 +2982,7 @@ export namespace Prisma {
     priceReviewedById: number | null
     priceReviewedAt: Date | null
     paymentStatus: $Enums.PaymentStatus | null
+    rejectionReason: string | null
     paidAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3006,6 +3007,7 @@ export namespace Prisma {
     priceReviewedById: number | null
     priceReviewedAt: Date | null
     paymentStatus: $Enums.PaymentStatus | null
+    rejectionReason: string | null
     paidAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3030,6 +3032,7 @@ export namespace Prisma {
     priceReviewedById: number
     priceReviewedAt: number
     paymentStatus: number
+    rejectionReason: number
     paidAt: number
     createdAt: number
     updatedAt: number
@@ -3082,6 +3085,7 @@ export namespace Prisma {
     priceReviewedById?: true
     priceReviewedAt?: true
     paymentStatus?: true
+    rejectionReason?: true
     paidAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3106,6 +3110,7 @@ export namespace Prisma {
     priceReviewedById?: true
     priceReviewedAt?: true
     paymentStatus?: true
+    rejectionReason?: true
     paidAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3130,6 +3135,7 @@ export namespace Prisma {
     priceReviewedById?: true
     priceReviewedAt?: true
     paymentStatus?: true
+    rejectionReason?: true
     paidAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3241,6 +3247,7 @@ export namespace Prisma {
     priceReviewedById: number | null
     priceReviewedAt: Date | null
     paymentStatus: $Enums.PaymentStatus
+    rejectionReason: string | null
     paidAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -3284,6 +3291,7 @@ export namespace Prisma {
     priceReviewedById?: boolean
     priceReviewedAt?: boolean
     paymentStatus?: boolean
+    rejectionReason?: boolean
     paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3314,6 +3322,7 @@ export namespace Prisma {
     priceReviewedById?: boolean
     priceReviewedAt?: boolean
     paymentStatus?: boolean
+    rejectionReason?: boolean
     paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3344,6 +3353,7 @@ export namespace Prisma {
     priceReviewedById?: boolean
     priceReviewedAt?: boolean
     paymentStatus?: boolean
+    rejectionReason?: boolean
     paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3374,12 +3384,13 @@ export namespace Prisma {
     priceReviewedById?: boolean
     priceReviewedAt?: boolean
     paymentStatus?: boolean
+    rejectionReason?: boolean
     paidAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ShipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cargoType" | "weight" | "dimensions" | "origin" | "destination" | "timeline" | "status" | "senderId" | "driverId" | "companyId" | "createdById" | "assignedById" | "proposedPrice" | "approvedPrice" | "priceReviewedById" | "priceReviewedAt" | "paymentStatus" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["shipment"]>
+  export type ShipmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cargoType" | "weight" | "dimensions" | "origin" | "destination" | "timeline" | "status" | "senderId" | "driverId" | "companyId" | "createdById" | "assignedById" | "proposedPrice" | "approvedPrice" | "priceReviewedById" | "priceReviewedAt" | "paymentStatus" | "rejectionReason" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["shipment"]>
   export type ShipmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sender?: boolean | UserDefaultArgs<ExtArgs>
     driver?: boolean | Shipment$driverArgs<ExtArgs>
@@ -3434,6 +3445,7 @@ export namespace Prisma {
       priceReviewedById: number | null
       priceReviewedAt: Date | null
       paymentStatus: $Enums.PaymentStatus
+      rejectionReason: string | null
       paidAt: Date | null
       createdAt: Date
       updatedAt: Date
@@ -3884,6 +3896,7 @@ export namespace Prisma {
     readonly priceReviewedById: FieldRef<"Shipment", 'Int'>
     readonly priceReviewedAt: FieldRef<"Shipment", 'DateTime'>
     readonly paymentStatus: FieldRef<"Shipment", 'PaymentStatus'>
+    readonly rejectionReason: FieldRef<"Shipment", 'String'>
     readonly paidAt: FieldRef<"Shipment", 'DateTime'>
     readonly createdAt: FieldRef<"Shipment", 'DateTime'>
     readonly updatedAt: FieldRef<"Shipment", 'DateTime'>
@@ -7974,6 +7987,7 @@ export namespace Prisma {
     priceReviewedById: 'priceReviewedById',
     priceReviewedAt: 'priceReviewedAt',
     paymentStatus: 'paymentStatus',
+    rejectionReason: 'rejectionReason',
     paidAt: 'paidAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -8359,6 +8373,7 @@ export namespace Prisma {
     priceReviewedById?: IntNullableFilter<"Shipment"> | number | null
     priceReviewedAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     paymentStatus?: EnumPaymentStatusFilter<"Shipment"> | $Enums.PaymentStatus
+    rejectionReason?: StringNullableFilter<"Shipment"> | string | null
     paidAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeFilter<"Shipment"> | Date | string
@@ -8389,6 +8404,7 @@ export namespace Prisma {
     priceReviewedById?: SortOrderInput | SortOrder
     priceReviewedAt?: SortOrderInput | SortOrder
     paymentStatus?: SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     paidAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8422,6 +8438,7 @@ export namespace Prisma {
     priceReviewedById?: IntNullableFilter<"Shipment"> | number | null
     priceReviewedAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     paymentStatus?: EnumPaymentStatusFilter<"Shipment"> | $Enums.PaymentStatus
+    rejectionReason?: StringNullableFilter<"Shipment"> | string | null
     paidAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeFilter<"Shipment"> | Date | string
@@ -8452,6 +8469,7 @@ export namespace Prisma {
     priceReviewedById?: SortOrderInput | SortOrder
     priceReviewedAt?: SortOrderInput | SortOrder
     paymentStatus?: SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     paidAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8484,6 +8502,7 @@ export namespace Prisma {
     priceReviewedById?: IntNullableWithAggregatesFilter<"Shipment"> | number | null
     priceReviewedAt?: DateTimeNullableWithAggregatesFilter<"Shipment"> | Date | string | null
     paymentStatus?: EnumPaymentStatusWithAggregatesFilter<"Shipment"> | $Enums.PaymentStatus
+    rejectionReason?: StringNullableWithAggregatesFilter<"Shipment"> | string | null
     paidAt?: DateTimeNullableWithAggregatesFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Shipment"> | Date | string
@@ -8863,6 +8882,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8893,6 +8913,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8910,6 +8931,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8940,6 +8962,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8964,6 +8987,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -8981,6 +9005,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9005,6 +9030,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9578,6 +9604,7 @@ export namespace Prisma {
     priceReviewedById?: SortOrder
     priceReviewedAt?: SortOrder
     paymentStatus?: SortOrder
+    rejectionReason?: SortOrder
     paidAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9615,6 +9642,7 @@ export namespace Prisma {
     priceReviewedById?: SortOrder
     priceReviewedAt?: SortOrder
     paymentStatus?: SortOrder
+    rejectionReason?: SortOrder
     paidAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9639,6 +9667,7 @@ export namespace Prisma {
     priceReviewedById?: SortOrder
     priceReviewedAt?: SortOrder
     paymentStatus?: SortOrder
+    rejectionReason?: SortOrder
     paidAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11174,6 +11203,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11202,6 +11232,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11229,6 +11260,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11257,6 +11289,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11284,6 +11317,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11312,6 +11346,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11339,6 +11374,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11367,6 +11403,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11394,6 +11431,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11422,6 +11460,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11628,6 +11667,7 @@ export namespace Prisma {
     priceReviewedById?: IntNullableFilter<"Shipment"> | number | null
     priceReviewedAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     paymentStatus?: EnumPaymentStatusFilter<"Shipment"> | $Enums.PaymentStatus
+    rejectionReason?: StringNullableFilter<"Shipment"> | string | null
     paidAt?: DateTimeNullableFilter<"Shipment"> | Date | string | null
     createdAt?: DateTimeFilter<"Shipment"> | Date | string
     updatedAt?: DateTimeFilter<"Shipment"> | Date | string
@@ -12555,6 +12595,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12583,6 +12624,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13078,6 +13120,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13101,6 +13144,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13124,6 +13168,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13147,6 +13192,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13170,6 +13216,7 @@ export namespace Prisma {
     approvedPrice?: Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13313,6 +13360,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13341,6 +13389,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13364,6 +13413,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13381,6 +13431,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13409,6 +13460,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13432,6 +13484,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13449,6 +13502,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13477,6 +13531,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13500,6 +13555,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13517,6 +13573,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13545,6 +13602,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13568,6 +13626,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13585,6 +13644,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13613,6 +13673,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13636,6 +13697,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13724,6 +13786,7 @@ export namespace Prisma {
     priceReviewedById?: number | null
     priceReviewedAt?: Date | string | null
     paymentStatus?: $Enums.PaymentStatus
+    rejectionReason?: string | null
     paidAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13799,6 +13862,7 @@ export namespace Prisma {
     approvedPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13827,6 +13891,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13850,6 +13915,7 @@ export namespace Prisma {
     priceReviewedById?: NullableIntFieldUpdateOperationsInput | number | null
     priceReviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

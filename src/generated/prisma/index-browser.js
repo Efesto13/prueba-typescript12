@@ -153,6 +153,7 @@ exports.Prisma.ShipmentScalarFieldEnum = {
   priceReviewedById: 'priceReviewedById',
   priceReviewedAt: 'priceReviewedAt',
   paymentStatus: 'paymentStatus',
+  rejectionReason: 'rejectionReason',
   paidAt: 'paidAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
