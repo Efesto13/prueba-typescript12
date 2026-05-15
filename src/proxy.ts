@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateAccessToken } from './lib/jwt';
-
+//proxy
 const PUBLIC_PAGE = ['/login', '/register'];
 const PROTECTED_PAGE = [
     '/masterAdmin',
